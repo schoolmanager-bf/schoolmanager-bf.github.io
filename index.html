@@ -177,9 +177,15 @@
   footer{border-top:1px solid var(--card-border);padding:50px 0 34px;margin-top:40px}
   .foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
   .foot .copy{color:var(--muted);font-size:.88rem}
-  .foot .links{display:flex;gap:20px}
+  .foot .links{display:flex;gap:20px;flex-wrap:wrap}
   .foot a{color:var(--muted);text-decoration:none;font-size:.9rem}
   .foot a:hover{color:#fff}
+  .foot .dev{width:100%;text-align:center;margin-top:26px;padding-top:22px;border-top:1px solid var(--card-border)}
+  .foot .dev p{color:var(--muted);font-size:.88rem;margin-bottom:14px}
+  .foot .dev b{color:#fff}
+  .btn-linkedin{display:inline-flex;align-items:center;gap:9px;background:#0A66C2;color:#fff !important;font-weight:600;font-size:.9rem;padding:11px 22px;border-radius:100px;text-decoration:none;transition:.3s}
+  .btn-linkedin:hover{background:#0b7ad1;transform:translateY(-2px);box-shadow:0 8px 22px rgba(10,102,194,.4)}
+  .btn-linkedin svg{width:17px;height:17px}
 
   /* ===== Reveal au scroll ===== */
   .reveal{opacity:0;transform:translateY(34px);transition:.8s cubic-bezier(.2,.7,.3,1)}
@@ -389,6 +395,16 @@
       <a href="#verification">Vérification</a>
       <a href="#telechargement">Téléchargement</a>
       <a href="verification.html">Vérifier un document</a>
+    </div>
+    <div class="dev">
+      <p>Nos produits : <a href="#telechargement"><b>SchoolManager BF</b> (gestion scolaire)</a> ·
+        <a href="verification.html"><b>Vérification QR en ligne</b></a> ·
+        <a href="#telechargement"><b>Générateur de licences</b></a> (fourni à l'administration)</p>
+      <p>Développé par <b>Bénéwendé Dieudonné Tassembédo</b> — Burkina Faso</p>
+      <a class="btn-linkedin" href="https://www.linkedin.com/in/b%C3%A9n%C3%A9wend%C3%A9-dieudonn%C3%A9-tassemb%C3%A9do-122514289/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        Suivre sur LinkedIn
+      </a>
     </div>
   </div>
 </footer>
