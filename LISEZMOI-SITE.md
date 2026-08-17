@@ -3,7 +3,7 @@
 Ce dossier contient le **site web du projet** (organisation GitHub : `schoolmanager-bf`) :
 - `index.html` — la page d'accueil animée (présentation + téléchargement)
 - `verification.html` — la page de vérification des QR codes (utilisable par les parents, même à la maison)
-- `download/` — l'installateur SchoolManager 1.6.6 à télécharger
+- `download/` — l'installateur SchoolManager 1.7.0 à télécharger
   (⚠️ l'outil de génération des licences est PRIVÉ : il n'est jamais publié sur le site,
   il est fourni uniquement à l'administration de l'établissement)
 
