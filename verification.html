@@ -232,17 +232,41 @@ function unwrapUrl(qrContent) {
   return t;
 }
 
-async function verify(content) {
-  const secret = secretInput.value.trim() || DEFAULT_SECRET;
-  const res = document.getElementById("result");
-  const verdict = document.getElementById("verdict");
-  const infos = document.getElementById("infos");
-  const msg = document.getElementById("msg");
-  res.style.display = "block";
-  infos.innerHTML = "";
+// Affiche un message d'erreur technique visible (au lieu de « rien ne se passe »)
+function showError(err) {
+  try {
+    const res = document.getElementById("result");
+    const verdict = document.getElementById("verdict");
+    const infos = document.getElementById("infos");
+    const msg = document.getElementById("msg");
+    if (!res) return;
+    res.style.display = "block";
+    if (verdict) { verdict.className = "verdict warn"; verdict.innerHTML = "⚠️ ERREUR<small>Vérification impossible</small>"; }
+    if (infos) infos.innerHTML = "";
+    if (msg) msg.textContent = "Une erreur technique est survenue : " + (err && err.message ? err.message : String(err)) +
+      ". Réessayez, ou copiez ce message et envoyez-le au support.";
+  } catch (e) { /* ne jamais boucler */ }
+}
+window.addEventListener("error", function (e) { try { showError(e.error || e.message || "Erreur JavaScript"); } catch (x) {} });
+window.addEventListener("unhandledrejection", function (e) { try { showError(e.reason || "Erreur asynchrone"); } catch (x) {} });
 
-  // Auto-unwrap URL format QR (depuis v1.6.5)
-  content = unwrapUrl(content);
+async function verify(content) {
+  try {
+    const res = document.getElementById("result");
+    const verdict = document.getElementById("verdict");
+    const infos = document.getElementById("infos");
+    const msg = document.getElementById("msg");
+    // Retour visuel immédiat : le bouton répond toujours.
+    res.style.display = "block";
+    infos.innerHTML = "";
+    verdict.className = "verdict info";
+    verdict.innerHTML = "⏳ Vérification…";
+    msg.textContent = "";
+
+    const secret = secretInput.value.trim() || DEFAULT_SECRET;
+
+    // Auto-unwrap URL format QR (depuis v1.6.5)
+    content = unwrapUrl(content);
 
   if (!content || content.trim() === "") {
     verdict.className = "verdict warn";
@@ -331,6 +355,9 @@ async function verify(content) {
   verdict.className = "verdict warn";
   verdict.innerHTML = "⚠️ INVALIDE<small>Format non reconnu</small>";
   msg.textContent = "Ce QR n'est pas un document SchoolManager (type : " + (type || "vide") + ").";
+  } catch (err) {
+    showError(err);
+  }
 }
 
 function row(k, v) {
