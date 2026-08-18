@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuel d'utilisation — SchoolManager BF</title>
+<meta name="description" content="Manuel d'utilisation complet de SchoolManager BF : installation, élèves, paiements, bulletins sécurisés, notes, emploi du temps et bien plus.">
+<style>
+  :root{
+    --bg:#070b16; --card:rgba(255,255,255,.045); --card-border:rgba(255,255,255,.09);
+    --blue:#3d7bff; --green:#00C853; --gold:#FCD116; --red:#FF5252;
+    --text:#eef2fb; --muted:#9aa8c7;
+    --grad:linear-gradient(135deg,#3d7bff 0%,#00C853 100%);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(7,11,22,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--card-border)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem;text-decoration:none;color:var(--text)}
+  .logo-mark{width:36px;height:36px;border-radius:10px;background:var(--grad);display:grid;place-items:center}
+  .logo b{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .nav a.back{color:var(--muted);text-decoration:none;font-size:.9rem;padding:8px 16px;border:1px solid var(--card-border);border-radius:100px;transition:.25s}
+  .nav a.back:hover{color:#fff;background:rgba(255,255,255,.07)}
+
+  .hero{padding:56px 0 30px;text-align:center}
+  .hero h1{font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:800;letter-spacing:-.5px}
+  .hero h1 .grad{background:linear-gradient(120deg,#7db3ff,#00E676);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{color:var(--muted);max-width:640px;margin:12px auto 0}
+
+  .toc{background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:24px 28px;margin:30px 0}
+  .toc h2{font-size:1.1rem;margin-bottom:14px;color:#7db3ff}
+  .toc ol{columns:2;gap:28px;list-style:none;counter-reset:sec}
+  .toc li{margin-bottom:7px}
+  .toc a{color:var(--muted);text-decoration:none;font-size:.92rem;display:flex;gap:8px}
+  .toc a::before{counter-increment:sec;content:counter(sec);color:#00E676;font-weight:700;min-width:20px}
+  .toc a:hover{color:#fff}
+  @media(max-width:640px){.toc ol{columns:1}}
+
+  section{background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:30px 32px;margin:22px 0}
+  section h2{font-size:1.45rem;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  section h3{font-size:1.05rem;color:#7db3ff;margin:20px 0 8px}
+  section p,section li{color:#c6d0e2;font-size:.95rem}
+  section ul,section ol{padding-left:22px;margin:8px 0}
+  section li{margin-bottom:6px}
+  code{background:rgba(61,123,255,.14);border:1px solid rgba(61,123,255,.3);color:#9cc0ff;padding:2px 8px;border-radius:6px;font-size:.85em;font-family:Consolas,monospace}
+  .num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--grad);color:#04100a;font-weight:800;display:grid;place-items:center;font-size:.95rem}
+  .note{background:rgba(252,209,22,.09);border:1px solid rgba(252,209,22,.3);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:.9rem;color:#f5d76e}
+  .ok{background:rgba(0,200,83,.09);border:1px solid rgba(0,200,83,.3);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:.9rem;color:#7dffb0}
+  .warn{background:rgba(255,82,82,.09);border:1px solid rgba(255,82,82,.3);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:.9rem;color:#ff8a80}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}
+  th,td{border:1px solid var(--card-border);padding:9px 12px;text-align:left}
+  th{background:rgba(61,123,255,.1);color:#9cc0ff}
+  .steps{counter-reset:step;list-style:none;padding:0}
+  .steps li{counter-increment:step;position:relative;padding-left:40px;margin-bottom:12px}
+  .steps li::before{content:counter(step);position:absolute;left:0;top:2px;width:26px;height:26px;border-radius:50%;background:var(--grad);color:#04100a;font-weight:800;font-size:.85rem;display:grid;place-items:center}
+  footer{border-top:1px solid var(--card-border);padding:30px 0;margin-top:40px;text-align:center}
+  footer p{color:var(--muted);font-size:.88rem}
+  .to-top{position:fixed;bottom:24px;right:24px;width:46px;height:46px;border-radius:50%;background:var(--grad);color:#04100a;font-weight:800;display:grid;place-items:center;text-decoration:none;box-shadow:0 6px 24px rgba(0,200,83,.4);font-size:1.2rem}
+  @media(max-width:640px){section{padding:22px 18px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><div class="logo-mark">🎓</div><span>School<b>Manager BF</b></span></a>
+    <a class="back" href="index.html">← Retour au site</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>📘 Manuel d'utilisation <span class="grad">SchoolManager BF</span></h1>
+    <p>Le guide complet pour installer, configurer et utiliser le logiciel de gestion scolaire — de la première connexion aux rapports avancés.</p>
+  </div>
+
+  <div class="toc">
+    <h2>Sommaire</h2>
+    <ol>
+      <li><a href="#installer">Installer le logiciel</a></li>
+      <li><a href="#premiere-connexion">Première connexion</a></li>
+      <li><a href="#licence">Activer la licence</a></li>
+      <li><a href="#parametres">Paramètres généraux</a></li>
+      <li><a href="#classes">Créer des classes</a></li>
+      <li><a href="#eleves">Gérer les élèves</a></li>
+      <li><a href="#inscriptions">Inscriptions</a></li>
+      <li><a href="#enseignants">Enseignants &amp; affectations</a></li>
+      <li><a href="#paiements">Paiements &amp; reçus</a></li>
+      <li><a href="#notes">Notes &amp; bulletins</a></li>
+      <li><a href="#verification">Vérification des documents</a></li>
+      <li><a href="#emploi-du-temps">Emploi du temps</a></li>
+      <li><a href="#absences">Absences</a></li>
+      <li><a href="#rapports">Rapports &amp; IA</a></li>
+      <li><a href="#utilisateurs">Utilisateurs &amp; accès</a></li>
+      <li><a href="#mot-de-passe-maitre">Mot de passe maître</a></li>
+      <li><a href="#sauvegardes">Sauvegardes</a></li>
+      <li><a href="#depannage">Dépannage</a></li>
+    </ol>
+  </div>
+
+  <section id="installer">
+    <h2><span class="num">1</span> Installer le logiciel</h2>
+    <ol class="steps">
+      <li>Téléchargez l'installateur depuis la page <a href="index.html#telechargement" style="color:#7db3ff">Téléchargement</a> du site officiel (ou recevez-le de votre fournisseur).</li>
+      <li>Double-cliquez sur <code>SchoolManager-Setup-1.7.0.exe</code> et suivez l'assistant d'installation.</li>
+      <li>Acceptez le dossier d'installation proposé (ou choisissez le vôtre) et terminez l'installation.</li>
+      <li>Lancez SchoolManager depuis le menu Démarrer ou le raccourci du bureau.</li>
+    </ol>
+    <div class="ok">✅ Vos données sont stockées localement sur l'ordinateur — aucune connexion internet obligatoire pour fonctionner.</div>
+  </section>
+
+  <section id="premiere-connexion">
+    <h2><span class="num">2</span> Première connexion</h2>
+    <ol class="steps">
+      <li>À l'écran d'accueil, connectez-vous avec le compte administrateur par défaut : <code>admin</code> / <code>admin123</code>.</li>
+      <li>La première fois, une fenêtre vous propose de définir le <b>mot de passe maître</b> de l'établissement — la clé de secours qui permet de réinitialiser les mots de passe oubliés. <b>Choisissez-le et gardez-le précieusement.</b></li>
+      <li>Changez ensuite le mot de passe du compte admin : menu <b>Paramètres → Utilisateurs</b>.</li>
+    </ol>
+    <div class="warn">⚠️ <b>Important :</b> changez le mot de passe <code>admin123</code> dès la première utilisation. N'oubliez pas le mot de passe maître — sans lui, la réinitialisation d'un mot de passe oublié n'est pas possible.</div>
+  </section>
+
+  <section id="licence">
+    <h2><span class="num">3</span> Activer la licence</h2>
+    <p>SchoolManager BF fonctionne avec une licence par durée. <b>Toutes les fonctionnalités sont incluses dans chaque licence</b> — seule la durée change :</p>
+    <table>
+      <tr><th>Durée</th><th>Prix</th></tr>
+      <tr><td>1 mois</td><td>15 000 FCFA</td></tr>
+      <tr><td>1 an</td><td>100 000 FCFA</td></tr>
+      <tr><td>2 ans</td><td>200 000 FCFA</td></tr>
+      <tr><td>5 ans</td><td>500 000 FCFA</td></tr>
+    </table>
+    <ol class="steps">
+      <li>Au premier lancement, l'écran d'activation affiche votre <b>identifiant machine</b>.</li>
+      <li>Envoyez cet identifiant à votre fournisseur (via la page À propos : Appeler, WhatsApp ou Email).</li>
+      <li>Recevez votre clé de licence et collez-la dans le champ prévu, puis cliquez sur <b>Activer</b>.</li>
+    </ol>
+    <div class="note">💡 Pour renouveler ou changer de durée : menu <b>À propos → Changer / Renouveler ma licence</b>.</div>
+  </section>
+
+  <section id="parametres">
+    <h2><span class="num">4</span> Paramètres généraux</h2>
+    <p>Le menu <b>Paramètres</b> (réservé à l'administrateur) permet de configurer :</p>
+    <ul>
+      <li><b>Informations de l'établissement</b> : nom, contact, téléphone du fournisseur, etc.</li>
+      <li><b>Année scolaire active</b> : création des années et sélection de l'année en cours.</li>
+      <li><b>Mot de passe maître</b> : définition ou modification de la clé de secours.</li>
+      <li><b>Utilisateurs</b> : création des comptes (admin, secrétaire, comptable, directeur) et attribution des accès.</li>
+      <li><b>Sécurité des documents</b> : clé de sécurité des QR, adresse personnalisée de vérification en ligne.</li>
+      <li><b>Apparence</b> : thème clair ou sombre.</li>
+    </ul>
+  </section>
+
+  <section id="classes">
+    <h2><span class="num">5</span> Créer des classes</h2>
+    <ol class="steps">
+      <li>Menu <b>Classes</b> → bouton <b>➕ Nouvelle classe</b>.</li>
+      <li>Renseignez le <b>nom</b> (ex. 6ème A), la <b>capacité</b>, les <b>frais d'inscription</b> et de <b>scolarité</b>.</li>
+      <li>Choisissez le <b>système de notation</b> dès la création : <b>Trimestriel</b> (3 périodes) ou <b>Semestriel</b> (2 périodes).</li>
+      <li>Sélectionnez l'année scolaire et enregistrez.</li>
+    </ol>
+    <div class="note">💡 Le système de notation est choisi à la création de la classe — chaque classe peut avoir le sien.</div>
+  </section>
+
+  <section id="eleves">
+    <h2><span class="num">6</span> Gérer les élèves</h2>
+    <ul>
+      <li><b>Ajouter un élève</b> : menu <b>Élèves</b> → remplir nom, prénom (obligatoires ⭐), sexe, date et lieu de naissance, contact parent, photo… Le <b>matricule est généré automatiquement</b>.</li>
+      <li><b>Importer</b> : importez une liste d'élèves depuis un fichier Excel (menu Import).</li>
+      <li><b>Rechercher</b> : utilisez la recherche globale (icône 🔍) pour retrouver un élève, avec le filtre <b>retards de paiement</b> pour lister les élèves concernés.</li>
+      <li><b>Affectation</b> : chaque élève peut être affecté (État) ou non.</li>
+    </ul>
+    <div class="ok">✅ Les champs obligatoires sont marqués d'une étoile ⭐ — le nom et le prénom sont obligatoires.</div>
+  </section>
+
+  <section id="inscriptions">
+    <h2><span class="num">7</span> Inscriptions</h2>
+    <ol class="steps">
+      <li>Menu <b>Inscriptions</b> → <b>➕ Nouvelle inscription</b>.</li>
+      <li>Choisissez l'<b>élève</b>, la <b>classe</b> et l'<b>année scolaire</b>.</li>
+      <li>Cochez <b>redoublant</b> si nécessaire et enregistrez.</li>
+      <li>Les frais d'inscription sont repris automatiquement de la classe ; le suivi des paiements se fait dans le menu <b>Paiements</b>.</li>
+    </ol>
+  </section>
+
+  <section id="enseignants">
+    <h2><span class="num">8</span> Enseignants &amp; affectations</h2>
+    <ul>
+      <li>Menu <b>Enseignants</b> : ajoutez les enseignants avec leur <b>spécialité</b>.</li>
+      <li><b>Affectez</b> chaque enseignant à une classe en indiquant son <b>nombre d'heures</b> par semaine.</li>
+      <li>Un enseignant <b>ne peut pas être affecté à deux classes en même temps</b> sur les mêmes heures (le logiciel détecte les conflits).</li>
+      <li>Les affectations apparaissent <b>en bas de l'emploi du temps</b> de chaque classe : nom, spécialité et nombre d'heures hebdomadaires.</li>
+    </ul>
+  </section>
+
+  <section id="paiements">
+    <h2><span class="num">9</span> Paiements &amp; reçus</h2>
+    <ol class="steps">
+      <li>Menu <b>Paiements</b> : sélectionnez l'élève et le motif (frais d'inscription, scolarité, autres).</li>
+      <li>Indiquez le montant et enregistrez — le <b>reçu</b> est généré automatiquement avec un <b>QR code anti-fraude</b>.</li>
+      <li>Le tableau de bord affiche le total <b>payé</b> et le reste dû, avec la liste des <b>impayés</b> par classe (cliquable, avec défilement).</li>
+      <li>Utilisez les <b>relances WhatsApp en masse</b> pour les parents d'élèves en retard de paiement.</li>
+    </ul>
+    <div class="note">💡 Les reçus imprimés portent un QR code — toute modification du document est détectée.</div>
+  </section>
+
+  <section id="notes">
+    <h2><span class="num">10</span> Notes &amp; bulletins</h2>
+    <ol class="steps">
+      <li>Menu <b>Notes</b> : sélectionnez la classe et la période (trimestre ou semestre selon la classe).</li>
+      <li>Saisissez les notes par matière (avec coefficients).</li>
+      <li>Les <b>moyennes</b>, <b>mentions</b> et <b>rangs</b> sont calculés automatiquement.</li>
+      <li>Générez les <b>bulletins PDF</b> : chaque bulletin porte un <b>QR code à empreinte HMAC</b> infalsifiable.</li>
+      <li>Le module <b>IA</b> (Prédictions) analyse les résultats et produit des <b>recommandations personnalisées</b> par élève (situation satisfaisante, à surveiller, insuffisante…).</li>
+    </ol>
+    <div class="ok">✅ Même une moyenne de 0 ou très basse est correctement interprétée : la recommandation reflète le niveau réel de l'élève.</div>
+  </section>
+
+  <section id="verification">
+    <h2><span class="num">11</span> Vérification des documents</h2>
+    <p>Chaque bulletin et reçu porte un QR code. Trois façons de vérifier un document :</p>
+    <h3>🏫 À l'école (réseau local)</h3>
+    <ul>
+      <li>Le serveur de vérification démarre automatiquement avec le logiciel (port 8090).</li>
+      <li>Le téléphone (même Wi-Fi) ouvre l'adresse affichée dans <b>Paramètres → Sécurité des documents</b>.</li>
+    </ul>
+    <h3>🌐 À la maison (en ligne)</h3>
+    <ul>
+      <li>Scannez le QR avec n'importe quel téléphone : le lien ouvre la page de vérification en ligne.</li>
+      <li>La page affiche : ✅ <b>AUTHENTIQUE</b>, ❌ <b>FALSIFIÉ</b> ou ⚠️ <b>INVALIDE</b>, avec les informations de l'élève.</li>
+      <li>Adresse en ligne : <code>https://schoolmanager-bf.github.io/verification.html</code> (configurable dans Paramètres → Sécurité).</li>
+    </ul>
+    <h3>📱 Dans le logiciel</h3>
+    <ul>
+      <li>Menu <b>Système → Vérification documents</b> : importez un QR (image ou contenu) pour vérifier et recouper avec les notes enregistrées.</li>
+    </ul>
+  </section>
+
+  <section id="emploi-du-temps">
+    <h2><span class="num">12</span> Emploi du temps &amp; calendrier</h2>
+    <ul>
+      <li>Menu <b>Emploi du temps</b> : construisez le planning par classe (jours, heures, matières).</li>
+      <li>En bas du tableau apparaissent les <b>enseignants affectés</b> à la classe avec leur spécialité et leurs heures.</li>
+      <li>Menu <b>Calendrier</b> : événements scolaires, fêtes, congés et réunions.</li>
+    </ul>
+  </section>
+
+  <section id="absences">
+    <h2><span class="num">13</span> Absences</h2>
+    <ul>
+      <li>Menu <b>Absences</b> : enregistrez les absences par élève (justifiée ou non, nombre d'heures).</li>
+      <li>Le suivi cumulé est consultable par classe et par période.</li>
+    </ul>
+  </section>
+
+  <section id="rapports">
+    <h2><span class="num">14</span> Rapports &amp; IA</h2>
+    <ul>
+      <li><b>Rapports</b> : statistiques par classe, effectifs, paiements, impayés.</li>
+      <li><b>Rapports avancés</b> : bilans détaillés avec la <b>recommandation complète</b> de chaque élève (texte entier visible).</li>
+      <li><b>IA Prédictions</b> : prévisions de réussite et conseils personnalisés pour accompagner chaque élève.</li>
+    </ul>
+  </section>
+
+  <section id="utilisateurs">
+    <h2><span class="num">15</span> Utilisateurs &amp; accès par rôle</h2>
+    <p>Menu <b>Paramètres → Utilisateurs</b> (admin uniquement) : créez des comptes et choisissez le rôle :</p>
+    <table>
+      <tr><th>Rôle</th><th>Accès par défaut</th></tr>
+      <tr><td><b>Admin</b></td><td>Toutes les sections (Paramètres, Journal d'audit…)</td></tr>
+      <tr><td><b>Directeur</b></td><td>Tout sauf Paramètres et Journal d'audit</td></tr>
+      <tr><td><b>Secrétaire</b></td><td>Élèves, classes, inscriptions, notes, enseignants, paiements, rapports…</td></tr>
+      <tr><td><b>Comptable</b></td><td>Élèves, classes, inscriptions, paiements, rapports, vérification</td></tr>
+    </table>
+    <div class="note">💡 L'administrateur peut <b>personnaliser les accès</b> de chaque utilisateur (cocher ou décocher les sections). L'accès est contrôlé partout : le menu n'affiche que les sections autorisées.</div>
+  </section>
+
+  <section id="mot-de-passe-maitre">
+    <h2><span class="num">16</span> Mot de passe maître</h2>
+    <p>Le <b>mot de passe maître</b> est la clé de secours de l'établissement :</p>
+    <ul>
+      <li>Il permet de <b>réinitialiser le mot de passe</b> de n'importe quel utilisateur qui a oublié le sien, <b>sans perdre aucune donnée</b>.</li>
+      <li>Il est défini par l'admin dans <b>Paramètres → Mot de passe maître</b> (ou au premier lancement).</li>
+      <li>Sur l'écran de connexion, cliquez sur <b>« 🔑 Mot de passe oublié ? »</b> → saisissez le mot de passe maître → choisissez l'utilisateur → définissez un nouveau mot de passe.</li>
+    </ul>
+    <div class="warn">⚠️ Conservez le mot de passe maître dans un endroit sûr. S'il est perdu, seul un accès à la base de données permet de récupérer les comptes.</div>
+  </section>
+
+  <section id="sauvegardes">
+    <h2><span class="num">17</span> Sauvegardes</h2>
+    <ul>
+      <li>Menu <b>Sauvegardes</b> : sauvegarde manuelle en un clic, restauration, sauvegardes automatiques.</li>
+      <li>Les sauvegardes automatiques sont créées régulièrement dans le dossier de l'application.</li>
+      <li>Conseil : copiez régulièrement les sauvegardes sur une clé USB ou un autre ordinateur.</li>
+    </ul>
+  </section>
+
+  <section id="depannage">
+    <h2><span class="num">18</span> Dépannage</h2>
+    <h3>Le mot de passe ne fonctionne pas</h3>
+    <p>Utilisez <b>« Mot de passe oublié »</b> avec le <b>mot de passe maître</b> pour le réinitialiser. Si le mot de passe maître est perdu, l'administrateur peut restaurer une sauvegarde antérieure.</p>
+    <h3>Le QR indique « QR introuvable » ou « INVALIDE »</h3>
+    <ul>
+      <li>Vérifiez que le document a été généré avec une version récente (v1.6.5+).</li>
+      <li>Régénérez le document avec SchoolManager BF.</li>
+      <li>Si la clé de sécurité a été changée, les anciens documents deviennent invalides — régénérez-les.</li>
+    </ul>
+    <h3>La page de vérification ne répond pas (404)</h3>
+    <p>Le serveur intégré répond maintenant sur toutes les adresses. Redémarrez le logiciel et autorisez-le dans le pare-feu Windows (réseaux privés).</p>
+    <h3>Le vérificateur en ligne « ne fait rien »</h3>
+    <p>La page en ligne est corrigée (décodage automatique des URL-QR et moteur de secours). Utilisez le bouton <b>« 🔧 Tester le moteur »</b> puis les boutons de démonstration pour valider.</p>
+    <h3>Textes difficiles à lire en thème sombre</h3>
+    <p>Le thème sombre est corrigé : toutes les pages héritent des couleurs du thème. Si un texte reste illisible, mettez à jour le logiciel vers la dernière version.</p>
+  </section>
+
+  <footer>
+    <p>© 2026 <b>SchoolManager BF</b> — Burkina Faso 🇧🇫 · Manuel d'utilisation</p>
+    <p>Développé par <b>Bénéwendé Dieudonné Tassembédo</b></p>
+    <p style="margin-top:8px"><a href="index.html" style="color:#7db3ff">← Retour à l'accueil</a></p>
+  </footer>
+</div>
+
+<a class="to-top" href="#" title="Haut de page">↑</a>
+
+<script>
+// Liens ancres en douceur
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const id=a.getAttribute('href');
+  if(id.length>1){e.preventDefault();document.querySelector(id)?.scrollIntoView({behavior:'smooth'});}
+}));
+</script>
+</body>
+</html>
