@@ -377,7 +377,7 @@ document.getElementById("manual").addEventListener("input", () => {
 });
 
 // ===== Ouverture via un QR =====
-// Les QR des documents sont des URL : http://IP:8090/v?d=SM-BUL|…|empreinte
+// Les QR des documents sont des URL vers cette page : …/verification.html?d=SM-BUL|…|empreinte
 // N'importe quel scanner ouvre cette page → on vérifie automatiquement.
 function extractParam(name) {
   const q = window.location.search;
