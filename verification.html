@@ -100,11 +100,16 @@
   </div>
 
   <div class="card">
-    <div class="note"><b>Démonstration (test)</b> : génère un QR de bulletin avec la clé actuelle pour
-      vérifier que tout fonctionne.</div>
+    <div class="note"><b>Tester votre clé</b> : vérifie que la clé saisie correspond à celle de votre école.</div>
+    <button class="btn btn-ghost" id="btnTestKey">🔑 Tester ma clé</button>
+    <div id="keyTestResult" style="display:none;margin-top:10px;padding:12px;border-radius:10px;font-size:13px;"></div>
+  </div>
+
+  <div class="card">
+    <div class="note"><b>Démonstration (test)</b> : génère un QR de bulletin avec la clé par défaut pour
+      vérifier que le moteur fonctionne.</div>
     <button class="btn btn-ghost" id="btnDemoOk">🧪 QR bulletin valide (démo)</button>
     <button class="btn btn-ghost" id="btnDemoBad">🧪 QR falsifié (démo)</button>
-    <button class="btn btn-ghost" id="btnSelfTest">🔧 Tester le moteur de vérification</button>
   </div>
 
   <div class="card">
@@ -426,22 +431,35 @@ document.getElementById("btnDemoBad").addEventListener("click", () => {
 
 // Auto-test : vérifie que le moteur HMAC (crypto.subtle OU pur JS) fonctionne ici
 function hasSubtle() { try { return !!(window.crypto && crypto.subtle); } catch (e) { return false; } }
-document.getElementById("btnSelfTest").addEventListener("click", async () => {
+// ===== TESTER LA CLÉ =====
+document.getElementById("btnTestKey").addEventListener("click", async () => {
+  const box = document.getElementById("keyTestResult");
+  box.style.display = "block";
+  const secret = secretInput.value.trim() || DEFAULT_SECRET;
+  const isDefault = secret === DEFAULT_SECRET;
+  const input = "SM260001|Trimestre 1|13.75|OUEDRAOGO Awa|6ème A";
   try {
-    const expected = "E9F4C306"; // empreinte de référence (même calcul que .NET)
-    const input = "SM260001|Trimestre 1|13.75|OUEDRAOGO Awa|6ème A";
-    const h = (await hmacHex(input, DEFAULT_SECRET)).toUpperCase();
-    const mode = hasSubtle() ? "crypto.subtle" : "pur JavaScript (fallback)";
-    if (h.slice(0, 8) === expected) {
-      showNote("✅ Moteur de vérification <b>OK</b> (" + mode + ") — l'appli peut vérifier les QR." +
-        "<br>Si un QR affiche quand même INVALIDE, c'est qu'il a été généré avec une clé différente " +
-        "ou par une version antérieure à la v1.5.6 : régénérez le document avec SchoolManager.", "");
+    const h = (await hmacHex(input, secret)).slice(0, 8);
+    const hDefault = (await hmacHex(input, DEFAULT_SECRET)).slice(0, 8);
+    if (isDefault) {
+      box.style.background = "#FFF3E0";
+      box.style.color = "#E65100";
+      box.innerHTML = "⚠️ <b>Vous utilisez la clé par défaut</b> (" + secret.slice(0, 20) + "…)<br>" +
+        "Empreinte : " + h + "<br>" +
+        "<b>Si vos documents ont été générés avec une autre clé, ils seront marqués FALSIFIÉ.</b><br>" +
+        "→ Allez dans SchoolManager → Paramètres → Sécurité pour voir et copier votre clé.";
     } else {
-      showNote("⚠️ Le moteur produit " + h.slice(0, 8) + " au lieu de " + expected +
-        " (" + mode + "). Copiez ce message et envoyez-le au support.", "err");
+      box.style.background = "#E8F5E9";
+      box.style.color = "#2E7D32";
+      box.innerHTML = "✅ <b>Clé personnalisée détectée</b><br>" +
+        "Empreinte avec votre clé : " + h + "<br>" +
+        "Empreinte avec la clé par défaut : " + hDefault + "<br>" +
+        (h !== hDefault ? "✅ Les empreintes sont <b>différentes</b> — vos documents sont protégés !" : "⚠️ Les empreintes sont identiques — vérifiez votre clé.");
     }
   } catch (e) {
-    showNote("❌ Erreur moteur : " + e.message, "err");
+    box.style.background = "#FDECEA";
+    box.style.color = "#B3261E";
+    box.innerHTML = "❌ Erreur : " + e.message;
   }
 });
 
