@@ -273,19 +273,15 @@ async function verify(content) {
     const verdict = document.getElementById("verdict");
     const infos = document.getElementById("infos");
     const msg = document.getElementById("msg");
-    // Retour visuel immédiat : le bouton répond toujours.
     res.style.display = "block";
     infos.innerHTML = "";
     verdict.className = "verdict info";
     verdict.innerHTML = "⏳ Vérification…";
     msg.textContent = "";
 
-    const secret = secretInput.value.trim() || DEFAULT_SECRET;
+    const userKey = secretInput.value.trim();
 
-    // Auto-unwrap URL format QR (depuis v1.6.5)
     content = unwrapUrl(content);
-
-    // Décoder %7C et autres caractères encodés dans l'URL
     try { content = decodeURIComponent(content); } catch(e) {}
 
   if (!content || content.trim() === "") {
@@ -298,83 +294,103 @@ async function verify(content) {
   const type = (parts[0] || "").toUpperCase();
   const last = parts[parts.length - 1];
 
-  if (type === "SM-BUL") {
-    if (parts.length !== 5 && parts.length !== 7) {
-      verdict.className = "verdict warn";
-      verdict.innerHTML = "⚠️ INVALIDE<small>QR de bulletin incomplet</small>";
-      msg.textContent = "Le QR scanné ne ressemble pas à un bulletin SchoolManager.";
+  // Fonction interne : vérifie avec une clé donnée
+  async function tryVerify(keyUsed) {
+    if (type === "SM-BUL") {
+      if (parts.length !== 5 && parts.length !== 7) {
+        verdict.className = "verdict warn";
+        verdict.innerHTML = "⚠️ INVALIDE<small>QR de bulletin incomplet</small>";
+        msg.textContent = "Le QR scanné ne ressemble pas à un bulletin SchoolManager.";
+        return true;
+      }
+      const input = parts.slice(1, -1).join("|");
+      const h = await hmacHex(input, keyUsed);
+      const ok = h.slice(0, 8).toUpperCase() === last.toUpperCase();
+      const matricule = parts[1], periode = parts[2], moyStr = parts[3];
+      const nom = parts.length === 7 ? parts[4] : "";
+      const classe = parts.length === 7 ? parts[5] : "";
+      const moy = parseFloat(moyStr.replace(",", "."));
+      infos.innerHTML =
+        (nom ? row("\u00c9l\u00e8ve", nom) : "") +
+        row("Matricule", matricule) +
+        (classe ? row("Classe", classe) : "") +
+        row("P\u00e9riode", periode) +
+        row("Moyenne", moyStr + " / 20") +
+        (isNaN(moy) ? "" : row("Mention", mention(moy)));
+      return ok;
+    }
+    if (type === "SM-REC") {
+      if (parts.length !== 6) {
+        verdict.className = "verdict warn";
+        verdict.innerHTML = "\u26a0\ufe0f INVALIDE<small>QR de re\u00e7u incomplet</small>";
+        msg.textContent = "Le QR scann\u00e9 ne ressemble pas \u00e0 un re\u00e7u SchoolManager.";
+        return true;
+      }
+      const input = [parts[1], parts[3], parts[4]].join("|");
+      const h = await hmacHex(input, keyUsed);
+      const ok = h.slice(0, 8).toUpperCase() === last.toUpperCase();
+      infos.innerHTML =
+        row("Re\u00e7u n\u00b0", parts[1]) +
+        row("\u00c9l\u00e8ve", parts[2]) +
+        row("Montant", Number(parts[3]).toLocaleString("fr-FR") + " FCFA") +
+        row("Date", formatDate(parts[4]));
+      return ok;
+    }
+    if (type === "SM-SIG") {
+      verdict.className = "verdict info";
+      verdict.innerHTML = "\u2139\ufe0f DOCUMENT SIGN\u00c9<small>V\u00e9rification compl\u00e8te sur SchoolManager</small>";
+      infos.innerHTML = row("Identifiant de signature", parts[1] || "\u2014");
+      msg.textContent = "Le registre des signatures est conserv\u00e9 sur l'ordinateur de l'\u00e9cole.";
+      return true;
+    }
+    return null; // type inconnu
+  }
+
+  // ÉTAPE 1 : essayer avec la clé par défaut (99% des cas)
+  const result1 = await tryVerify(DEFAULT_SECRET);
+  if (result1 === true) {
+    verdict.className = "verdict ok";
+    verdict.innerHTML = "\u2705 AUTHENTIQUE<small>Empreinte de s\u00e9curit\u00e9 valide</small>";
+    msg.textContent = "Document v\u00e9rifi\u00e9 avec succ\u00e8s.";
+    return;
+  }
+  if (result1 === false) {
+    verdict.className = "verdict bad";
+    verdict.innerHTML = "\u274c FALSIFI\u00c9<small>Document alt\u00e9r\u00e9 ou cl\u00e9 incorrecte</small>";
+    msg.textContent = "L'empreinte ne correspond pas. Ce document a \u00e9t\u00e9 modifi\u00e9 ou produit sans la bonne cl\u00e9.";
+    return;
+  }
+  if (result1 === true && type !== "SM-BUL" && type !== "SM-REC") return;
+
+  // ÉTAPE 2 : si la clé par défaut échoue, essayer avec la clé utilisateur
+  if (userKey && userKey !== DEFAULT_SECRET) {
+    const result2 = await tryVerify(userKey);
+    if (result2 === true) {
+      verdict.className = "verdict ok";
+      verdict.innerHTML = "\u2705 AUTHENTIQUE<small>Cl\u00e9 personnalis\u00e9e valide</small>";
+      msg.textContent = "Document v\u00e9rifi\u00e9 avec votre cl\u00e9 personnelle.";
       return;
     }
-    const input = parts.slice(1, -1).join("|");
-    const h = await hmacHex(input, secret);
-    const ok = h.slice(0, 8).toUpperCase() === last.toUpperCase();
-
-    const matricule = parts[1], periode = parts[2], moyStr = parts[3];
-    const nom = parts.length === 7 ? parts[4] : "";
-    const classe = parts.length === 7 ? parts[5] : "";
-    const moy = parseFloat(moyStr.replace(",", "."));
-
-    if (ok) {
-      verdict.className = "verdict ok";
-      verdict.innerHTML = "✅ AUTHENTIQUE<small>Empreinte de sécurité valide</small>";
-    } else {
+    if (result2 === false) {
       verdict.className = "verdict bad";
-      verdict.innerHTML = "❌ FALSIFIÉ<small>L'empreinte ne correspond pas : document altéré</small>";
-    }
-    infos.innerHTML =
-      (nom ? row("Élève", nom) : "") +
-      row("Matricule", matricule) +
-      (classe ? row("Classe", classe) : "") +
-      row("Période", periode) +
-      row("Moyenne", moyStr + " / 20") +
-      (isNaN(moy) ? "" : row("Mention", mention(moy)));
-    msg.textContent = ok
-      ? "Ce bulletin a été émis par SchoolManager et n'a pas été modifié depuis son impression."
-      : "Ce QR a été modifié ou produit sans la clé de l'école. Méfiez-vous de ce document.";
-    return;
-  }
-
-  if (type === "SM-REC") {
-    if (parts.length !== 6) {
-      verdict.className = "verdict warn";
-      verdict.innerHTML = "⚠️ INVALIDE<small>QR de reçu incomplet</small>";
-      msg.textContent = "Le QR scanné ne ressemble pas à un reçu SchoolManager.";
+      verdict.innerHTML = "\u274c FALSIFI\u00c9<small>Document alt\u00e9r\u00e9</small>";
+      msg.textContent = "L'empreinte ne correspond pas avec aucune cl\u00e9. Ce document est suspect.";
       return;
     }
-    const input = [parts[1], parts[3], parts[4]].join("|");
-    const h = await hmacHex(input, secret);
-    const ok = h.slice(0, 8).toUpperCase() === last.toUpperCase();
-
-    if (ok) {
-      verdict.className = "verdict ok";
-      verdict.innerHTML = "✅ AUTHENTIQUE<small>Reçu vérifié</small>";
-    } else {
-      verdict.className = "verdict bad";
-      verdict.innerHTML = "❌ FALSIFIÉ<small>Reçu altéré ou faux</small>";
-    }
-    infos.innerHTML =
-      row("Reçu n°", parts[1]) +
-      row("Élève", parts[2]) +
-      row("Montant", Number(parts[3]).toLocaleString("fr-FR") + " FCFA") +
-      row("Date", formatDate(parts[4]));
-    msg.textContent = ok
-      ? "Le reçu correspond à un paiement enregistré par SchoolManager."
-      : "Ce reçu a été modifié ou produit sans la clé de l'école.";
-    return;
   }
 
-  if (type === "SM-SIG") {
-    verdict.className = "verdict info";
-    verdict.innerHTML = "ℹ️ DOCUMENT SIGNÉ<small>Vérification complète sur SchoolManager</small>";
-    infos.innerHTML = row("Identifiant de signature", parts[1] || "—");
-    msg.textContent = "Le registre des signatures est conservé sur l'ordinateur de l'école : " +
-      "ouvrez SchoolManager → SYSTÈME → Vérification documents pour confirmer la validité officielle.";
-    return;
-  }
-
+  // ÉTAPE 3 : ni la clé par défaut ni la clé utilisateur ne fonctionnent
   verdict.className = "verdict warn";
-  verdict.innerHTML = "⚠️ INVALIDE<small>Format non reconnu</small>";
-  msg.textContent = "Ce QR n'est pas un document SchoolManager (type : " + (type || "vide") + ").";
+  verdict.innerHTML = "\u26a0\ufe0f CL\u00c9 PERSONNALIS\u00c9E REQUISE";
+  verdict.style.cursor = "pointer";
+  verdict.onclick = () => { secretInput.focus(); secretInput.scrollIntoView({behavior:'smooth'}); };
+  infos.innerHTML = row("Cl\u00e9 utilis\u00e9e", "Par d\u00e9faut") +
+    row("R\u00e9sultat", "\u00c9chec de v\u00e9rification");
+  msg.innerHTML = "Ce document a \u00e9t\u00e9 g\u00e9n\u00e9r\u00e9 avec une cl\u00e9 secr\u00e8te personnalis\u00e9e.<br>" +
+    "\u2192 Allez dans <b>SchoolManager \u2192 Param\u00e8tres \u2192 S\u00e9curit\u00e9</b> pour copier votre cl\u00e9, " +
+    "puis collez-la ci-dessous et recliquez <b>V\u00e9rifier</b>.";
+  return;
+
   } catch (err) {
     showError(err);
   }
