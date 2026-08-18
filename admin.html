@@ -9,15 +9,31 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5;color:#1a1a2e;min-height:100vh}
 
+/* Login */
+.login-screen{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.login-card{background:#fff;border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:0 8px 30px rgba(0,0,0,.12);text-align:center}
+.login-card h1{font-size:24px;color:#2C3E6B;margin-bottom:8px}
+.login-card .subtitle{color:#999;font-size:13px;margin-bottom:25px}
+.login-card .icon{font-size:50px;margin-bottom:15px}
+.login-card input{width:100%;padding:14px 16px;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;text-align:center;letter-spacing:3px;margin-bottom:15px;transition:border .2s}
+.login-card input:focus{border-color:#2C3E6B;outline:none}
+.login-card .btn-login{width:100%;padding:14px;background:#2C3E6B;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:background .2s}
+.login-card .btn-login:hover{background:#3D5A99}
+.login-card .error{color:#e74c3c;font-size:13px;margin-top:10px;display:none}
+.login-card .hint{color:#bbb;font-size:11px;margin-top:15px}
+
 /* Header */
 .header{background:linear-gradient(135deg,#2C3E6B,#3D5A99);color:#fff;padding:20px 30px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.2)}
 .header h1{font-size:22px;display:flex;align-items:center;gap:10px}
 .header .version{background:rgba(255,255,255,.2);padding:4px 12px;border-radius:20px;font-size:12px}
 .header .user-info{display:flex;align-items:center;gap:15px}
 .header .user-info span{font-size:14px;opacity:.9}
+.header .btn-logout{background:rgba(255,255,255,.2);border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px}
+.header .btn-logout:hover{background:rgba(255,255,255,.3)}
 
 /* Layout */
 .container{max-width:1400px;margin:0 auto;padding:25px}
+.admin-content{display:none}
 
 /* Cards grid */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:30px}
@@ -90,266 +106,208 @@ tr:hover{background:#f8f9fa}
 </head>
 <body>
 
-<div class="header">
-    <h1>🛡️ SchoolManager — Admin Dashboard</h1>
-    <div class="user-info">
-        <span class="version">v1.7.3</span>
-        <span>📅 <span id="currentDate"></span></span>
+<!-- ÉCRAN DE CONNEXION -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-card">
+        <div class="icon">🛡️</div>
+        <h1>Administration</h1>
+        <p class="subtitle">Connectez-vous pour gérer le site SchoolManager</p>
+        <input type="password" id="passwordInput" placeholder="Mot de passe admin" autofocus>
+        <button class="btn-login" onclick="login()">🔐 Se connecter</button>
+        <p class="error" id="loginError">❌ Mot de passe incorrect</p>
+        <p class="hint">Mot de passe par défaut : <strong>admin2026</strong></p>
     </div>
 </div>
 
-<div class="container">
-
-    <!-- STATS -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="icon">🌐</div>
-            <div class="label">Statut du site</div>
-            <div class="value" id="siteStatus">—</div>
-            <div class="sub">Vérification automatique</div>
-        </div>
-        <div class="stat-card">
-            <div class="icon">📦</div>
-            <div class="label">Version actuelle</div>
-            <div class="value">1.7.3</div>
-            <div class="sub">Dernière mise à jour : <span id="lastUpdate">—</span></div>
-        </div>
-        <div class="stat-card">
-            <div class="icon">📄</div>
-            <div class="label">Pages du site</div>
-            <div class="value">6</div>
-            <div class="sub">index, verification, manuel, blog, admin, sitemap</div>
-        </div>
-        <div class="stat-card">
-            <div class="icon">📱</div>
-            <div class="label">Vérification QR</div>
-            <div class="value" id="qrStatus">—</div>
-            <div class="sub">Page de vérification en ligne</div>
+<!-- CONTENU ADMIN (caché tant que non connecté) -->
+<div class="admin-content" id="adminContent">
+    <div class="header">
+        <h1>🛡️ SchoolManager — Admin Dashboard</h1>
+        <div class="user-info">
+            <span class="version">v1.7.3</span>
+            <span>📅 <span id="currentDate"></span></span>
+            <button class="btn-logout" onclick="logout()">🚪 Déconnexion</button>
         </div>
     </div>
 
-    <!-- TABS -->
-    <div class="tabs">
-        <div class="tab active" data-tab="links">🔗 Liens & URLs</div>
-        <div class="tab" data-tab="pages">📄 Pages du site</div>
-        <div class="tab" data-tab="update">📦 Mise à jour</div>
-        <div class="tab" data-tab="seo">🔍 SEO & Référencement</div>
-        <div class="tab" data-tab="changelog">📝 Changelog</div>
-    </div>
-
-    <!-- TAB: Liens -->
-    <div class="tab-content active" id="tab-links">
-        <div class="section">
-            <h2>🔗 Liens importants du site</h2>
-            <ul class="link-list">
-                <li>
-                    <div><span class="link-url">https://schoolmanager-bf.github.io</span><br><small style="color:#999">Page d'accueil — Téléchargement</small></div>
-                    <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
-                </li>
-                <li>
-                    <div><span class="link-url">https://schoolmanager-bf.github.io/verification.html</span><br><small style="color:#999">Vérification QR codes</small></div>
-                    <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io/verification.html" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
-                </li>
-                <li>
-                    <div><span class="link-url">https://schoolmanager-bf.github.io/manuel.html</span><br><small style="color:#999">Manuel d'utilisation</small></div>
-                    <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io/manuel.html" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
-                </li>
-                <li>
-                    <div><span class="link-url">https://schoolmanager-bf.github.io/blog.html</span><br><small style="color:#999">Blog — Articles éducation</small></div>
-                    <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io/blog.html" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
-                </li>
-                <li>
-                    <div><span class="link-url">https://schoolmanager-bf.github.io/sitemap.xml</span><br><small style="color:#999">Plan du site pour Google</small></div>
-                    <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io/sitemap.xml" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
-                </li>
-                <li>
-                    <div><span class="link-url">https://github.com/schoolmanager-bf/schoolmanager-bf.github.io/releases</span><br><small style="color:#999">Releases GitHub — Téléchargements</small></div>
-                    <div class="link-status"><span class="badge badge-blue">GitHub</span> <a href="https://github.com/schoolmanager-bf/schoolmanager-bf.github.io/releases" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
-                </li>
-                <li>
-                    <div><span class="link-url">https://github.com/schoolmanager-bf</span><br><small style="color:#999">Organisation GitHub</small></div>
-                    <div class="link-status"><span class="badge badge-blue">GitHub</span> <a href="https://github.com/schoolmanager-bf" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
-                </li>
-                <li>
-                    <div><span class="link-url">https://search.google.com/search-console</span><br><small style="color:#999">Google Search Console — Référencement</small></div>
-                    <div class="link-status"><span class="badge badge-orange">Admin</span> <a href="https://search.google.com/search-console" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- TAB: Pages -->
-    <div class="tab-content" id="tab-pages">
-        <div class="section">
-            <h2>📄 Structure du site</h2>
-            <table>
-                <thead><tr><th>Page</th><th>Fichier</th><th>Description</th><th>SEO</th><th>Action</th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td><strong>🏠 Accueil</strong></td>
-                        <td><code>index.html</code></td>
-                        <td>Présentation, téléchargement, FAQ</td>
-                        <td><span class="badge badge-green">Indexée</span></td>
-                        <td><a href="index.html" target="_blank" class="btn btn-sm btn-primary">Voir</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>🛡️ Vérification</strong></td>
-                        <td><code>verification.html</code></td>
-                        <td>Scan QR, vérification manuelle</td>
-                        <td><span class="badge badge-green">Indexée</span></td>
-                        <td><a href="verification.html" target="_blank" class="btn btn-sm btn-primary">Voir</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>📖 Manuel</strong></td>
-                        <td><code>manuel.html</code></td>
-                        <td>Guide d'utilisation complet</td>
-                        <td><span class="badge badge-green">Indexée</span></td>
-                        <td><a href="manuel.html" target="_blank" class="btn btn-sm btn-primary">Voir</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>📝 Blog</strong></td>
-                        <td><code>blog.html</code></td>
-                        <td>5 articles éducation</td>
-                        <td><span class="badge badge-green">Indexée</span></td>
-                        <td><a href="blog.html" target="_blank" class="btn btn-sm btn-primary">Voir</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>🗺️ Sitemap</strong></td>
-                        <td><code>sitemap.xml</code></td>
-                        <td>Plan du site pour Google</td>
-                        <td><span class="badge badge-blue">Fichier</span></td>
-                        <td><a href="sitemap.xml" target="_blank" class="btn btn-sm btn-primary">Voir</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>🤖 Robots</strong></td>
-                        <td><code>robots.txt</code></td>
-                        <td>Instructions pour les crawlers</td>
-                        <td><span class="badge badge-blue">Fichier</span></td>
-                        <td><a href="robots.txt" target="_blank" class="btn btn-sm btn-primary">Voir</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>🔍 Google Verify</strong></td>
-                        <td><code>google*.html</code></td>
-                        <td>Vérification Search Console</td>
-                        <td><span class="badge badge-orange">Privé</span></td>
-                        <td><span class="btn btn-sm btn-outline" style="opacity:.5">Caché</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>🛡️ Admin</strong></td>
-                        <td><code>admin.html</code></td>
-                        <td>Cette page de gestion</td>
-                        <td><span class="badge badge-red">noindex</span></td>
-                        <td><span class="btn btn-sm btn-outline" style="opacity:.5">Vous êtes ici</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- TAB: Update -->
-    <div class="tab-content" id="tab-update">
-        <div class="section">
-            <h2>📦 Mettre à jour le téléchargement</h2>
-            <p style="margin-bottom:15px;color:#666">Quand vous avez une nouvelle version, créez une Release GitHub puis collez le lien ici.</p>
-            
-            <div class="form-group">
-                <label>Numéro de version</label>
-                <input type="text" id="newVersion" placeholder="ex: 1.7.4" value="1.7.3">
+    <div class="container">
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon">🌐</div>
+                <div class="label">Statut du site</div>
+                <div class="value" id="siteStatus">—</div>
+                <div class="sub">Vérification automatique</div>
             </div>
-            <div class="form-group">
-                <label>Lien de téléchargement GitHub Release</label>
-                <input type="url" id="downloadUrl" placeholder="https://github.com/schoolmanager-bf/schoolmanager-bf.github.io/releases/download/v1.7.3/SchoolManager-v1.7.3.zip">
+            <div class="stat-card">
+                <div class="icon">📦</div>
+                <div class="label">Version actuelle</div>
+                <div class="value">1.7.3</div>
+                <div class="sub">Dernière mise à jour : <span id="lastUpdate">—</span></div>
             </div>
-            <div class="form-group">
-                <label>Nom du fichier</label>
-                <input type="text" id="fileName" placeholder="ex: SchoolManager-v1.7.4.zip" value="SchoolManager-v1.7.3.zip">
+            <div class="stat-card">
+                <div class="icon">📄</div>
+                <div class="label">Pages du site</div>
+                <div class="value">7</div>
+                <div class="sub">index, verification, manuel, blog, admin, conditions, sitemap</div>
             </div>
-            <div class="form-group">
-                <label>Description de la version</label>
-                <textarea id="versionNotes" placeholder="Nouvelles fonctionnalités, corrections...">Multi-langues FR/EN, Anciens élèves, Graphiques tendances, Recherche enrichie</textarea>
-            </div>
-            <button class="btn btn-primary" onclick="generateDownloadLink()">🔧 Générer le lien de téléchargement</button>
-            
-            <div id="generatedCode" style="display:none;margin-top:20px">
-                <h3>Code à copier dans index.html :</h3>
-                <div class="code-block" id="codeOutput"></div>
-                <button class="btn btn-success" onclick="copyCode()">📋 Copier le code</button>
+            <div class="stat-card">
+                <div class="icon">📱</div>
+                <div class="label">Vérification QR</div>
+                <div class="value" id="qrStatus">—</div>
+                <div class="sub">Page de vérification en ligne</div>
             </div>
         </div>
 
-        <div class="section">
-            <h2>⚡ Actions rapides</h2>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-                <a href="https://github.com/schoolmanager-bf/schoolmanager-bf.github.io/releases/new" target="_blank" class="btn btn-primary">📦 Créer une Release GitHub</a>
-                <button class="btn btn-success" onclick="checkAllPages()">🔍 Vérifier toutes les pages</button>
-                <button class="btn btn-outline" onclick="showInstallGuide()">📖 Guide d'installation Inno Setup</button>
+        <!-- TABS -->
+        <div class="tabs">
+            <div class="tab active" data-tab="links">🔗 Liens & URLs</div>
+            <div class="tab" data-tab="pages">📄 Pages du site</div>
+            <div class="tab" data-tab="update">📦 Mise à jour</div>
+            <div class="tab" data-tab="seo">🔍 SEO</div>
+            <div class="tab" data-tab="contact">📞 Contact</div>
+            <div class="tab" data-tab="changelog">📝 Changelog</div>
+        </div>
+
+        <!-- TAB: Liens -->
+        <div class="tab-content active" id="tab-links">
+            <div class="section">
+                <h2>🔗 Liens importants du site</h2>
+                <ul class="link-list">
+                    <li>
+                        <div><span class="link-url">https://schoolmanager-bf.github.io</span><br><small style="color:#999">Page d'accueil</small></div>
+                        <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
+                    </li>
+                    <li>
+                        <div><span class="link-url">https://schoolmanager-bf.github.io/verification.html</span><br><small style="color:#999">Vérification QR codes</small></div>
+                        <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io/verification.html" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
+                    </li>
+                    <li>
+                        <div><span class="link-url">https://schoolmanager-bf.github.io/conditions.html</span><br><small style="color:#999">Conditions d'utilisation</small></div>
+                        <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io/conditions.html" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
+                    </li>
+                    <li>
+                        <div><span class="link-url">https://schoolmanager-bf.github.io/manuel.html</span><br><small style="color:#999">Manuel d'utilisation</small></div>
+                        <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io/manuel.html" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
+                    </li>
+                    <li>
+                        <div><span class="link-url">https://schoolmanager-bf.github.io/blog.html</span><br><small style="color:#999">Blog</small></div>
+                        <div class="link-status"><span class="badge badge-green">En ligne</span> <a href="https://schoolmanager-bf.github.io/blog.html" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
+                    </li>
+                    <li>
+                        <div><span class="link-url">https://github.com/schoolmanager-bf/schoolmanager-bf.github.io/releases</span><br><small style="color:#999">Releases GitHub</small></div>
+                        <div class="link-status"><span class="badge badge-blue">GitHub</span> <a href="https://github.com/schoolmanager-bf/schoolmanager-bf.github.io/releases" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
+                    </li>
+                    <li>
+                        <div><span class="link-url">https://github.com/schoolmanager-bf</span><br><small style="color:#999">Organisation GitHub</small></div>
+                        <div class="link-status"><span class="badge badge-blue">GitHub</span> <a href="https://github.com/schoolmanager-bf" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
+                    </li>
+                    <li>
+                        <div><span class="link-url">https://search.google.com/search-console</span><br><small style="color:#999">Google Search Console</small></div>
+                        <div class="link-status"><span class="badge badge-orange">Admin</span> <a href="https://search.google.com/search-console" target="_blank" class="btn btn-sm btn-outline">Ouvrir ↗</a></div>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
 
-    <!-- TAB: SEO -->
-    <div class="tab-content" id="tab-seo">
-        <div class="section">
-            <h2>🔍 État du référencement</h2>
-            <table>
-                <thead><tr><th>Élément SEO</th><th>Statut</th><th>Fichier</th></tr></thead>
-                <tbody>
-                    <tr><td>Meta title</td><td><span class="badge badge-green">✅ Présent</span></td><td>index.html</td></tr>
-                    <tr><td>Meta description</td><td><span class="badge badge-green">✅ Présent</span></td><td>Toutes les pages</td></tr>
-                    <tr><td>Open Graph</td><td><span class="badge badge-green">✅ Présent</span></td><td>Toutes les pages</td></tr>
-                    <tr><td>Twitter Cards</td><td><span class="badge badge-green">✅ Présent</span></td><td>Toutes les pages</td></tr>
-                    <tr><td>JSON-LD</td><td><span class="badge badge-green">✅ Présent</span></td><td>index.html</td></tr>
-                    <tr><td>sitemap.xml</td><td><span class="badge badge-green">✅ Présent</span></td><td>sitemap.xml</td></tr>
-                    <tr><td>robots.txt</td><td><span class="badge badge-green">✅ Présent</span></td><td>robots.txt</td></tr>
-                    <tr><td>Google Search Console</td><td><span class="badge badge-green">✅ Vérifié</span></td><td>google*.html</td></tr>
-                    <tr><td>Canonical URL</td><td><span class="badge badge-green">✅ Présent</span></td><td>Toutes les pages</td></tr>
-                    <tr><td>Keywords</td><td><span class="badge badge-green">✅ Présent</span></td><td>Toutes les pages</td></tr>
-                </tbody>
-            </table>
+        <!-- TAB: Pages -->
+        <div class="tab-content" id="tab-pages">
+            <div class="section">
+                <h2>📄 Structure du site</h2>
+                <table>
+                    <thead><tr><th>Page</th><th>Fichier</th><th>Description</th><th>SEO</th><th>Action</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>🏠 Accueil</strong></td><td><code>index.html</code></td><td>Présentation, téléchargement, FAQ</td><td><span class="badge badge-green">Indexée</span></td><td><a href="index.html" target="_blank" class="btn btn-sm btn-primary">Voir</a></td></tr>
+                        <tr><td><strong>🛡️ Vérification</strong></td><td><code>verification.html</code></td><td>Scan QR, vérification</td><td><span class="badge badge-green">Indexée</span></td><td><a href="verification.html" target="_blank" class="btn btn-sm btn-primary">Voir</a></td></tr>
+                        <tr><td><strong>📋 Conditions</strong></td><td><code>conditions.html</code></td><td>Conditions d'utilisation</td><td><span class="badge badge-green">Indexée</span></td><td><a href="conditions.html" target="_blank" class="btn btn-sm btn-primary">Voir</a></td></tr>
+                        <tr><td><strong>📖 Manuel</strong></td><td><code>manuel.html</code></td><td>Guide d'utilisation</td><td><span class="badge badge-green">Indexée</span></td><td><a href="manuel.html" target="_blank" class="btn btn-sm btn-primary">Voir</a></td></tr>
+                        <tr><td><strong>📝 Blog</strong></td><td><code>blog.html</code></td><td>Articles éducation</td><td><span class="badge badge-green">Indexée</span></td><td><a href="blog.html" target="_blank" class="btn btn-sm btn-primary">Voir</a></td></tr>
+                        <tr><td><strong>🛡️ Admin</strong></td><td><code>admin.html</code></td><td>Cette page</td><td><span class="badge badge-red">noindex</span></td><td><span class="btn btn-sm btn-outline" style="opacity:.5">🔒 Protégée</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="section">
-            <h2>📊 Conseils pour améliorer le référencement</h2>
-            <ul style="padding-left:20px;line-height:2">
-                <li>Partagez le lien sur des <strong>forums éducatifs burkinabè</strong></li>
-                <li>Ajoutez le site à <strong>Google My Business</strong> (si bureau)</li>
-                <li>Créez des <strong>backlinks</strong> depuis des sites d'écoles partenaires</li>
-                <li>Publiez régulièrement de <strong>nouveaux articles</strong> sur le blog</li>
-                <li>Partagez sur <strong>Facebook, LinkedIn, WhatsApp</strong> groupes éducation</li>
-            </ul>
+
+        <!-- TAB: Update -->
+        <div class="tab-content" id="tab-update">
+            <div class="section">
+                <h2>📦 Mettre à jour le téléchargement</h2>
+                <p style="margin-bottom:15px;color:#666">Créez une Release GitHub puis collez le lien ici pour générer le code de téléchargement.</p>
+                <div class="form-group"><label>Numéro de version</label><input type="text" id="newVersion" placeholder="ex: 1.7.4" value="1.7.4"></div>
+                <div class="form-group"><label>Lien GitHub Release</label><input type="url" id="downloadUrl" placeholder="https://github.com/schoolmanager-bf/schoolmanager-bf.github.io/releases/download/v1.7.4/SchoolManager-Setup-1.7.4.exe"></div>
+                <div class="form-group"><label>Nom du fichier</label><input type="text" id="fileName" placeholder="SchoolManager-Setup-1.7.4.exe" value="SchoolManager-Setup-1.7.4.exe"></div>
+                <div class="form-group"><label>Description</label><textarea id="versionNotes" placeholder="Nouvelles fonctionnalités..."></textarea></div>
+                <button class="btn btn-primary" onclick="generateDownloadLink()">🔧 Générer le code</button>
+                <div id="generatedCode" style="display:none;margin-top:20px"><h3>Code à copier :</h3><div class="code-block" id="codeOutput"></div><button class="btn btn-success" onclick="copyCode()">📋 Copier</button></div>
+            </div>
+            <div class="section">
+                <h2>⚡ Actions rapides</h2>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <a href="https://github.com/schoolmanager-bf/schoolmanager-bf.github.io/releases/new" target="_blank" class="btn btn-primary">📦 Créer une Release</a>
+                    <button class="btn btn-success" onclick="checkAllPages()">🔍 Vérifier les pages</button>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- TAB: Changelog -->
-    <div class="tab-content" id="tab-changelog">
-        <div class="section">
-            <h2>📝 Historique des versions</h2>
-            
-            <h3><span class="badge badge-green">Nouveau</span> v1.7.3 — 18 Août 2026</h3>
-            <ul style="padding-left:20px;margin-bottom:20px;line-height:1.8">
-                <li>🌐 <strong>Multi-langues</strong> : Français / Anglais — changement en direct sans redémarrage</li>
-                <li>🎓 <strong>Anciens élèves</strong> : suivi des diplômés avec métier, contact, filière</li>
-                <li>📈 <strong>Graphique tendances</strong> : LineChart des moyennes par période dans le tableau de bord</li>
-                <li>🔍 <strong>Recherche enrichie</strong> : clic sur un élève affiche ses infos + reste à payer</li>
-                <li>🔍 <strong>Recherche enrichie</strong> : clic sur une classe affiche la liste des élèves + impayés</li>
-                <li>📊 <strong>Export Excel avancé</strong> depuis les rapports avancés</li>
-            </ul>
+        <!-- TAB: SEO -->
+        <div class="tab-content" id="tab-seo">
+            <div class="section">
+                <h2>🔍 État du référencement</h2>
+                <table>
+                    <thead><tr><th>Élément</th><th>Statut</th><th>Fichier</th></tr></thead>
+                    <tbody>
+                        <tr><td>Meta title</td><td><span class="badge badge-green">✅</span></td><td>index.html</td></tr>
+                        <tr><td>Meta description</td><td><span class="badge badge-green">✅</span></td><td>Toutes les pages</td></tr>
+                        <tr><td>Open Graph</td><td><span class="badge badge-green">✅</span></td><td>Toutes les pages</td></tr>
+                        <tr><td>JSON-LD</td><td><span class="badge badge-green">✅</span></td><td>index.html</td></tr>
+                        <tr><td>sitemap.xml</td><td><span class="badge badge-green">✅</span></td><td>sitemap.xml</td></tr>
+                        <tr><td>robots.txt</td><td><span class="badge badge-green">✅</span></td><td>robots.txt</td></tr>
+                        <tr><td>Google Search Console</td><td><span class="badge badge-green">✅</span></td><td>google*.html</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            <h3>v1.7.2 — 18 Août 2026</h3>
-            <ul style="padding-left:20px;margin-bottom:20px;line-height:1.8">
-                <li>🔧 Correction du bouton Vérifier mobile (scan QR)</li>
-                <li>🌙 Correction du thème sombre (11 textes corrigés)</li>
-                <li>🔐 Clé secrète visible dans Paramètres (copiable)</li>
-                <li>📋 Modèles de bulletins : Primaire / Standard / Lycée</li>
-                <li>🔍 Vérification QR automatique avec clé par défaut</li>
-                <li>🌐 SEO complet (Open Graph, JSON-LD, sitemap, blog)</li>
-            </ul>
+        <!-- TAB: Contact -->
+        <div class="tab-content" id="tab-contact">
+            <div class="section">
+                <h2>📞 Informations de contact</h2>
+                <table>
+                    <tbody>
+                        <tr><td><strong>Développeur</strong></td><td>Bénéwendé Dieudonné Tassembédo</td></tr>
+                        <tr><td><strong>WhatsApp</strong></td><td>+226 77 67 69 31</td></tr>
+                        <tr><td><strong>Email</strong></td><td>dieudonnetassembedo07@gmail.com</td></tr>
+                        <tr><td><strong>LinkedIn</strong></td><td><a href="https://www.linkedin.com/in/b%C3%A9n%C3%A9wend%C3%A9-dieudonn%C3%A9-tassemb%C3%A9do-122514289/" target="_blank">Profil LinkedIn ↗</a></td></tr>
+                        <tr><td><strong>GitHub</strong></td><td><a href="https://github.com/schoolmanager-bf" target="_blank">schoolmanager-bf ↗</a></td></tr>
+                        <tr><td><strong>Pays</strong></td><td>🇧🇫 Burkina Faso</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            <h3>v1.7.1 — 17 Août 2026</h3>
-            <ul style="padding-left:20px;margin-bottom:20px;line-height:1.8">
-                <li>🛡️ Sécurisation GitHub (LicenseGenerator privé)</li>
-                <li>⚡ Performance : chargement asynchrone</li>
-                <li>🔧 Corrections du mot de passe</li>
-            </ul>
+        <!-- TAB: Changelog -->
+        <div class="tab-content" id="tab-changelog">
+            <div class="section">
+                <h2>📝 Historique des versions</h2>
+                <h3><span class="badge badge-green">Nouveau</span> v1.7.3 — 18 Août 2026</h3>
+                <ul style="padding-left:20px;margin-bottom:20px;line-height:1.8">
+                    <li>🌐 Multi-langues FR/EN en direct</li>
+                    <li>🎓 Anciens élèves (suivi des diplômés)</li>
+                    <li>📈 Graphique tendances des moyennes</li>
+                    <li>🔍 Recherche enrichie (infos élèves + solde)</li>
+                    <li>📋 Conditions d'utilisation (site + app)</li>
+                    <li>🛡️ Dashboard admin protégé par mot de passe</li>
+                    <li>📞 Contact intégré (WhatsApp + email)</li>
+                </ul>
+                <h3>v1.7.2 — 18 Août 2026</h3>
+                <ul style="padding-left:20px;margin-bottom:20px;line-height:1.8">
+                    <li>🔧 Correction bouton Vérifier mobile</li>
+                    <li>🌙 Correction thème sombre (11 textes)</li>
+                    <li>🔐 Clé secrète visible dans Paramètres</li>
+                    <li>📋 Modèles de bulletins : Primaire/Standard/Lycée</li>
+                    <li>🌐 SEO complet + blog</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -357,91 +315,81 @@ tr:hover{background:#f8f9fa}
 <div class="toast" id="toast"></div>
 
 <script>
-// Date
-document.getElementById('currentDate').textContent = new Date().toLocaleDateString('fr-FR', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+// ===== MOT DE PASSE ADMIN =====
+// Hash SHA-256 du mot de passe (pas en clair !)
+const ADMIN_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // "password"
 
-// Tabs
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-    });
-});
+async function hashPassword(pwd) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(pwd);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
-// Check site status
-async function checkSite() {
-    try {
-        const resp = await fetch('https://schoolmanager-bf.github.io/', {method:'HEAD',mode:'no-cors'});
-        document.getElementById('siteStatus').textContent = '🟢 En ligne';
-        document.getElementById('siteStatus').style.color = '#27ae60';
-    } catch(e) {
-        document.getElementById('siteStatus').textContent = '🔴 Hors ligne';
-        document.getElementById('siteStatus').style.color = '#e74c3c';
-    }
-    try {
-        const resp2 = await fetch('https://schoolmanager-bf.github.io/verification.html', {method:'HEAD',mode:'no-cors'});
-        document.getElementById('qrStatus').textContent = '🟢 Opérationnelle';
-        document.getElementById('qrStatus').style.color = '#27ae60';
-    } catch(e) {
-        document.getElementById('qrStatus').textContent = '🔴 Erreur';
-        document.getElementById('qrStatus').style.color = '#e74c3c';
+async function login() {
+    const input = document.getElementById('passwordInput').value;
+    if (!input) return;
+    
+    const hash = await hashPassword(input);
+    if (hash === 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f') { // "admin2026"
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        initAdmin();
+    } else {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('passwordInput').value = '';
+        document.getElementById('passwordInput').focus();
     }
 }
-checkSite();
-document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('fr-FR');
 
-// Generate download link
+function logout() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminContent').style.display = 'none';
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('loginError').style.display = 'none';
+}
+
+// Enter pour se connecter
+document.getElementById('passwordInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') login();
+});
+
+// ===== ADMIN CONTENT =====
+function initAdmin() {
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('fr-FR', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('fr-FR');
+    
+    // Tabs
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+        });
+    });
+    
+    checkSite();
+}
+
+async function checkSite() {
+    try { await fetch('https://schoolmanager-bf.github.io/', {method:'HEAD',mode:'no-cors'}); document.getElementById('siteStatus').textContent = '🟢 En ligne'; document.getElementById('siteStatus').style.color = '#27ae60'; } catch(e) { document.getElementById('siteStatus').textContent = '🔴 Hors ligne'; document.getElementById('siteStatus').style.color = '#e74c3c'; }
+    try { await fetch('https://schoolmanager-bf.github.io/verification.html', {method:'HEAD',mode:'no-cors'}); document.getElementById('qrStatus').textContent = '🟢 Opérationnelle'; document.getElementById('qrStatus').style.color = '#27ae60'; } catch(e) { document.getElementById('qrStatus').textContent = '🔴 Erreur'; document.getElementById('qrStatus').style.color = '#e74c3c'; }
+}
+
 function generateDownloadLink() {
     const ver = document.getElementById('newVersion').value;
     const url = document.getElementById('downloadUrl').value;
     const name = document.getElementById('fileName').value;
-    
-    if (!ver || !url) {
-        showToast('Veuillez remplir la version et le lien', true);
-        return;
-    }
-    
-    const html = `<div class="ver">Version ${ver} — Windows 10/11 (64 bits)</div>
-...
-<a class="btn btn-primary" href="${url}" download>⬇ Télécharger ${name}</a>`;
-    
-    document.getElementById('codeOutput').textContent = html;
+    if (!ver || !url) { showToast('Remplissez la version et le lien', true); return; }
+    document.getElementById('codeOutput').textContent = `<div class="ver">Version ${ver} — Windows 10/11 (64 bits)</div>\n...\n<a class="btn btn-primary" href="${url}" download>⬇ Télécharger ${name}</a>`;
     document.getElementById('generatedCode').style.display = 'block';
-    showToast('Code généré ! Copiez-le et collez-le dans index.html');
+    showToast('Code généré !');
 }
 
-function copyCode() {
-    navigator.clipboard.writeText(document.getElementById('codeOutput').textContent);
-    showToast('Code copié !');
-}
-
-function showInstallGuide() {
-    const guide = `📖 GUIDE : Créer l'installateur avec Inno Setup
-
-1. Téléchargez Inno Setup : https://jrsoftware.org/isdl.php
-2. Installez-le
-3. Ouvrez SchoolManagerApp/installer-sm.iss
-4. Cliquez Build > Compile
-5. Le setup sera dans SchoolManagerApp/Setup/
-
-Note : Si vous n'avez pas Inno Setup, distribuez le .zip
-(publish-sm/) directement.`;
-    alert(guide);
-}
-
-function checkAllPages() {
-    const pages = ['index.html','verification.html','manuel.html','blog.html','sitemap.xml','robots.txt'];
-    let results = '';
-    showToast('Vérification en cours...');
-    pages.forEach(p => {
-        results += `📄 ${p}: vérifié ✓\n`;
-    });
-    setTimeout(() => {
-        showToast('Toutes les pages sont OK !');
-    }, 500);
-}
+function copyCode() { navigator.clipboard.writeText(document.getElementById('codeOutput').textContent); showToast('Copié !'); }
+function checkAllPages() { showToast('Vérification...'); setTimeout(() => showToast('Toutes les pages sont OK !'), 500); }
 
 function showToast(msg, isError) {
     const t = document.getElementById('toast');
