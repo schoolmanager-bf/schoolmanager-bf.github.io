@@ -104,11 +104,12 @@
     <h2><span class="num">1</span> Installer le logiciel</h2>
     <ol class="steps">
       <li>Téléchargez l'installateur depuis la page <a href="index.html#telechargement" style="color:#7db3ff">Téléchargement</a> du site officiel (ou recevez-le de votre fournisseur).</li>
-      <li>Double-cliquez sur <code>SchoolManager-Setup-1.7.0.exe</code> et suivez l'assistant d'installation.</li>
+      <li>Double-cliquez sur <code>SchoolManager-Setup-1.7.1.exe</code> et suivez l'assistant d'installation.</li>
       <li>Acceptez le dossier d'installation proposé (ou choisissez le vôtre) et terminez l'installation.</li>
       <li>Lancez SchoolManager depuis le menu Démarrer ou le raccourci du bureau.</li>
     </ol>
     <div class="ok">✅ Vos données sont stockées localement sur l'ordinateur — aucune connexion internet obligatoire pour fonctionner.</div>
+    <div class="note">💡 <b>Astuce ergonomie :</b> dans toutes les fenêtres de saisie, <b>Entrée</b> enregistre et <b>Échap</b> ferme. Les listes vides affichent un message et un bouton d'action directe ; le survol d'une cellule coupée affiche le texte complet en infobulle.</div>
   </section>
 
   <section id="premiere-connexion">
@@ -187,9 +188,10 @@
   <section id="enseignants">
     <h2><span class="num">8</span> Enseignants &amp; affectations</h2>
     <ul>
-      <li>Menu <b>Enseignants</b> : ajoutez les enseignants avec leur <b>spécialité</b>.</li>
-      <li><b>Affectez</b> chaque enseignant à une classe en indiquant son <b>nombre d'heures</b> par semaine.</li>
-      <li>Un enseignant <b>ne peut pas être affecté à deux classes en même temps</b> sur les mêmes heures (le logiciel détecte les conflits).</li>
+      <li>Menu <b>Enseignants</b> : ajoutez les enseignants avec <b>une ou plusieurs spécialités</b> (ex. Mathématiques + Physique-Chimie).</li>
+      <li><b>Affectez</b> chaque enseignant à une classe : sa <b>liste de spécialités</b> s'affiche automatiquement (sélection automatique s'il n'en a qu'une) — plus de saisie manuelle de la matière.</li>
+      <li>Indiquez le <b>nombre d'heures</b> par semaine.</li>
+      <li>Un enseignant <b>ne peut pas être affecté à deux classes en même temps</b> : le logiciel détecte les conflits d'horaires (même si les heures sont écrites différemment, ex. « 7h30-8h30 » vs « 07:30-08:30 ») et les refus.</li>
       <li>Les affectations apparaissent <b>en bas de l'emploi du temps</b> de chaque classe : nom, spécialité et nombre d'heures hebdomadaires.</li>
     </ul>
   </section>
@@ -222,7 +224,7 @@
     <p>Chaque bulletin et reçu porte un QR code. Trois façons de vérifier un document :</p>
     <h3>🌐 En ligne (depuis n'importe où)</h3>
     <ul>
-      <li>Depuis la v1.7.0, les QR pointent directement vers le <b>site officiel de vérification</b> : aucun serveur local, aucune installation.</li>
+      <li>Depuis la v1.7.1, les QR pointent directement vers le <b>site officiel de vérification</b> : plus de serveur local, aucune installation. Le contenu du QR est entièrement encodé pour être fiable avec tous les scanners de téléphone.</li>
       <li>Scannez le QR avec la caméra de n'importe quel téléphone : le lien ouvre la page de vérification et le document est contrôlé instantanément.</li>
       <li>La page affiche : ✅ <b>AUTHENTIQUE</b>, ❌ <b>FALSIFIÉ</b> ou ⚠️ <b>INVALIDE</b>, avec les informations de l'élève.</li>
       <li>Adresse en ligne : <code>https://schoolmanager-bf.github.io/verification.html</code> (configurable dans Paramètres → Sécurité des documents).</li>
@@ -238,6 +240,7 @@
     <ul>
       <li>Menu <b>Emploi du temps</b> : construisez le planning par classe (jours, heures, matières).</li>
       <li>En bas du tableau apparaissent les <b>enseignants affectés</b> à la classe avec leur spécialité et leurs heures.</li>
+      <li>À l'enregistrement, le logiciel vérifie qu'<b>aucun enseignant n'est sur deux classes au même créneau</b> : les cellules en conflit sont surlignées en rouge et l'enregistrement est bloqué jusqu'à correction.</li>
       <li>Menu <b>Calendrier</b> : événements scolaires, fêtes, congés et réunions.</li>
     </ul>
   </section>
@@ -302,8 +305,12 @@
       <li>Régénérez le document avec SchoolManager BF.</li>
       <li>Si la clé de sécurité a été changée, les anciens documents deviennent invalides — régénérez-les.</li>
     </ul>
-    <h3>La page de vérification ne répond pas (404)</h3>
-    <p>Le serveur intégré répond maintenant sur toutes les adresses. Redémarrez le logiciel et autorisez-le dans le pare-feu Windows (réseaux privés).</p>
+    <h3>Un QR ne s'ouvre pas sur le téléphone</h3>
+    <ul>
+      <li>Depuis la v1.7.1, plus de serveur local : les QR pointent vers le site officiel en ligne, vérifiable partout.</li>
+      <li>Les documents <b>imprimés avant la v1.7.1</b> portent l'ancien lien local — <b>régénérez-les</b> avec la v1.7.1 pour qu'ils soient vérifiables sur téléphone.</li>
+      <li>Dans le logiciel, la vérification des QR (menu Système → Vérification documents) fonctionne toujours, même pour les anciens documents.</li>
+    </ul>
     <h3>Le vérificateur en ligne « ne fait rien »</h3>
     <p>La page en ligne est corrigée (décodage automatique des URL-QR et moteur de secours). Utilisez le bouton <b>« 🔧 Tester le moteur »</b> puis les boutons de démonstration pour valider.</p>
     <h3>Textes difficiles à lire en thème sombre</h3>

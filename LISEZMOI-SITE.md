@@ -3,19 +3,14 @@
 Ce dossier contient le **site web du projet** (organisation GitHub : `schoolmanager-bf`) :
 - `index.html` — la page d'accueil animée (présentation + téléchargement)
 - `verification.html` — la page de vérification des QR codes (utilisable par les parents, même à la maison)
-- `download/` — l'installateur SchoolManager 1.7.0 à télécharger
+- `download/` — l'installateur SchoolManager 1.7.1 à télécharger
   (⚠️ l'outil de génération des licences est PRIVÉ : il n'est jamais publié sur le site,
   il est fourni uniquement à l'administration de l'établissement)
 
 ## 🚀 Option A — GitHub Pages (gratuit, recommandé — DÉJÀ FAIT ✅)
 
-1. Le site est actuellement sur le dépôt **`dieudo07/dieudo07.github.io`** : **`https://dieudo07.github.io/`**
-2. Pour l'héberger sous l'organisation `schoolmanager-bf` :
-   - Créez le dépôt `schoolmanager-bf/schoolmanager-bf.github.io` dans l'organisation,
-   - déplacez-y tout le contenu de ce dossier (`index.html`, `verification.html`, `download/`, `assets/`),
-   - puis **Settings → Pages** : « Deploy from a branch » → `main` → `/ (root)`.
-3. Le site sera alors en ligne à **`https://schoolmanager-bf.github.io/`**.
-4. Pensez ensuite à mettre à jour l'adresse de vérification dans SchoolManager (Paramètres → Sécurité des documents).
+1. Le site est hébergé sur le dépôt **`schoolmanager-bf/schoolmanager-bf.github.io`** : **`https://schoolmanager-bf.github.io/`** ✅
+2. Pour publier une mise à jour : copiez les fichiers modifiés (`index.html`, `verification.html`, `manuel.html`, `download/`, `assets/`) dans le dépôt local puis `git push` — GitHub Pages reconstruit automatiquement.
 
 ## 🚀 Option B — Netlify Drop (gratuit, sans Git)
 
