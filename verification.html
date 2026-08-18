@@ -268,6 +268,9 @@ async function verify(content) {
     // Auto-unwrap URL format QR (depuis v1.6.5)
     content = unwrapUrl(content);
 
+    // Décoder %7C et autres caractères encodés dans l'URL
+    try { content = decodeURIComponent(content); } catch(e) {}
+
   if (!content || content.trim() === "") {
     verdict.className = "verdict warn";
     verdict.innerHTML = "⚠️ INVALIDE<small>Contenu du QR code vide</small>";
@@ -487,7 +490,7 @@ function tick() {
       const text = codes[0].rawValue;
       stopCamera();
       document.getElementById("manual").value = text;
-      verify(text);
+      verify(text).catch(e => showError(e));
       return;
     }
     requestAnimationFrame(tick);
