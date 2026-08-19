@@ -1,0 +1,14 @@
+{
+    "name": "LicenseGenerator — SchoolManager",
+    "short_name": "LicenseGen",
+    "description": "Générateur de licences pour SchoolManager",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0f0f23",
+    "theme_color": "#1a1a2e",
+    "orientation": "portrait",
+    "icons": [
+        { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    ]
+}

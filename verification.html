@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#2C3E6B">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>🛡️ SchoolManager — Vérification documents</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: linear-gradient(160deg, #eef2f7 0%, #dde6f0 100%);
+    color: #223; min-height: 100vh;
+  }
+  .app { max-width: 480px; margin: 0 auto; padding: 16px 14px 40px; }
+  header { background: #2C3E6B; color: #fff; border-radius: 16px; padding: 16px; text-align: center;
+           box-shadow: 0 4px 14px rgba(44,62,107,.25); }
+  header h1 { margin: 0; font-size: 19px; }
+  header p { margin: 4px 0 0; font-size: 12px; opacity: .85; }
+  .card { background: #fff; border-radius: 14px; padding: 14px; margin-top: 14px;
+          box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+  .btn { display: block; width: 100%; border: 0; border-radius: 12px; padding: 14px;
+         font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+  .btn-primary { background: #2C3E6B; color: #fff; }
+  .btn-green   { background: #1B7F3B; color: #fff; }
+  .btn-red     { background: #EF2B2D; color: #fff; }
+  .btn-ghost   { background: #f1f3f6; color: #334; }
+  label { display: block; font-size: 12px; font-weight: 700; color: #556; margin: 12px 0 5px; }
+  input, textarea { width: 100%; border: 1px solid #ccd4de; border-radius: 10px; padding: 11px;
+                    font-size: 14px; background: #fafbfc; }
+  textarea { min-height: 64px; resize: vertical; font-family: monospace; }
+  #video { width: 100%; border-radius: 12px; display: none; margin-top: 10px; background: #000; }
+  /* Résultat */
+  #result { display: none; margin-top: 14px; }
+  .verdict { border-radius: 14px; padding: 18px 14px; text-align: center; color: #fff;
+             font-weight: 800; font-size: 20px; letter-spacing: .5px; }
+  .verdict.ok { background: linear-gradient(135deg,#1B7F3B,#2EA85B); }
+  .verdict.bad { background: linear-gradient(135deg,#C62828,#EF2B2D); }
+  .verdict.warn { background: linear-gradient(135deg,#E65100,#FB8C00); }
+  .verdict.info { background: linear-gradient(135deg,#37474F,#607D8B); }
+  .verdict small { display:block; font-size: 12px; font-weight: 500; margin-top: 6px; opacity: .9; }
+  .infos { background: #f6f8fb; border-radius: 12px; margin-top: 12px; padding: 8px 14px; }
+  .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e6ebf2; font-size: 14px; }
+  .row:last-child { border-bottom: 0; }
+  .row b { color: #556; font-weight: 600; }
+  .row span { font-weight: 700; text-align: right; max-width: 62%; }
+  .note { font-size: 11.5px; color: #667; margin-top: 10px; line-height: 1.45; }
+  .badge { display: inline-block; background: #FCD116; color: #333; border-radius: 8px;
+           padding: 2px 8px; font-size: 11px; font-weight: 800; }
+  #secret { font-family: monospace; font-size: 13px; }
+  .spacer { height: 4px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>🛡️ SchoolManager</h1>
+    <p>Vérification des documents (bulletins, reçus)</p>
+  </header>
+
+  <div class="card">
+    <button class="btn btn-primary" id="btnScan">📷 Scanner un QR code</button>
+    <video id="video" playsinline autoplay muted></video>
+
+    <label for="manual">Ou collez le contenu du QR code :</label>
+    <textarea id="manual" placeholder="SM-BUL|SM260001|Trimestre 1|12.50|…"></textarea>
+    <button class="btn btn-green" id="btnVerify">✅ Vérifier</button>
+
+    <label for="secret">Clé de sécurité de l'établissement</label>
+    <input id="secret" type="text" autocomplete="off" spellcheck="false">
+    <div class="note">Doit correspondre à la clé définie dans <b>SchoolManager → Paramètres → Sécurité</b>.
+      Modifiée par l'école ? Saisissez-la ici. Elle reste enregistrée sur ce téléphone.</div>
+  </div>
+
+  <div id="result">
+    <div class="verdict" id="verdict"></div>
+    <div class="infos" id="infos"></div>
+    <div class="note" id="msg"></div>
+  </div>
+
+  <div class="card">
+    <div class="note"><b>Démonstration (test)</b> : génère un QR de bulletin avec la clé actuelle pour
+      vérifier que tout fonctionne.</div>
+    <button class="btn btn-ghost" id="btnDemoOk">🧪 QR bulletin valide (démo)</button>
+    <button class="btn btn-ghost" id="btnDemoBad">🧪 QR falsifié (démo)</button>
+    <button class="btn btn-ghost" id="btnSelfTest">🔧 Tester le moteur de vérification</button>
+  </div>
+
+  <div class="card">
+    <div class="note">
+      ℹ️ <b>Comment ça marche</b> : le téléphone vérifie l'<b>empreinte de sécurité</b> (HMAC) du QR —
+      impossible à falsifier sans la clé secrète — et affiche les informations de l'élève portées par le
+      document. Le recoupement avec les notes enregistrées se fait dans SchoolManager
+      (menu <b>SYSTÈME → Vérification documents</b>).
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+// ===== Clé secrète (identique à SchoolManager) =====
+const DEFAULT_SECRET = "SchoolManager-BulletinSecurity-2026!@#BurkinaFaso";
+const KEY_LS = "sm_qr_secret";
+const secretInput = document.getElementById("secret");
+secretInput.value = localStorage.getItem(KEY_LS) || DEFAULT_SECRET;
+secretInput.addEventListener("input", () => localStorage.setItem(KEY_LS, secretInput.value.trim()));
+
+// ===== SHA-256 en pur JavaScript (fallback : fonctionne même en HTTP, sans crypto.subtle) =====
+function sha256JS(ascii) {
+  function rightRotate(value, amount) {
+    return (value >>> amount) | (value << (32 - amount));
+  }
+  let result = "";
+  const words = [];
+  const asciiBitLength = ascii.length * 8;
+  let hash = sha256JS.h = sha256JS.h || [];
+  const k = sha256JS.k = sha256JS.k || [];
+  let primeCounter = k.length;
+  const isComposite = {};
+  for (let candidate = 2; primeCounter < 64; candidate++) {
+    if (!isComposite[candidate]) {
+      for (let i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+      hash[primeCounter] = (Math.pow(candidate, 0.5) * 4294967296) | 0;
+      k[primeCounter++] = (Math.pow(candidate, 1 / 3) * 4294967296) | 0;
+    }
+  }
+  ascii += "\x80";
+  while (ascii.length % 64 - 56) ascii += "\x00";
+  for (let i = 0; i < ascii.length; i++) {
+    const j = ascii.charCodeAt(i);
+    if (j >> 8) return ""; // texte non-latin1 : encoder en UTF-8 d'abord
+    words[i >> 2] |= j << ((3 - i) % 4) * 8;
+  }
+  words[words.length] = (asciiBitLength / 4294967296) | 0;
+  words[words.length] = asciiBitLength;
+  for (let j = 0; j < words.length;) {
+    const w = words.slice(j, j += 16);
+    const oldHash = hash.slice(0, 8);
+    for (let i = 0; i < 64; i++) {
+      const w15 = w[i - 15], w2 = w[i - 2];
+      const a = hash[0], e = hash[4];
+      const temp1 = hash[7]
+        + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25))
+        + ((e & hash[5]) ^ (~e & hash[6]))
+        + k[i]
+        + (w[i] = (i < 16) ? w[i] : (
+            w[i - 16]
+            + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3))
+            + w[i - 7]
+            + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))
+          ) | 0);
+      const temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22))
+        + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+      hash = [(temp1 + temp2) | 0].concat(hash);
+      hash[4] = (hash[4] + temp1) | 0;
+    }
+    for (let i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
+  }
+  for (let i = 0; i < 8; i++) {
+    for (let j = 3; j + 1; j--) {
+      const b = (hash[i] >> (j * 8)) & 255;
+      result += ((b < 16) ? "0" : "") + b.toString(16);
+    }
+  }
+  return result;
+}
+
+// Convertit un texte en chaîne latin-1 (octets UTF-8) pour SHA-256
+function toLatin1(str) {
+  return String.fromCharCode.apply(null, new Uint8Array(new TextEncoder().encode(str)));
+}
+
+// Hexadécimal → octets bruts (latin-1)
+function hexToBin(hex) {
+  let s = "";
+  for (let i = 0; i < hex.length; i += 2) s += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+  return s;
+}
+
+// ===== HMAC-SHA256 en pur JS (identique au C# : hexadécimal MAJUSCULE) =====
+function hmacHexJS(input, secret) {
+  const blockSize = 64;
+  const bInput = toLatin1(input);
+  let key = toLatin1(secret);
+  if (key.length > blockSize) key = sha256JS(key);
+  while (key.length < blockSize) key += "\x00";
+  let oKeyPad = "", iKeyPad = "";
+  for (let i = 0; i < blockSize; i++) {
+    oKeyPad += String.fromCharCode(key.charCodeAt(i) ^ 0x5c);
+    iKeyPad += String.fromCharCode(key.charCodeAt(i) ^ 0x36);
+  }
+  // L'empreinte intérieure doit être réinjectée en OCTETS BRUTS, pas en hex.
+  const inner = hexToBin(sha256JS(iKeyPad + bInput));
+  return sha256JS(oKeyPad + inner);
+}
+
+async function hmacHex(input, secret) {
+  // crypto.subtle n'existe PAS en HTTP (contexte non sécurisé) → on bascule en pur JS.
+  try {
+    if (window.crypto && crypto.subtle) {
+      const enc = new TextEncoder();
+      const key = await crypto.subtle.importKey("raw", enc.encode(secret),
+        { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+      const sig = await crypto.subtle.sign("HMAC", key, enc.encode(input));
+      return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+    }
+  } catch (e) { /* bascule en pur JS */ }
+  return hmacHexJS(input, secret);
+}
+
+function mention(moyenne) {
+  if (moyenne >= 16) return "Très Bien";
+  if (moyenne >= 14) return "Bien";
+  if (moyenne >= 12) return "Assez Bien";
+  if (moyenne >= 10) return "Passable";
+  return "Insuffisant";
+}
+
+// ===== Vérification d'un contenu QR =====
+async function verify(content) {
+  const secret = secretInput.value.trim() || DEFAULT_SECRET;
+  const res = document.getElementById("result");
+  const verdict = document.getElementById("verdict");
+  const infos = document.getElementById("infos");
+  const msg = document.getElementById("msg");
+  res.style.display = "block";
+  infos.innerHTML = "";
+
+  if (!content || content.trim() === "") {
+    verdict.className = "verdict warn";
+    verdict.innerHTML = "⚠️ INVALIDE<small>Contenu du QR code vide</small>";
+    msg.textContent = "Scannez un QR code ou collez son contenu.";
+    return;
+  }
+  const parts = content.trim().split("|");
+  const type = (parts[0] || "").toUpperCase();
+  const last = parts[parts.length - 1];
+
+  if (type === "SM-BUL") {
+    if (parts.length !== 5 && parts.length !== 7) {
+      verdict.className = "verdict warn";
+      verdict.innerHTML = "⚠️ INVALIDE<small>QR de bulletin incomplet</small>";
+      msg.textContent = "Le QR scanné ne ressemble pas à un bulletin SchoolManager.";
+      return;
+    }
+    const input = parts.slice(1, -1).join("|");
+    const h = await hmacHex(input, secret);
+    const ok = h.slice(0, 8).toUpperCase() === last.toUpperCase();
+
+    const matricule = parts[1], periode = parts[2], moyStr = parts[3];
+    const nom = parts.length === 7 ? parts[4] : "";
+    const classe = parts.length === 7 ? parts[5] : "";
+    const moy = parseFloat(moyStr.replace(",", "."));
+
+    if (ok) {
+      verdict.className = "verdict ok";
+      verdict.innerHTML = "✅ AUTHENTIQUE<small>Empreinte de sécurité valide</small>";
+    } else {
+      verdict.className = "verdict bad";
+      verdict.innerHTML = "❌ FALSIFIÉ<small>L'empreinte ne correspond pas : document altéré</small>";
+    }
+    infos.innerHTML =
+      (nom ? row("Élève", nom) : "") +
+      row("Matricule", matricule) +
+      (classe ? row("Classe", classe) : "") +
+      row("Période", periode) +
+      row("Moyenne", moyStr + " / 20") +
+      (isNaN(moy) ? "" : row("Mention", mention(moy)));
+    msg.textContent = ok
+      ? "Ce bulletin a été émis par SchoolManager et n'a pas été modifié depuis son impression."
+      : "Ce QR a été modifié ou produit sans la clé de l'école. Méfiez-vous de ce document.";
+    return;
+  }
+
+  if (type === "SM-REC") {
+    if (parts.length !== 6) {
+      verdict.className = "verdict warn";
+      verdict.innerHTML = "⚠️ INVALIDE<small>QR de reçu incomplet</small>";
+      msg.textContent = "Le QR scanné ne ressemble pas à un reçu SchoolManager.";
+      return;
+    }
+    const input = [parts[1], parts[3], parts[4]].join("|");
+    const h = await hmacHex(input, secret);
+    const ok = h.slice(0, 8).toUpperCase() === last.toUpperCase();
+
+    if (ok) {
+      verdict.className = "verdict ok";
+      verdict.innerHTML = "✅ AUTHENTIQUE<small>Reçu vérifié</small>";
+    } else {
+      verdict.className = "verdict bad";
+      verdict.innerHTML = "❌ FALSIFIÉ<small>Reçu altéré ou faux</small>";
+    }
+    infos.innerHTML =
+      row("Reçu n°", parts[1]) +
+      row("Élève", parts[2]) +
+      row("Montant", Number(parts[3]).toLocaleString("fr-FR") + " FCFA") +
+      row("Date", formatDate(parts[4]));
+    msg.textContent = ok
+      ? "Le reçu correspond à un paiement enregistré par SchoolManager."
+      : "Ce reçu a été modifié ou produit sans la clé de l'école.";
+    return;
+  }
+
+  if (type === "SM-SIG") {
+    verdict.className = "verdict info";
+    verdict.innerHTML = "ℹ️ DOCUMENT SIGNÉ<small>Vérification complète sur SchoolManager</small>";
+    infos.innerHTML = row("Identifiant de signature", parts[1] || "—");
+    msg.textContent = "Le registre des signatures est conservé sur l'ordinateur de l'école : " +
+      "ouvrez SchoolManager → SYSTÈME → Vérification documents pour confirmer la validité officielle.";
+    return;
+  }
+
+  verdict.className = "verdict warn";
+  verdict.innerHTML = "⚠️ INVALIDE<small>Format non reconnu</small>";
+  msg.textContent = "Ce QR n'est pas un document SchoolManager (type : " + (type || "vide") + ").";
+}
+
+function row(k, v) {
+  return '<div class="row"><b>' + k + '</b><span>' + (v ?? "—") + '</span></div>';
+}
+function formatDate(yyyymmdd) {
+  const s = String(yyyymmdd);
+  if (s.length !== 8) return s;
+  return s.slice(6, 8) + "/" + s.slice(4, 6) + "/" + s.slice(0, 4);
+}
+
+// ===== Actions =====
+document.getElementById("btnVerify").addEventListener("click", () => verify(document.getElementById("manual").value));
+document.getElementById("manual").addEventListener("input", () => {
+  const v = document.getElementById("manual").value.trim();
+  if (v.startsWith("SM-")) verify(v);
+});
+
+// ===== Ouverture via un QR =====
+// Les QR des documents sont des URL : http://IP:8090/v?d=SM-BUL|…|empreinte
+// N'importe quel scanner ouvre cette page → on vérifie automatiquement.
+function extractParam(name) {
+  const q = window.location.search;
+  if (!q) return null;
+  const params = new URLSearchParams(q);
+  return params.get(name);
+}
+// Le script est en fin de page : les éléments existent déjà → vérification immédiate.
+(async () => {
+  const d = extractParam("d");
+  if (d) {
+    document.getElementById("manual").value = d;
+    await verify(d);
+  }
+})();
+
+// Démo : bulletin valide / falsifié (mêmes données, clé courante)
+document.getElementById("btnDemoOk").addEventListener("click", async () => {
+  const secret = secretInput.value.trim() || DEFAULT_SECRET;
+  const data = "SM260001|Trimestre 1|13.75|OUEDRAOGO Awa|6ème A";
+  const h = await hmacHex(data, secret);
+  document.getElementById("manual").value = "SM-BUL|" + data + "|" + h.slice(0, 8);
+  verify(document.getElementById("manual").value);
+});
+document.getElementById("btnDemoBad").addEventListener("click", () => {
+  // Empreinte inventée : ne peut pas passer
+  document.getElementById("manual").value = "SM-BUL|SM260001|Trimestre 1|20.00|OUEDRAOGO Awa|6ème A|DEADBEEF";
+  verify(document.getElementById("manual").value);
+});
+
+// Auto-test : vérifie que le moteur HMAC (crypto.subtle OU pur JS) fonctionne ici
+function hasSubtle() { try { return !!(window.crypto && crypto.subtle); } catch (e) { return false; } }
+document.getElementById("btnSelfTest").addEventListener("click", async () => {
+  try {
+    const expected = "E9F4C306"; // empreinte de référence (même calcul que .NET)
+    const input = "SM260001|Trimestre 1|13.75|OUEDRAOGO Awa|6ème A";
+    const h = (await hmacHex(input, DEFAULT_SECRET)).toUpperCase();
+    const mode = hasSubtle() ? "crypto.subtle" : "pur JavaScript (fallback)";
+    if (h.slice(0, 8) === expected) {
+      showNote("✅ Moteur de vérification <b>OK</b> (" + mode + ") — l'appli peut vérifier les QR." +
+        "<br>Si un QR affiche quand même INVALIDE, c'est qu'il a été généré avec une clé différente " +
+        "ou par une version antérieure à la v1.5.6 : régénérez le document avec SchoolManager.", "");
+    } else {
+      showNote("⚠️ Le moteur produit " + h.slice(0, 8) + " au lieu de " + expected +
+        " (" + mode + "). Copiez ce message et envoyez-le au support.", "err");
+    }
+  } catch (e) {
+    showNote("❌ Erreur moteur : " + e.message, "err");
+  }
+});
+
+// ===== Caméra (BarcodeDetector, disponible sur Chrome Android) =====
+let detector = null, scanning = false, stream = null;
+const video = document.getElementById("video");
+
+function showNote(html, kind) {
+  let box = document.getElementById("camnote");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "camnote";
+    box.style.margin = "10px 0";
+    box.style.padding = "12px";
+    box.style.borderRadius = "10px";
+    box.style.fontSize = "13px";
+    box.style.lineHeight = "1.5";
+    document.getElementById("btnScan").parentNode.insertBefore(box, document.getElementById("btnScan").nextSibling);
+  }
+  box.style.display = "block";
+  box.style.background = kind === "err" ? "#FDECEA" : "#E8F0FE";
+  box.style.color = kind === "err" ? "#B3261E" : "#174EA6";
+  box.innerHTML = html;
+}
+
+document.getElementById("btnScan").addEventListener("click", async () => {
+  if (scanning) { stopCamera(); showNote("", ""); return; }
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (!("BarcodeDetector" in window)) {
+    showNote("⚠️ La caméra n'est pas disponible sur ce navigateur/téléphone." +
+      (isIOS ? " Sur iPhone, utilisez <b>le mode collage</b> ci-dessous ou l'app Android." : "") +
+      "<br>👉 Collez le contenu du QR (mode collage) à la place, ou installez l'app Android « Vérification QR ».", "err");
+    return;
+  }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    showNote("⚠️ La caméra est bloquée ici (page ouverte en HTTP ou navigateur non compatible).<br>👉 Utilisez le <b>mode collage</b> ci-dessous : collez le contenu du QR puis « Vérifier ».", "err");
+    return;
+  }
+  try {
+    detector = new BarcodeDetector({ formats: ["qr_code"] });
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    video.srcObject = stream;
+    video.style.display = "block";
+    scanning = true;
+    document.getElementById("btnScan").textContent = "⏹️ Arrêter la caméra";
+    showNote("", "");
+    tick();
+  } catch (e) {
+    showNote("⚠️ Impossible d'ouvrir la caméra : " + e.message +
+      "<br>👉 Autorisez la caméra dans le navigateur, ou utilisez le <b>mode collage</b> ci-dessous.", "err");
+  }
+});
+
+function tick() {
+  if (!scanning) return;
+  detector.detect(video).then(codes => {
+    if (codes.length > 0) {
+      const text = codes[0].rawValue;
+      stopCamera();
+      document.getElementById("manual").value = text;
+      verify(text);
+      return;
+    }
+    requestAnimationFrame(tick);
+  }).catch(() => requestAnimationFrame(tick));
+}
+
+function stopCamera() {
+  scanning = false;
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  video.style.display = "none";
+  document.getElementById("btnScan").textContent = "📷 Scanner un QR code";
+}
+</script>
+</body>
+</html>

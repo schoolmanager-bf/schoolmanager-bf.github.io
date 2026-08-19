@@ -1,0 +1,11 @@
+# SchoolManager BF - Robots.txt
+# Autoriser l'exploration par tous les moteurs de recherche
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://schoolmanager-bf.github.io/sitemap.xml
+
+# Pages importantes
+Disallow: /download/
