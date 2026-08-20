@@ -231,6 +231,28 @@
   .about .tag{background:rgba(61,123,255,.14);border:1px solid rgba(61,123,255,.35);color:#9cc0ff;font-size:.78rem;font-weight:600;padding:5px 14px;border-radius:100px}
   @media(max-width:700px){.about{grid-template-columns:1fr;text-align:center;justify-items:center}}
 
+  /* ===== Contact ===== */
+  .contact{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+  .contact-form{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:36px;backdrop-filter:blur(10px)}
+  .contact-form h3{font-size:1.3rem;font-weight:800;margin-bottom:6px}
+  .contact-form p{color:var(--muted);font-size:.9rem;margin-bottom:24px}
+  .form-group{margin-bottom:18px}
+  .form-group label{display:block;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+  .form-group input,.form-group textarea,.form-group select{width:100%;padding:14px 16px;border:1px solid var(--card-border);border-radius:12px;background:rgba(255,255,255,.04);color:var(--text);font-size:.95rem;font-family:inherit;transition:.3s;outline:none}
+  .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(61,123,255,.15)}
+  .form-group textarea{min-height:120px;resize:vertical}
+  .form-group select option{background:var(--bg2);color:var(--text)}
+  .contact-form .btn{width:100%;justify-content:center}
+  .contact-info{display:grid;gap:18px}
+  .contact-card{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:24px;backdrop-filter:blur(10px);transition:.3s}
+  .contact-card:hover{border-color:rgba(61,123,255,.4);transform:translateY(-3px)}
+  .contact-card .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.2rem;margin-bottom:12px;background:linear-gradient(135deg,rgba(61,123,255,.18),rgba(0,200,83,.14));border:1px solid rgba(61,123,255,.3)}
+  .contact-card h4{font-size:1rem;font-weight:700;margin-bottom:4px}
+  .contact-card p{color:var(--muted);font-size:.88rem;line-height:1.5}
+  .contact-card a{color:#7db3ff;text-decoration:none}
+  .contact-card a:hover{text-decoration:underline}
+  @media(max-width:700px){.contact{grid-template-columns:1fr}}
+
   /* ===== Footer ===== */
   footer{border-top:1px solid var(--card-border);padding:50px 0 34px;margin-top:40px}
   .foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
@@ -286,6 +308,7 @@
         <li><a href="#faq">FAQ</a></li>
         <li><a href="manuel.html">📘 Manuel</a></li>
         <li><a href="blog.html">📝 Blog</a></li>
+        <li><a href="#contact">Contact</a></li>
         <li><a href="#apropos">À propos</a></li>
         <li><a class="nav-cta" href="#telechargement">⬇ Télécharger</a></li>
       </ul>
@@ -490,6 +513,81 @@
   </div>
 </section>
 
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Contact</span>
+      <h2>Envoyez-nous un message</h2>
+      <p>Une question, une demande de licence ou un partenariat ? Écrivez-nous !</p>
+    </div>
+    <div class="contact reveal">
+      <div class="contact-form">
+        <h3>✉️ Formulaire de contact</h3>
+        <p>Remplissez le formulaire et nous vous répondrons dans les plus brefs délais.</p>
+        <form id="contactForm" onsubmit="sendMessage(event)">
+          <div class="form-group">
+            <label>Nom complet</label>
+            <input type="text" id="cfName" placeholder="Votre nom" required>
+          </div>
+          <div class="form-group">
+            <label>Email ou téléphone</label>
+            <input type="text" id="cfContact" placeholder="email@exemple.com ou +226 XX XX XX XX" required>
+          </div>
+          <div class="form-group">
+            <label>Sujet</label>
+            <select id="cfSubject">
+              <option value="Demande de licence">🔑 Demande de licence</option>
+              <option value="Question technique">🔧 Question technique</option>
+              <option value="Partenariat">🤝 Partenariat</option>
+              <option value="Suggestion">💡 Suggestion</option>
+              <option value="Autre">📋 Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="cfMessage" placeholder="Décrivez votre demande en détail..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            Envoyer via WhatsApp
+          </button>
+        </form>
+        <p style="font-size:.8rem;color:var(--muted);margin-top:12px;text-align:center">
+          📱 Le message est envoyé directement via WhatsApp — réponse sous 24h maximum.
+        </p>
+      </div>
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="ico">📞</div>
+          <h4>Téléphone</h4>
+          <p><a href="tel:+22677676931">+226 77 67 69 31</a></p>
+        </div>
+        <div class="contact-card">
+          <div class="ico">✉️</div>
+          <h4>Email</h4>
+          <p><a href="mailto:dieudonnetassembedo07@gmail.com">dieudonnetassembedo07@gmail.com</a></p>
+        </div>
+        <div class="contact-card">
+          <div class="ico">💬</div>
+          <h4>WhatsApp</h4>
+          <p><a href="https://wa.me/22677676931" target="_blank">Envoyer un message WhatsApp →</a></p>
+        </div>
+        <div class="contact-card">
+          <div class="ico">💼</div>
+          <h4>LinkedIn</h4>
+          <p><a href="https://www.linkedin.com/in/b%C3%A9n%C3%A9wend%C3%A9-dieudonn%C3%A9-tassemb%C3%A9do-122514289/" target="_blank">Profil LinkedIn →</a></p>
+        </div>
+        <div class="contact-card">
+          <div class="ico">💻</div>
+          <h4>GitHub</h4>
+          <p><a href="https://github.com/schoolmanager-bf" target="_blank">Voir le code source →</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== FOOTER ===== -->
 <footer>
   <div class="wrap foot">
@@ -500,6 +598,7 @@
       <a href="#telechargement">Téléchargement</a>
       <a href="verification.html">Vérifier un document</a>
       <a href="manuel.html">📘 Manuel</a>
+      <a href="#contact">Contact</a>
       <a href="#apropos">À propos</a>
       <a href="conditions.html">📋 Conditions</a>
     </div>
@@ -610,6 +709,21 @@ function toggleDownload(){
     });
   }
 })();
+
+/* ===== Contact Form ===== */
+function sendMessage(e) {
+  e.preventDefault();
+  const name = document.getElementById('cfName').value.trim();
+  const contact = document.getElementById('cfContact').value.trim();
+  const subject = document.getElementById('cfSubject').value;
+  const message = document.getElementById('cfMessage').value.trim();
+  if (!name || !contact || !message) { alert('Veuillez remplir tous les champs.'); return; }
+  const phone = '22677676931';
+  const text = `📩 *Nouveau message depuis le site SchoolManager*\n\n👤 *Nom :* ${name}\n📧 *Contact :* ${contact}\n📋 *Sujet :* ${subject}\n\n💬 *Message :*\n${message}`;
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+  e.target.reset();
+}
 </script>
 </body>
 </html>
