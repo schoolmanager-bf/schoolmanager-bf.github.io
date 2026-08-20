@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SchoolManager BF — Fiche technique</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --border: #334155;
+  --primary: #6366f1;
+  --accent: #06b6d4;
+  --green: #10b981;
+  --gold: #f59e0b;
+  --red: #ef4444;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --text3: #64748b;
+}
+
+@media print {
+  .page { page-break-after: always; }
+  .no-print { display: none !important; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #0f172a !important; }
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 20mm;
+  position: relative;
+}
+
+code, .mono {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 12px;
+  background: rgba(99,102,241,.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--accent);
+}
+
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 2px;
+}
+
+.tag-green { background: rgba(16,185,129,.15); color: var(--green); }
+.tag-blue { background: rgba(99,102,241,.15); color: var(--primary); }
+.tag-gold { background: rgba(245,158,11,.15); color: var(--gold); }
+.tag-red { background: rgba(239,68,68,.15); color: var(--red); }
+.tag-cyan { background: rgba(6,182,212,.15); color: var(--accent); }
+
+h1 { font-size: 36px; font-weight: 900; }
+h2 { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 16px; }
+h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+p { font-size: 13px; color: var(--text2); }
+
+/* Cover */
+.cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.cover .terminal {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 20px 30px;
+  text-align: left;
+  margin: 30px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  width: 80%;
+}
+
+.cover .terminal .prompt { color: var(--green); }
+.cover .terminal .cmd { color: var(--text); }
+.cover .terminal .output { color: var(--text3); }
+.cover .terminal .highlight { color: var(--gold); }
+.cover .terminal .info { color: var(--accent); }
+
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.card h3 { margin-bottom: 6px; }
+.card p { font-size: 12px; line-height: 1.5; }
+
+.stat {
+  text-align: center;
+  padding: 16px;
+}
+
+.stat .value {
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat .label {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: rgba(99,102,241,.1);
+  color: var(--primary);
+  font-weight: 700;
+  border-bottom: 2px solid var(--border);
+}
+
+table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+
+table td:first-child {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.badge-page {
+  position: absolute;
+  bottom: 15mm;
+  right: 20mm;
+  font-size: 10px;
+  color: var(--text3);
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 : COUVERTURE -->
+<div class="page cover">
+  <h1>School<span style="color:var(--accent)">Manager</span> BF</h1>
+  <p style="font-size:16px;margin-top:8px;color:var(--text2)">Fiche technique — Architecture & implémentation</p>
+
+  <div class="terminal">
+    <div><span class="prompt">$</span> <span class="cmd">schoolmanager --version</span></div>
+    <div><span class="output">SchoolManager v1.7.6 (1.7.6-Client-Setup.exe)</span></div>
+    <div></div>
+    <div><span class="prompt">$</span> <span class="cmd">schoolmanager --stack</span></div>
+    <div><span class="info">Runtime:</span>    .NET 6.0 (LTS) — WPF (Windows Presentation Foundation)</div>
+    <div><span class="info">Language:</span>   C# 10.0</div>
+    <div><span class="info">Database:</span>   SQLite 3.x (via System.Data.SQLite)</div>
+    <div><span class="info">PDF:</span>        QuestPDF 2024.x + PdfSharp</div>
+    <div><span class="info">Excel:</span>      ClosedXML 0.102.x</div>
+    <div><span class="info">QR Code:</span>    QRCoder 1.5.x + ZXing.Net</div>
+    <div><span class="info">Crypto:</span>     System.Security.Cryptography (HMAC-SHA256, SHA-256)</div>
+    <div></div>
+    <div><span class="prompt">$</span> <span class="cmd">schoolmanager --platform</span></div>
+    <div><span class="output">Windows 10/11 x64 — Self-contained (no .NET runtime required)</span></div>
+    <div><span class="highlight">Taille: ~59 MB (single-file published, trimmed)</span></div>
+  </div>
+
+  <p style="margin-top:20px;font-size:12px;color:var(--text3)">Août 2026 — Bénéwendé Dieudonné Tassembédo</p>
+  <p style="font-size:10px;color:var(--text3);margin-top:4px">+226 77 67 69 31 · dieudonnetassembedo07@gmail.com</p>
+</div>
+
+<!-- PAGE 2 : ARCHITECTURE -->
+<div class="page">
+  <h2>📐 Architecture logicielle</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🧩 Pattern MVVM</h3>
+      <p>Architecture Model-View-ViewModel avec code-behind XAML. Séparation data/UI via <code>DynamicResource</code> et <code>Binding</code>.</p>
+      <div style="margin-top:8px">
+        <span class="tag tag-blue">Models/</span>
+        <span class="tag tag-cyan">Views/</span>
+        <span class="tag tag-green">Services/</span>
+        <span class="tag tag-gold">Themes/</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🗃️ Base de données</h3>
+      <p>SQLite locale fichier unique. WAL mode pour performance. Migrations auto via <code>ALTER TABLE</code>.</p>
+      <div style="margin-top:8px">
+        <code>schoolmanager.db</code> — <span style="color:var(--green)">~2-50 MB selon l'usage</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🌍 Internationalisation</h3>
+      <p>Système de ressources XAML bilingue. Dictionnaires FR.xaml / EN.xaml chargés dynamiquement.</p>
+      <div style="margin-top:8px">
+        <code>LocalizationService.SetLanguage("FR")</code>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🎨 Thèmes</h4>
+      <p>4 thèmes via <code>ResourceDictionary</code> : Clair, Sombre, Burkina, Moderne. Changement dynamique.</p>
+      <div style="margin-top:8px">
+        <code>ThemeService.SetTheme(Theme.Dark)</code>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:24px">📁 Structure du projet</h2>
+  <div class="card" style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8">
+    <div><span style="color:var(--accent)">SchoolManager/</span></div>
+    <div>├── <span style="color:var(--gold)">Models/</span>          → Student, ClassRoom, Grade, Payment, Inscription, User, Alumni</div>
+    <div>├── <span style="color:var(--accent)">Views/</span></div>
+    <div>│   ├── <span style="color:var(--accent)">Pages/</span>       → Dashboard, Students, Classes, Grades, Payments, Reports, AI...</div>
+    <div>│   ├── LoginWindow.xaml</div>
+    <div>│   ├── MainWindow.xaml</div>
+    <div>│   └── LicenseActivationWindow.xaml</div>
+    <div>├── <span style="color:var(--green)">Services/</span></div>
+    <div>│   ├── DatabaseService.cs   → CRUD complet, migrations, backup</div>
+    <div>│   ├── LicenseService.cs    → Validation HMAC-SHA256, Machine ID</div>
+    <div>│   ├── PdfService.cs        → QuestPDF templates bulletins/reçus</div>
+    <div>│   ├── BackupService.cs     → Auto + manuelle + second support</div>
+    <div>│   ├── QrVerificationService.cs → QR HMAC signés</div>
+    <div>│   └── AIService.cs         → Prédictions, analyse financière</div>
+    <div>├── <span style="color:var(--gold)">Themes/</span></div>
+    <div>│   ├── Lang/FR.xaml         → 1745+ clés de traduction</div>
+    <div>│   ├── Lang/EN.xaml</div>
+    <div>│   └── *.xaml              → 4 thèmes de style</div>
+    <div>└── App.xaml                → Configuration, seeding, lifecycle</div>
+  </div>
+
+  <div class="badge-page">SchoolManager BF — Fiche technique</div>
+</div>
+
+<!-- PAGE 3 : SÉCURITÉ -->
+<div class="page">
+  <h2>🔐 Mécanismes de sécurité</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🔑 Licence — HMAC-SHA256</h3>
+      <table>
+        <tr><td>Algorithme</td><td><code>SHA-256</code></td></tr>
+        <tr><td>Format clé</td><td><code>TYPE-XXXX-XXXX-XXXX-HASH4</code></td></tr>
+        <tr><td>Input hash</td><td><code>{type}-{body}-{machineId}-{SECRET}</code></td></tr>
+        <tr><td>Extraction</td><td>4 premiers caractères hex du hash</td></tr>
+        <tr><td>Lien machine</td><td>WMI <code>Win32_BaseBoard</code> + <code>Win32_BIOS</code></td></tr>
+        <tr><td>Types</td><td>1MO, 1AN, 2AN, 5AN</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>🛡️ QR Code — Empreinte document</h3>
+      <table>
+        <tr><td>Signature</td><td><code>HMAC-SHA256</code></td></tr>
+        <tr><td>Input</td><td>Nom + Matricule + Notes + Classe + Année</td></tr>
+        <tr><td>Encodage</td><td>QRCoder → PNG intégré au PDF</td></tr>
+        <tr><td>Vérification</td><td>En ligne (GitHub Pages) + hors-ligne</td></tr>
+        <tr><td>Contrefaçon</td><td>Détectée si 1 seul caractère modifié</td></tr>
+        <tr><td>Révocation</td><td>IDs révoqués stockés en DB</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>👤 Multi-utilisateurs</h3>
+      <table>
+        <tr><td>Hash MDPS</td><td><code>SHA-256(salt + password)</code></td></tr>
+        <tr><td>Rôles</td><td>Admin, Secrétaire, Comptable</td></tr>
+        <tr><td>Permissions</td><td>20 sections indépendantes</td></tr>
+        <tr><td>Root password</td><td>MDPS maître (reset n'importe quel compte)</td></tr>
+        <tr><td>Audit</td><td>Journal de toutes les actions (300 dernières)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>💾 Données & sauvegarde</h3>
+      <table>
+        <tr><td>Stockage</td><td>Local — <code>%LocalAppData%\SchoolManager\</code></td></tr>
+        <tr><td>Auto-backup</td><td>À la fermeture (max 30 fichiers)</td></tr>
+        <tr><td>Backup critique</td><td>Avant clôture d'année, suppression</td></tr>
+        <tr><td>Second support</td><td>Clé USB / dossier réseau configurable</td></tr>
+        <tr><td>Format</td><td>SQLite <code>.db</code> — restauration 1 clic</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2 style="margin-top:20px">🧠 Intelligence artificielle</h2>
+  <div class="grid-3">
+    <div class="card stat">
+      <div class="value">Analyse</div>
+      <div class="label">Moyennes par classe/matière</div>
+      <p style="margin-top:6px">Comparaisons, tendances, distribution des notes</p>
+    </div>
+    <div class="card stat">
+      <div class="value">Prédiction</div>
+      <div class="label">Élèves en difficulté</div>
+      <p style="margin-top:6px">Score de risque basé sur la tendance des moyennes</p>
+    </div>
+    <div class="card stat">
+      <div class="value">Anomalie</div>
+      <div class="label">Détection automatique</div>
+      <p style="margin-top:6px">Notes aberrantes, écarts suspects, incohérences</p>
+    </div>
+  </div>
+
+  <div class="badge-page">SchoolManager BF — Fiche technique</div>
+</div>
+
+<!-- PAGE 4 : BASE DE DONNÉES & PDF -->
+<div class="page">
+  <h2>🗃️ Schéma de la base de données</h2>
+  <div class="card" style="overflow-x:auto">
+    <table>
+      <tr>
+        <th>Table</th>
+        <th>Colonnes clés</th>
+        <th>Relations</th>
+      </tr>
+      <tr>
+        <td><code>Students</code></td>
+        <td>Id, Matricule, Nom, Prenom, Sexe, DateNaissance, Photo, TypeAffectation</td>
+        <td>→ Inscriptions</td>
+      </tr>
+      <tr>
+        <td><code>ClassRooms</code></td>
+        <td>Id, Nom, Niveau, Capacite, FraisInscription, FraisScolarite, BulletinTemplate, Matieres</td>
+        <td>→ Inscriptions, ClassSubjects</td>
+      </tr>
+      <tr>
+        <td><code>ClassSubjects</code></td>
+        <td>Id, ClassRoomId, SubjectName, Coefficient</td>
+        <td>→ ClassRooms</td>
+      </tr>
+      <tr>
+        <td><code>Grades</code></td>
+        <td>Id, StudentId, SubjectName, Periode, Note1, Note2, Composition, Coefficient</td>
+        <td>→ Students, ClassRooms</td>
+      </tr>
+      <tr>
+        <td><code>Inscriptions</code></td>
+        <td>Id, StudentId, ClassRoomId, AnneeScolaireId, TypeAffectation, Statut</td>
+        <td>→ Students, ClassRooms, AnneesScolaires</td>
+      </tr>
+      <tr>
+        <td><code>Payments</code></td>
+        <td>Id, InscriptionId, Montant, DatePaiement, ModePaiement, Reference</td>
+        <td>→ Inscriptions</td>
+      </tr>
+      <tr>
+        <td><code>Users</code></td>
+        <td>Id, NomUtilisateur, MotDePasse, Role, Permissions, IsActive</td>
+        <td>→ AuditLog</td>
+      </tr>
+      <tr>
+        <td><code>AnneesScolaires</code></td>
+        <td>Id, Annee, IsActive, Statut</td>
+        <td>→ Inscriptions, Grades</td>
+      </tr>
+      <tr>
+        <td><code>Teachers</code></td>
+        <td>Id, Nom, Prenom, Specialites, Phone</td>
+        <td>→ TeacherAssignments</td>
+      </tr>
+      <tr>
+        <td><code>Settings</code></td>
+        <td>Key, Value (clé-valeur dynamique)</td>
+        <td>Logo, école, fournisseur, QR secret...</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2 style="margin-top:20px">📄 Génération de documents</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Bulletins PDF (QuestPDF)</h3>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8">
+        <p>• Génération fluide via API <code>Document.Create()</code></p>
+        <p>• Layout : Header école → Infos élève → Tableau notes → Moyennes → Mentions → Footer QR</p>
+        <p>• QR code intégré (QRCoder → Base64 PNG)</p>
+        <p>• Signature numérique (HMAC empreinte)</p>
+        <p>• 2 modèles : Standard / Lycée</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Reçus de paiement</h3>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8">
+        <p>• Format sur une seule page A4</p>
+        <p>• Infos école + élève + montant + date</p>
+        <p>• QR de vérification intégré</p>
+        <p>• Empreinte anti-fraude HMAC</p>
+        <p>• Impression directe ou export PDF</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="badge-page">SchoolManager BF — Fiche technique</div>
+</div>
+
+<!-- PAGE 5 : DÉPLOIEMENT & API -->
+<div class="page">
+  <h2>🚀 Déploiement & distribution</h2>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Build pipeline</h3>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;color:var(--text2)">
+      <div><span style="color:var(--green)">$</span> dotnet publish -c Release -r win-x64 --self-contained</div>
+      <div style="color:var(--text3)">  → Runtime: .NET 6 embedded (pas besoin d'installer .NET)</div>
+      <div style="color:var(--text3)">  → Self-contained: toutes les DLLs embarquées</div>
+      <div style="color:var(--text3)">  → Target: Windows x64 (Win10/11)</div>
+      <div></div>
+      <div><span style="color:var(--green)">$</span> Inno Setup 6 → SchoolManager-Client-Setup.exe</div>
+      <div style="color:var(--text3)">  → Assistant d'installation guidé</div>
+      <div style="color:var(--text3)">  → Raccourci bureau + menu démarrer</div>
+      <div style="color:var(--text3)">  → Désinstallation propre</div>
+    </div>
+  </div>
+
+  <h2>☁️ Backend Cloudflare Workers</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Worker Admin Dashboard</h3>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8">
+        <p>• <code>worker-full.js</code> — ~700 lignes JS</p>
+        <p>• Auth : SHA-256 password + HMAC session cookie</p>
+        <p>• CSRF protection (token par formulaire)</p>
+        <p>• Rate limiting : 5 tentatives / 15 min (via KV)</p>
+        <p>• Session 60 min auto-expiry</p>
+        <p>• Pages internes : Dashboard + Générateur licences</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>API Endpoints</h3>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8">
+        <p>• <code>POST /auth</code> → Login avec CSRF + rate limit</p>
+        <p>• <code>GET /admin.html</code> → Dashboard protégé</p>
+        <p>• <code>GET /generator/</code> → Générateur licences</p>
+        <p>• <code>POST /generate-license</code> → API clé licence</p>
+        <p>• <code>GET /logout</code> → Destruction session</p>
+        <p>• <code>GET /*</code> → Proxy GitHub Pages (site public)</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:20px">🌐 Site web (GitHub Pages)</h2>
+  <div class="card">
+    <div class="grid-3" style="margin:0">
+      <div>
+        <h3>Pages</h3>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          <p>• index.html — Landing page</p>
+          <p>• verification.html — Vérification QR</p>
+          <p>• conditions.html — CGU</p>
+          <p>• manuel.html — Documentation</p>
+          <p>• blog.html — Articles SEO</p>
+        </div>
+      </div>
+      <div>
+        <h3>Sécurité</h3>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          <p>• HTTPS forcé (GitHub Pages)</p>
+          <p>• Aucune donnée stockée côté serveur</p>
+          <p>• QR vérification : calcul HMAC client-side</p>
+          <p>• Google Site Verification</p>
+          <p>• robots.txt + sitemap.xml</p>
+        </div>
+      </div>
+      <div>
+        <h3>SEO</h3>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          <p>• Meta tags OG/Twitter</p>
+          <p>• Schema.org JSON-LD</p>
+          <p>• Open Graph image</p>
+          <p>• Description optimisée</p>
+          <p>• FAQ structurée</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="badge-page">SchoolManager BF — Fiche technique</div>
+</div>
+
+<!-- PAGE 6 : MÉTRIQUES & CONCLUSION -->
+<div class="page">
+  <h2>📊 Métriques du projet</h2>
+  <div class="grid-3">
+    <div class="card stat">
+      <div class="value">~30K</div>
+      <div class="label">Lignes de code C#</div>
+    </div>
+    <div class="card stat">
+      <div class="value">1745+</div>
+      <div class="label">Clés de traduction FR/EN</div>
+    </div>
+    <div class="card stat">
+      <div class="value">20+</div>
+      <div class="label">Modules fonctionnels</div>
+    </div>
+    <div class="card stat">
+      <div class="value">59 MB</div>
+      <div class="label">Setup (self-contained)</div>
+    </div>
+    <div class="card stat">
+      <div class="value">0</div>
+      <div class="label">Dépendances cloud obligatoires</div>
+    </div>
+    <div class="card stat">
+      <div class="value">4</div>
+      <div class="label">Thèmes visuels</div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:20px">📚 Stack technique complet</h2>
+  <div class="card">
+    <table>
+      <tr><th>Couche</th><th>Technologie</th><th>Version</th><th>Usage</th></tr>
+      <tr><td>Runtime</td><td>.NET</td><td>6.0 LTS</td><td>Exécution, compilation</td></tr>
+      <tr><td>UI</td><td>WPF</td><td>—</td><td>Interface graphique Windows</td></tr>
+      <tr><td>Language</td><td>C#</td><td>10.0</td><td>Logique métier</td></tr>
+      <tr><td>Database</td><td>SQLite</td><td>3.x</td><td>Stockage local (WAL mode)</td></tr>
+      <tr><td>PDF</td><td>QuestPDF</td><td>2024.x</td><td>Génération bulletins/reçus</td></tr>
+      <tr><td>PDF</td><td>PdfSharp</td><td>6.x</td><td>Manipulation PDF existant</td></tr>
+      <tr><td>Excel</td><td>ClosedXML</td><td>0.102.x</td><td>Import/Export .xlsx</td></tr>
+      <tr><td>QR</td><td>QRCoder</td><td>1.5.x</td><td>Génération QR codes</td></tr>
+      <tr><td>QR</td><td>ZXing.Net</td><td>0.16.x</td><td>Lecture/scanning QR</td></tr>
+      <tr><td>Crypto</td><td>BCL</td><td>—</td><td>HMAC-SHA256, SHA-256</td></tr>
+      <tr><td>Backend</td><td>Cloudflare Workers</td><td>V8</td><td>Admin dashboard, licences</td></tr>
+      <tr><td>Frontend</td><td>GitHub Pages</td><td>—</td><td>Site public, vérification QR</td></tr>
+      <tr><td>Installer</td><td>Inno Setup</td><td>6.x</td><td>Setup Windows</td></tr>
+    </table>
+  </div>
+
+  <h2 style="margin-top:16px">🎯 Capacités de licence</h2>
+  <div class="card">
+    <table>
+      <tr><th>Type</th><th>Durée</th><th>Prix</th><th>Fonctionnalités</th></tr>
+      <tr><td><span class="tag tag-cyan">1MO</span></td><td>30 jours</td><td>15 000 FCFA</td><td>TOUTES — aucune restriction</td></tr>
+      <tr><td><span class="tag tag-green">1AN</span></td><td>365 jours</td><td>100 000 FCFA</td><td>TOUTES — aucune restriction</td></tr>
+      <tr><td><span class="tag tag-blue">2AN</span></td><td>730 jours</td><td>200 000 FCFA</td><td>TOUTES — aucune restriction</td></tr>
+      <tr><td><span class="tag tag-gold">5AN</span></td><td>1825 jours</td><td>500 000 FCFA</td><td>TOUTES — aucune restriction</td></tr>
+    </table>
+    <p style="margin-top:8px;font-size:11px;color:var(--text3)">💡 Pas de limitation de fonctionnalités. La seule différence est la durée d'activation.</p>
+  </div>
+
+  <div class="badge-page">SchoolManager BF — Fiche technique — Août 2026</div>
+</div>
+
+<div class="no-print" style="text-align:center;padding:40px;background:#1e293b">
+  <h2 style="color:var(--text);margin-bottom:12px">📄 Imprimer en PDF</h2>
+  <p style="color:var(--text3);margin-bottom:16px">Appuyez sur <strong>Ctrl+P</strong> puis choisissez « Enregistrer en PDF »</p>
+  <button onclick="window.print()" style="padding:16px 32px;background:linear-gradient(135deg,var(--primary),var(--accent));color:white;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer">
+    🖨️ Imprimer / Sauvegarder en PDF
+  </button>
+</div>
+
+</body>
+</html>
