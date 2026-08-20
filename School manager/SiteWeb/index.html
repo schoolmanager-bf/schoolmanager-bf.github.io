@@ -421,6 +421,7 @@
         </label>
         <a id="downloadBtn" class="btn btn-primary" href="download/SchoolManager-Setup-1.7.6.exe" download style="opacity:0.4;pointer-events:none;cursor:not-allowed">⬇ Télécharger l'installateur</a>
         <div class="size">Taille : 55,8 Mo · Gratuit</div>
+        <div id="dlCounter" style="margin-top:10px;font-size:13px;color:var(--text2);display:none">📥 <span id="dlCount">0</span> téléchargements</div>
       </div>
     </div>
     <p style="text-align:center;color:var(--muted);font-size:.9rem;margin-top:22px">
@@ -582,6 +583,31 @@ function toggleDownload(){
   if(chk.checked){btn.style.opacity='1';btn.style.pointerEvents='auto';btn.style.cursor='pointer';}
   else{btn.style.opacity='0.4';btn.style.pointerEvents='none';btn.style.cursor='not-allowed';}
 }
+
+/* ===== Download Counter ===== */
+(function(){
+  const counterEl=document.getElementById('dlCounter');
+  const countEl=document.getElementById('dlCount');
+  const dlBtn=document.getElementById('downloadBtn');
+  
+  // Fetch current count
+  fetch('https://schoolmanager-bf.workers.dev/api/counter')
+    .then(r=>r.json())
+    .then(d=>{if(counterEl&&countEl){counterEl.style.display='block';countEl.textContent=d.count.toLocaleString('fr-FR');}})
+    .catch(()=>{});
+  
+  // Increment on download
+  if(dlBtn){
+    dlBtn.addEventListener('click',function(){
+      if(document.getElementById('acceptTerms').checked){
+        fetch('https://schoolmanager-bf.workers.dev/api/counter',{method:'POST'})
+          .then(r=>r.json())
+          .then(d=>{if(countEl)countEl.textContent=d.count.toLocaleString('fr-FR');})
+          .catch(()=>{});
+      }
+    });
+  }
+})();
 </script>
 </body>
 </html>
