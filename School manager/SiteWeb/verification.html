@@ -260,7 +260,7 @@ async function verify(content) {
       verdict.innerHTML = "✅ AUTHENTIQUE<small>Empreinte de sécurité valide</small>";
     } else {
       verdict.className = "verdict bad";
-      verdict.innerHTML = "❌ FALSIFIÉ<small>L'empreinte ne correspond pas : document altéré</small>";
+      verdict.innerHTML = "❌ NON VÉRIFIÉ<small>L'empreinte ne correspond pas</small>";
     }
     infos.innerHTML =
       (nom ? row("Élève", nom) : "") +
@@ -269,9 +269,14 @@ async function verify(content) {
       row("Période", periode) +
       row("Moyenne", moyStr + " / 20") +
       (isNaN(moy) ? "" : row("Mention", mention(moy)));
-    msg.textContent = ok
-      ? "Ce bulletin a été émis par SchoolManager et n'a pas été modifié depuis son impression."
-      : "Ce QR a été modifié ou produit sans la clé de l'école. Méfiez-vous de ce document.";
+    if (ok) {
+      msg.textContent = "Ce bulletin a été émis par SchoolManager et n'a pas été modifié depuis son impression.";
+    } else {
+      msg.innerHTML = "⚠️ La clé de sécurité ne correspond pas. <b>Cela ne signifie pas que le document est faux</b> — " +
+        "l'école a peut-être changé la clé depuis l'impression. <br><br>" +
+        "<b>Pour vérifier :</b> ouvrez SchoolManager → Paramètres → Sécurité, copiez la « Clé secrète », " +
+        "puis collez-la dans le champ « Clé de sécurité » ci-dessus et re-scanez.";
+    }
     return;
   }
 
