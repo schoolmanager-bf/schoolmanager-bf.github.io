@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SchoolManager BF — Présentation officielle</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --primary: #1a2747;
+  --accent: #2C3E6B;
+  --gold: #C8A951;
+  --green: #009E49;
+  --red: #EF2B2D;
+  --light: #f8fafc;
+  --text: #1e293b;
+  --text2: #64748b;
+}
+
+@media print {
+  .page { page-break-after: always; }
+  .no-print { display: none !important; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background: #fff;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 20mm;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== PAGE 1 : COUVERTURE ===== */
+.cover {
+  background: linear-gradient(135deg, var(--primary) 0%, #0f1a2e 50%, var(--accent) 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(200,169,81,.15), transparent 70%);
+  border-radius: 50%;
+}
+
+.cover::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0,158,73,.1), transparent 70%);
+  border-radius: 50%;
+}
+
+.cover .flag {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 40px;
+}
+
+.cover .flag span {
+  width: 60px;
+  height: 6px;
+  border-radius: 3px;
+}
+
+.cover h1 {
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.cover h1 span { color: var(--gold); }
+
+.cover .subtitle {
+  font-size: 18px;
+  font-weight: 300;
+  opacity: .8;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 1;
+}
+
+.cover .badge {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50px;
+  padding: 12px 30px;
+  font-size: 14px;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+}
+
+.cover .version {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  font-size: 12px;
+  opacity: .5;
+  z-index: 1;
+}
+
+.cover .year {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  font-size: 12px;
+  opacity: .5;
+  z-index: 1;
+}
+
+/* ===== PAGE 2 : PROBLÈME & SOLUTION ===== */
+.section-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 30px;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.problem-card {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.problem-card .icon { font-size: 28px; margin-bottom: 8px; }
+.problem-card h3 { font-size: 15px; color: #991b1b; margin-bottom: 4px; }
+.problem-card p { font-size: 12px; color: #7f1d1d; }
+
+.solution-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.solution-card {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.solution-card .icon { font-size: 28px; margin-bottom: 8px; }
+.solution-card h3 { font-size: 15px; color: #166534; margin-bottom: 4px; }
+.solution-card p { font-size: 12px; color: #14532d; }
+
+/* ===== PAGE 3 : FONCTIONNALITÉS ===== */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.feature-card {
+  background: var(--light);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+}
+
+.feature-card .icon { font-size: 32px; margin-bottom: 8px; }
+.feature-card h3 { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.feature-card p { font-size: 11px; color: var(--text2); line-height: 1.5; }
+
+/* ===== PAGE 4 : TARIFS ===== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.price-card {
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  position: relative;
+}
+
+.price-card.featured {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+}
+
+.price-card.featured::after {
+  content: '⭐ POPULAIRE';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: white;
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.price-card .duration { font-size: 14px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
+.price-card .price { font-size: 36px; font-weight: 900; color: var(--primary); }
+.price-card .unit { font-size: 14px; color: var(--text2); }
+.price-card .features { margin-top: 16px; text-align: left; }
+.price-card .features li { font-size: 12px; color: var(--text2); padding: 4px 0; list-style: none; }
+.price-card .features li::before { content: '✅ '; }
+
+/* ===== PAGE 5 : AVANTAGES ===== */
+.advantages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.advantage {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--light);
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.advantage .num {
+  width: 40px;
+  height: 40px;
+  background: var(--primary);
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.advantage h3 { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 2px; }
+.advantage p { font-size: 11px; color: var(--text2); }
+
+/* ===== PAGE 6 : TÉMOIGNAGES / FOOTER ===== */
+.testimonial {
+  background: var(--light);
+  border-radius: 16px;
+  padding: 30px;
+  border-left: 4px solid var(--gold);
+  margin-bottom: 30px;
+}
+
+.testimonial .quote { font-size: 16px; font-style: italic; color: var(--text); margin-bottom: 12px; }
+.testimonial .author { font-size: 13px; font-weight: 600; color: var(--primary); }
+
+.footer-contact {
+  background: var(--primary);
+  color: white;
+  border-radius: 16px;
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-contact h2 { font-size: 20px; margin-bottom: 8px; }
+.footer-contact p { font-size: 13px; opacity: .8; }
+
+.contact-info {
+  text-align: right;
+  font-size: 13px;
+}
+
+.contact-info div { margin-bottom: 4px; }
+.contact-info strong { color: var(--gold); }
+
+.watermark {
+  position: absolute;
+  bottom: 15mm;
+  left: 20mm;
+  font-size: 10px;
+  color: var(--text2);
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 : COUVERTURE -->
+<div class="page cover">
+  <div class="flag">
+    <span style="background:#EF2B2D"></span>
+    <span style="background:#FCD116"></span>
+    <span style="background:#009E49"></span>
+  </div>
+  <h1>School<span>Manager</span> BF</h1>
+  <div class="subtitle">La gestion scolaire complète, simple et sécurisée</div>
+  <div class="badge">🏆 Conçu pour les écoles du Burkina Faso 🇧🇫</div>
+  <div class="year">Août 2026</div>
+  <div class="version">Version 1.7.6 — Présentation officielle</div>
+</div>
+
+<!-- PAGE 2 : PROBLÈME & SOLUTION -->
+<div class="page">
+  <div class="section-title">Le problème</div>
+  <div class="section-subtitle">Les écoles font face à des défis quotidiens</div>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="icon">📝</div>
+      <h3>Gestion manuelle</h3>
+      <p>Registres papier, calculs Excel, erreurs fréquentes dans les notes et moyennes</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🔍</div>
+      <h3>Fraude des bulletins</h3>
+      <p>Les faux bulletins circulent, impossibles à vérifier sans contacter l'école</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">💸</div>
+      <h3>Paiements non suivis</h3>
+      <p>Impayés non détectés, reçus manuscrits, pertes de données financières</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">⏰</div>
+      <h3>Temps perdu</h3>
+      <p>Heures à chercher des informations, recopier des listes, générer des documents</p>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:22px;margin-top:10px">La solution</div>
+  <div class="section-subtitle">Un seul logiciel qui fait tout</div>
+
+  <div class="solution-grid">
+    <div class="solution-card">
+      <div class="icon">🚀</div>
+      <h3>Tout-en-un</h3>
+      <p>Élèves, notes, bulletins, paiements, emploi du temps — tout dans une seule application</p>
+    </div>
+    <div class="solution-card">
+      <div class="icon">🛡️</div>
+      <h3>Anti-fraude</h3>
+      <p>QR codes signés sur chaque document, vérifiables par n'importe quel téléphone</p>
+    </div>
+    <div class="solution-card">
+      <div class="icon">🤖</div>
+      <h3>Intelligence artificielle</h3>
+      <p>Prédictions des élèves en difficulté, analyse financière automatique</p>
+    </div>
+    <div class="solution-card">
+      <div class="icon">🔒</div>
+      <h3>Hors-ligne</h3>
+      <p>Aucune connexion requise. Les données restent sur votre ordinateur</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3 : FONCTIONNALITÉS -->
+<div class="page">
+  <div class="section-title">Fonctionnalités complètes</div>
+  <div class="section-subtitle">Tout ce dont une école a besoin</div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="icon">👨‍🎓</div>
+      <h3>Gestion des élèves</h3>
+      <p>Inscriptions, matricules automatiques, photos, affectations, import Excel, filtres</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">💰</div>
+      <h3>Paiements & reçus</h3>
+      <p>Suivi par classe, relances WhatsApp, reçus professionnels sur une page avec QR</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📊</div>
+      <h3>Notes & bulletins</h3>
+      <p>Saisie par matière, coefficients, moyennes, mentions, rang, bulletins PDF signés</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🗓️</div>
+      <h3>Emploi du temps</h3>
+      <p>Planning par classe, affectation enseignants, exportation</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📅</div>
+      <h3>Calendrier</h3>
+      <p>Événements, examens, vacances — jours fériés du Burkina inclus</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🤖</div>
+      <h3>IA prédictive</h3>
+      <p>Élèves à risque, tendances, recommandations automatiques</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🛡️</div>
+      <h3>QR anti-fraude</h3>
+      <p>Empreinte HMAC signée, vérification en ligne par téléphone</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📈</div>
+      <h3>Rapports avancés</h3>
+      <p>Statistiques, graphiques, exports Excel, comparaisons par classe</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">💾</div>
+      <h3>Sauvegardes</h3>
+      <p>Automatiques + manuelles, copie USB, restauration en 1 clic</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">👥</div>
+      <h3>Multi-utilisateurs</h3>
+      <p>Admin, Secrétaire, Comptable — permissions par section</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">👨‍🏫</div>
+      <h3>Enseignants</h3>
+      <p>Affectations, spécialités, emplois du temps</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🎓</div>
+      <h3>Anciens élèves</h3>
+      <p>Réseau des diplômés, diplômes, professions, contacts</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4 : TARIFS -->
+<div class="page">
+  <div class="section-title">Licences & tarification</div>
+  <div class="section-subtitle">Une seule licence, toutes les fonctionnalités — la durée change</div>
+
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="duration">1 mois</div>
+      <div class="price">15 000 <span class="unit">FCFA</span></div>
+      <ul class="features">
+        <li>Toutes les fonctionnalités incluses</li>
+        <li>Idéal pour un essai complet</li>
+        <li>Support technique inclus</li>
+        <li>Mises à jour gratuites</li>
+      </ul>
+    </div>
+
+    <div class="price-card featured">
+      <div class="duration">1 an</div>
+      <div class="price">100 000 <span class="unit">FCFA</span></div>
+      <ul class="features">
+        <li>Toutes les fonctionnalités incluses</li>
+        <li>Couvre l'année scolaire complète</li>
+        <li>Économie de 44% vs 1 mois × 12</li>
+        <li>Support prioritaire</li>
+      </ul>
+    </div>
+
+    <div class="price-card">
+      <div class="duration">2 ans</div>
+      <div class="price">200 000 <span class="unit">FCFA</span></div>
+      <ul class="features">
+        <li>Toutes les fonctionnalités incluses</li>
+        <li>Économie de 33% vs renouvellement annuel</li>
+        <li>Paiement en 2 fois possible</li>
+        <li>Formation incluse</li>
+      </ul>
+    </div>
+
+    <div class="price-card">
+      <div class="duration">5 ans</div>
+      <div class="price">500 000 <span class="unit">FCFA</span></div>
+      <ul class="features">
+        <li>Toutes les fonctionnalités incluses</li>
+        <li>Investissement long terme</li>
+        <li>Économie de 58% vs mensuel</li>
+        <li>Priorité absolue</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:16px;background:#f0fdf4;border-radius:12px;border:1px solid #bbf7d0;margin-top:10px">
+    <p style="font-size:14px;font-weight:600;color:#166534">💡 Pas de restriction — Chaque licence donne accès à TOUTES les fonctionnalités</p>
+    <p style="font-size:12px;color:#166534;margin-top:4px">Achat unique, pas d'abonnement mensuel. Pas de frais cachés.</p>
+  </div>
+
+  <div class="watermark">SchoolManager BF — Présentation officielle — Août 2026</div>
+</div>
+
+<!-- PAGE 5 : POURQUOI NOUS -->
+<div class="page">
+  <div class="section-title">Pourquoi SchoolManager ?</div>
+  <div class="section-subtitle">6 raisons de choisir SchoolManager BF</div>
+
+  <div class="advantages">
+    <div class="advantage">
+      <div class="num">1</div>
+      <div>
+        <h3>Conçu au Burkina Faso</h3>
+        <p>Adapté aux réalités des écoles burkinabè : FCFA, jours fériés locaux, système éducatif BF</p>
+      </div>
+    </div>
+    <div class="advantage">
+      <div class="num">2</div>
+      <div>
+        <h3>100% en français</h3>
+        <p>Interface entièrement francophone, pensée pour les francophones d'Afrique de l'Ouest</p>
+      </div>
+    </div>
+    <div class="advantage">
+      <div class="num">3</div>
+      <div>
+        <h3>Anti-fraude intégré</h3>
+        <p>QR codes HMAC sur chaque bulletin, reçu et document — vérifiables par n'importe quel téléphone</p>
+      </div>
+    </div>
+    <div class="advantage">
+      <div class="num">4</div>
+      <div>
+        <h3>Intelligence artificielle</h3>
+        <p>Prédictions automatiques des élèves à risque, analyse financière, recommandations</p>
+      </div>
+    </div>
+    <div class="advantage">
+      <div class="num">5</div>
+      <div>
+        <h3>Aucune dépendance internet</h3>
+        <p>Fonctionne entièrement hors-ligne. Les données ne quittent jamais votre ordinateur</p>
+      </div>
+    </div>
+    <div class="advantage">
+      <div class="num">6</div>
+      <div>
+        <h3>Support local</h3>
+        <p>Contact direct par WhatsApp, assistance en français, mises à jour gratuites</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:30px">
+    <div class="section-title" style="font-size:20px">Sécurité & confidentialité</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+      <div style="background:var(--light);padding:16px;border-radius:12px;border:1px solid #e2e8f0">
+        <p style="font-size:13px;font-weight:600;color:var(--primary)">🔐 Chiffrement</p>
+        <p style="font-size:11px;color:var(--text2)">QR codes signés HMAC-SHA256, signatures numériques sur tous les documents</p>
+      </div>
+      <div style="background:var(--light);padding:16px;border-radius:12px;border:1px solid #e2e8f0">
+        <p style="font-size:13px;font-weight:600;color:var(--primary)">💾 Données locales</p>
+        <p style="font-size:11px;color:var(--text2)">Aucune donnée n'est transmise. Tout reste sur votre PC, avec sauvegardes automatiques</p>
+      </div>
+      <div style="background:var(--light);padding:16px;border-radius:12px;border:1px solid #e2e8f0">
+        <p style="font-size:13px;font-weight:600;color:var(--primary)">👤 Multi-utilisateurs</p>
+        <p style="font-size:11px;color:var(--text2)">Droits d'accès par section : Admin, Secrétaire, Comptable</p>
+      </div>
+      <div style="background:var(--light);padding:16px;border-radius:12px;border:1px solid #e2e8f0">
+        <p style="font-size:13px;font-weight:600;color:var(--primary)">📋 Audit</p>
+        <p style="font-size:11px;color:var(--text2)">Journal complet de toutes les actions : qui a fait quoi et quand</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="watermark">SchoolManager BF — Présentation officielle — Août 2026</div>
+</div>
+
+<!-- PAGE 6 : CONTACT -->
+<div class="page" style="display:flex;flex-direction:column;justify-content:space-between">
+  <div>
+    <div class="section-title">Comment ça marche ?</div>
+    <div class="section-subtitle">3 étapes simples</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:40px">
+      <div style="text-align:center;padding:24px;background:var(--light);border-radius:16px;border:1px solid #e2e8f0">
+        <div style="font-size:40px;margin-bottom:8px">📥</div>
+        <div style="font-size:32px;font-weight:900;color:var(--gold);margin-bottom:8px">1</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--primary);margin-bottom:4px">Télécharger</h3>
+        <p style="font-size:12px;color:var(--text2)">Téléchargez l'installateur depuis schoolmanager-bf.github.io</p>
+      </div>
+      <div style="text-align:center;padding:24px;background:var(--light);border-radius:16px;border:1px solid #e2e8f0">
+        <div style="font-size:40px;margin-bottom:8px">🔑</div>
+        <div style="font-size:32px;font-weight:900;color:var(--gold);margin-bottom:8px">2</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--primary);margin-bottom:4px">Activer</h3>
+        <p style="font-size:12px;color:var(--text2)">Envoyez votre ID Machine et recevez votre clé de licence</p>
+      </div>
+      <div style="text-align:center;padding:24px;background:var(--light);border-radius:16px;border:1px solid #e2e8f0">
+        <div style="font-size:40px;margin-bottom:8px">🎓</div>
+        <div style="font-size:32px;font-weight:900;color:var(--gold);margin-bottom:8px">3</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--primary);margin-bottom:4px">Utiliser</h3>
+        <p style="font-size:12px;color:var(--text2)">Commencez à gérer votre école en quelques minutes</p>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="quote">"SchoolManager a transformé la gestion de notre école. Les bulletins sont désormais sécurisés et les parents peuvent vérifier l'authenticité en un scan."</div>
+      <div class="author">— Direction scolaire, Ouagadougou</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <h2>SchoolManager BF 🇧🇫</h2>
+      <p>La gestion scolaire moderne au Burkina Faso</p>
+      <p style="margin-top:8px;font-size:12px;opacity:.7">schoolmanager-bf.github.io</p>
+    </div>
+    <div class="contact-info">
+      <div>📞 <strong>+226 77 67 69 31</strong></div>
+      <div>✉️ <strong>dieudonnetassembedo07@gmail.com</strong></div>
+      <div>🌐 <strong>schoolmanager-bf.github.io</strong></div>
+      <div style="margin-top:8px;opacity:.6">Bénéwendé Dieudonné Tassembédo</div>
+    </div>
+  </div>
+
+  <div class="watermark">SchoolManager BF — Présentation officielle — Août 2026</div>
+</div>
+
+<div class="no-print" style="text-align:center;padding:40px;background:#f1f5f9">
+  <h2 style="margin-bottom:12px">📄 Imprimer en PDF</h2>
+  <p style="color:var(--text2);margin-bottom:16px">Appuyez sur <strong>Ctrl+P</strong> puis choisissez « Enregistrer en PDF »</p>
+  <button onclick="window.print()" style="padding:16px 32px;background:var(--primary);color:white;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer">
+    🖨️ Imprimer / Sauvegarder en PDF
+  </button>
+</div>
+
+</body>
+</html>

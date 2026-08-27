@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditions d'utilisation — Yiriba</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --red:#CE1126; --green:#009E49; --yellow:#FCD116; --dark:#1a1a2e; --darker:#12121f; --card:#1e1e32; --text:#e8e8f0; --muted:#9a9ab0; --radius:16px; }
+        *{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Inter',sans-serif;background:var(--darker);color:var(--text);line-height:1.7;}
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(18,18,31,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:70px;}
+        .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}.nav-logo span{font-size:18px;font-weight:800;color:var(--text);}.nav-logo .bf{color:var(--green);}
+        .nav-links{display:flex;gap:32px;list-style:none;}.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s;}.nav-links a:hover{color:var(--text);}
+        .nav-cta{background:var(--green);color:#fff;padding:10px 24px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;transition:.3s;}.nav-cta:hover{background:#007A3A;transform:translateY(-1px);}
+        .content{max-width:800px;margin:0 auto;padding:120px 20px 80px;}
+        h1{font-size:36px;font-weight:900;margin-bottom:8px;}
+        .subtitle{color:var(--muted);margin-bottom:40px;}
+        h2{font-size:22px;font-weight:700;margin:36px 0 12px;color:var(--green);}
+        h3{font-size:17px;font-weight:600;margin:24px 0 8px;}
+        p{margin-bottom:16px;color:var(--muted);font-size:15px;}
+        ul{margin:0 0 16px 24px;color:var(--muted);font-size:15px;}li{margin-bottom:8px;}
+        .highlight{background:rgba(0,158,73,0.1);border:1px solid rgba(0,158,73,0.2);border-radius:12px;padding:20px;margin:24px 0;}
+        .highlight strong{color:var(--green);}
+        footer{border-top:1px solid rgba(255,255,255,0.06);padding:40px;text-align:center;color:var(--muted);font-size:13px;}footer a{color:var(--green);text-decoration:none;} .footer-links{display:flex;gap:20px;justify-content:center;margin-top:16px;} .footer-links a{color:var(--muted);text-decoration:none;font-size:13px;}
+    
+        /* WhatsApp Flottant */
+        .wa-float{position:fixed;bottom:30px;right:30px;z-index:9999;display:flex;align-items:center;gap:12px;text-decoration:none}
+        .wa-float .wa-label{background:#fff;color:#128C7E;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;box-shadow:0 4px 15px rgba(0,0,0,.2);white-space:nowrap;opacity:0;transform:translateX(20px);transition:.3s;pointer-events:none}
+        .wa-float:hover .wa-label{opacity:1;transform:translateX(0)}
+        .wa-float .wa-icon{width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:.3s;animation:wa-pulse 2s infinite}
+        .wa-float:hover .wa-icon{transform:scale(1.1);box-shadow:0 6px 25px rgba(37,211,102,.6)}
+        @keyframes wa-pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4)}50%{box-shadow:0 4px 30px rgba(37,211,102,.7)}}
+    </style>
+
+    <meta property="og:title" content="Conditions - Yiriba">
+    <meta property="og:description" content="Conditions d'utilisation du logiciel Yiriba.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://schoolmanager-bf.github.io/conditions.html">
+    <meta property="og:image" content="https://schoolmanager-bf.github.io/screenshots/dashboard.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Conditions - Yiriba">
+    <meta name="twitter:description" content="Conditions d'utilisation du logiciel Yiriba.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://schoolmanager-bf.github.io/conditions.html">
+</head>
+<body>
+<nav class="nav">
+    <a href="index.html" class="nav-logo"><span>🎓</span><span>Yiriba <span class="bf">BF</span></span></a>
+    <ul class="nav-links">
+        <li><a href="index.html#fonctionnalites">Fonctionnalités</a></li>
+        <li><a href="index.html#packs">Packs</a></li>
+        <li><a href="index.html#telechargement">Télécharger</a></li>
+        <li><a href="verification.html">Vérifier</a></li>
+    </ul>
+    <a href="#telecharger" class="nav-cta">📥 Télécharger</a>
+</nav>
+
+<div class="content">
+    <h1>Conditions d'utilisation</h1>
+    <p class="subtitle">Dernière mise à jour : 26 août 2026</p>
+
+    <h2>1. Acceptation des conditions</h2>
+    <p>En téléchargeant, installant ou utilisant Yiriba, vous acceptez les présentes conditions d'utilisation. Si vous n'acceptez pas ces conditions, ne pas utiliser le logiciel.</p>
+
+    <h2>2. Description du logiciel</h2>
+    <p>Yiriba est un logiciel de gestion scolaire comprenant :</p>
+    <ul>
+        <li>Gestion des élèves (inscriptions, affectations, photos)</li>
+        <li>Gestion des notes et bulletins (D1, D2, Composition, moyennes)</li>
+        <li>Gestion des paiements et finances</li>
+        <li>Emploi du temps et emplois du temps enseignants</li>
+        <li>QR codes anti-fraude pour bulletins et reçus</li>
+        <li>Mode réseau local (Pack Réseau Pro)</li>
+    </ul>
+
+    <h2>3. Packs et licences</h2>
+    <div class="highlight">
+        <strong>Pack DEMO (Gratuit) :</strong> Limité à 150 élèves, 1 PC, avec watermark "VERSION DEMO" sur les PDF. Valable 365 jours.
+    </div>
+    <div class="highlight">
+        <strong>Pack ÉCOLE (250 000 FCFA) :</strong> Élèves illimités, 1 PC, bulletins signés, QR vérifiables localement. Licience à vie + 6 mois de support.
+    </div>
+    <div class="highlight">
+        <strong>Pack Réseau Pro (450 000 FCFA) :</strong> Tout le Pack ÉCOLE + mode réseau multi-PC (jusqu'à 5), vérification en ligne, support 12 mois. Licience à vie.
+    </div>
+
+    <h2>4. Utilisation acceptée</h2>
+    <p>Le logiciel est destiné à un usage professionnel par les établissements scolaires. Vous vous engagez à :</p>
+    <ul>
+        <li>Ne pas copier, distribuer ou revendre le logiciel</li>
+        <li>Ne pas tenter de décompiler, modifier ou contourner les mécanismes de licence</li>
+        <li>Utiliser le logiciel conformément à la législation en vigueur au Burkina Faso</li>
+        <li>Ne pas utiliser les données de l'application à des fins de fraude ou de falsification</li>
+    </ul>
+
+    <h2>5. Données et confidentialité</h2>
+    <p>Yiriba fonctionne <strong>100% hors ligne</strong>. Aucune donnée personnelle n'est transmise à nos serveurs. Les données restent sur le PC de l'utilisateur.</p>
+    <p>Les vérifications QR en ligne n'envoient que l'empreinte HMAC (pas les noms ou notes) à l'adresse schoolmanager-bf.github.io pour validation.</p>
+
+    <h2>6. Propriété intellectuelle</h2>
+    <p>Le code source, les designs, les logos et la marque "Yiriba" sont la propriété de Bénéwendé Dieudonné Tassembédo. Toute reproduction non autorisée est interdite.</p>
+
+    <h2>7. Garantie et responsabilité</h2>
+    <p>Le logiciel est fourni "en l'état" sans garantie explicite ou implicite. L'éditeur ne saurait être tenu responsable des pertes de données, dommages directs ou indirects résultant de l'utilisation du logiciel.</p>
+    <p>Il est recommandé de effectuer des sauvegardes régulières des données.</p>
+
+    <h2>8. Mises à jour</h2>
+    <p>Des mises à jour peuvent être proposées. Leur installation reste facultative. Les Packs à vie incluent les mises à jour pendant la durée de support.</p>
+
+    <h2>9. Résiliation</h2>
+    <p>Vous pouvez cesser d'utiliser le logiciel à tout moment. Les licences à vie ne sont ni remboursables ni transférables à un autre établissement.</p>
+
+    <h2>10. Contact</h2>
+    <p>Pour toute question, contactez-nous :</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin:16px 0">
+        <a href="https://wa.me/22677676931" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:12px 20px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;transition:.3s;">💬 WhatsApp (+226 77 67 69 31)</a>
+        <button onclick="navigator.clipboard.writeText('dieudonnetassembedo07@gmail.com').then(()=>{this.textContent='✅ Copié !';setTimeout(()=>this.textContent='📧 dieudonnetassembedo07@gmail.com',2000)})" style="display:inline-flex;align-items:center;gap:8px;background:var(--card);color:var(--text);border:1px solid rgba(255,255,255,0.1);padding:12px 20px;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;transition:.3s;">📧 dieudonnetassembedo07@gmail.com</button>
+    </div>
+</div>
+
+<footer>
+<div class="footer-links">
+<a href="index.html">Accueil</a>
+<a href="faq.html">FAQ</a>
+<a href="blog.html">Blog</a>
+<a href="contact.html">Contact</a>
+<a href="manuel.html">Manuel</a>
+</div>
+    <p>🎓 Yiriba — © 2026 <a href="https://www.linkedin.com/in/bénéwendé-dieudonné-tassembédo-122514289/" target="_blank">Bénéwendé Dieudonné Tassembédo</a></p>
+    <p style="margin-top:12px"><a href="manuel.html">Manuel</a> · <a href="blog.html">Blog</a> · <a href="conditions.html">Conditions</a></p>
+</footer>
+
+<a href="https://wa.me/22677676931?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20Yiriba%20BF" target="_blank" class="wa-float" aria-label="Chat WhatsApp">
+    <span class="wa-label">Besoin d'aide ?</span>
+    <span class="wa-icon">💬</span>
+</a>
+</body>
+</html>

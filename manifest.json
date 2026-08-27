@@ -1,0 +1,17 @@
+{
+    "name": "SchoolManager BF",
+    "short_name": "SchoolManager",
+    "description": "Logiciel de gestion scolaire gratuit pour le Burkina Faso",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#020617",
+    "theme_color": "#009E49",
+    "lang": "fr",
+    "icons": [
+        {
+            "src": "favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

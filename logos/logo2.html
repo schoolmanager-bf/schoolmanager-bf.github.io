@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><style>
+body { display:flex; justify-content:center; align-items:center; min-height:100vh; background:#1a1a2e; margin:0; }
+.card { text-align:center; margin:20px; }
+.card h3 { color:#fff; margin-top:15px; font-family:Arial; }
+svg { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
+</style></head><body>
+<div class="card">
+<svg width="200" height="220" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1565C0"/>
+      <stop offset="100%" style="stop-color:#0D47A1"/>
+    </linearGradient>
+  </defs>
+  <!-- Bouclier -->
+  <path d="M100,10 L180,50 L180,120 Q180,180 100,210 Q20,180 20,120 L20,50 Z" fill="url(#g2)"/>
+  <path d="M100,20 L170,55 L170,118 Q170,172 100,200 Q30,172 30,118 L30,55 Z" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+  <!-- Livre ouvert -->
+  <path d="M60,100 Q80,90 100,95 Q120,90 140,100 L140,130 Q120,120 100,125 Q80,120 60,130 Z" fill="#fff" opacity="0.95"/>
+  <line x1="100" y1="95" x2="100" y2="125" stroke="#1565C0" stroke-width="1.5"/>
+  <!-- Chapeau au-dessus -->
+  <polygon points="65,75 100,50 135,75 125,80 75,80" fill="#212121"/>
+  <rect x="70" y="75" width="60" height="6" rx="2" fill="#333"/>
+  <line x1="100" y1="50" x2="120" y2="65" stroke="#F44336" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="120" cy="65" r="3.5" fill="#F44336"/>
+  <!-- SM -->
+  <text x="100" y="162" text-anchor="middle" font-family="Georgia,serif" font-size="36" font-weight="bold" fill="#fff">SM</text>
+  <text x="100" y="180" text-anchor="middle" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.6)" letter-spacing="2.5">SCHOOL MANAGER</text>
+</svg>
+<h3>Option 2 — Bouclier Bleu</h3>
+</div>
+</body></html>

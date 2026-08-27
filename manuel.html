@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuel d'utilisation — Yiriba</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root{--red:#CE1126;--green:#009E49;--yellow:#FCD116;--dark:#1a1a2e;--darker:#12121f;--card:#1e1e32;--text:#e8e8f0;--muted:#9a9ab0;--accent:#FF6B35;--radius:16px;}
+        *{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Inter',sans-serif;background:var(--darker);color:var(--text);line-height:1.7;}
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(18,18,31,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:70px;}
+        .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}.nav-logo span{font-size:18px;font-weight:800;color:var(--text);}.nav-logo .bf{color:var(--green);}
+        .nav-links{display:flex;gap:32px;list-style:none;}.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s;}.nav-links a:hover{color:var(--text);}
+        .nav-cta{background:var(--green);color:#fff;padding:10px 24px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;transition:.3s;}.nav-cta:hover{background:#007A3A;}
+        .content{max-width:800px;margin:0 auto;padding:120px 20px 80px;}
+        h1{font-size:36px;font-weight:900;margin-bottom:8px;}
+        .subtitle{color:var(--muted);margin-bottom:40px;}
+        h2{font-size:22px;font-weight:700;margin:36px 0 12px;color:var(--green);}
+        h3{font-size:17px;font-weight:600;margin:24px 0 8px;color:var(--accent);}
+        p{margin-bottom:16px;color:var(--muted);font-size:15px;}
+        ul{margin:0 0 16px 24px;color:var(--muted);font-size:15px;}li{margin-bottom:8px;}
+        ol{margin:0 0 16px 24px;color:var(--muted);font-size:15px;}li{margin-bottom:8px;}
+        .step{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:24px;margin:16px 0;}
+        .step-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;font-weight:700;font-size:14px;margin-right:12px;}
+        .tip{background:rgba(0,158,73,0.08);border:1px solid rgba(0,158,73,0.2);border-radius:12px;padding:16px;margin:16px 0;font-size:14px;}
+        .tip strong{color:var(--green);}
+        .warning{background:rgba(206,17,38,0.08);border:1px solid rgba(206,17,38,0.2);border-radius:12px;padding:16px;margin:16px 0;font-size:14px;}
+        .warning strong{color:var(--red);}
+        footer{border-top:1px solid rgba(255,255,255,0.06);padding:40px;text-align:center;color:var(--muted);font-size:13px;}footer a{color:var(--green);text-decoration:none;}
+        @media(max-width:768px){.nav{padding:0 20px;}.nav-links{display:none;}.content{padding:100px 16px 60px;}}
+    
+        /* WhatsApp Flottant */
+        .wa-float{position:fixed;bottom:30px;right:30px;z-index:9999;display:flex;align-items:center;gap:12px;text-decoration:none}
+        .wa-float .wa-label{background:#fff;color:#128C7E;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;box-shadow:0 4px 15px rgba(0,0,0,.2);white-space:nowrap;opacity:0;transform:translateX(20px);transition:.3s;pointer-events:none}
+        .wa-float:hover .wa-label{opacity:1;transform:translateX(0)}
+        .wa-float .wa-icon{width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:.3s;animation:wa-pulse 2s infinite}
+        .wa-float:hover .wa-icon{transform:scale(1.1);box-shadow:0 6px 25px rgba(37,211,102,.6)}
+        @keyframes wa-pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4)}50%{box-shadow:0 4px 30px rgba(37,211,102,.7)}}
+    </style>
+
+    <meta property="og:title" content="Manuel - Yiriba">
+    <meta property="og:description" content="Manuel d'utilisation complet de Yiriba : installation, configuration, fonctionnalites.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://schoolmanager-bf.github.io/manuel.html">
+    <meta property="og:image" content="https://schoolmanager-bf.github.io/screenshots/dashboard.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Manuel - Yiriba">
+    <meta name="twitter:description" content="Manuel d'utilisation complet de Yiriba : installation, configuration, fonctionnalites.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://schoolmanager-bf.github.io/manuel.html">
+</head>
+<body>
+<nav class="nav">
+    <a href="index.html" class="nav-logo"><span>🎓</span><span>Yiriba <span class="bf">BF</span></span></a>
+    <ul class="nav-links"><li><a href="index.html#fonctionnalites">Fonctionnalités</a></li><li><a href="index.html#packs">Packs</a></li><li><a href="index.html#telechargement">Télécharger</a></li></ul>
+    <a href="#telecharger" class="nav-cta">📥 Télécharger</a>
+</nav>
+
+<div class="content">
+    <h1>Manuel d'utilisation</h1>
+    <p class="subtitle">Guide complet de Yiriba v2.0</p>
+
+    <h2>1. Installation</h2>
+    <div class="step"><span class="step-num">1</span>Téléchargez l'installateur depuis <a href="index.html#telechargement" style="color:var(--green)">schoolmanager-bf.github.io</a></div>
+    <div class="step"><span class="step-num">2</span>Lancez <code>Yiriba_BF_Setup.exe</code> et suivez l'assistant</div>
+    <div class="step"><span class="step-num">3</span>À la première ouverture, l'écran d'activation s'affiche. Collez votre clé de licence ou cliquez "Version Démo"</div>
+
+    <h2>2. Connexion</h2>
+    <p>Entrez votre identifiant et mot de passe. Par défaut :</p>
+    <ul><li><strong>Utilisateur :</strong> admin</li><li><strong>Mot de passe :</strong> admin123</li></ul>
+    <div class="warning"><strong>⚠️ Important :</strong> Changez le mot de passe dès la première connexion dans Paramètres.</div>
+
+    <h2>3. Paramétrage initial</h2>
+    <p>Allez dans <strong>Paramètres</strong> pour configurer :</p>
+    <ul>
+        <li><strong>Informations de l'école :</strong> Nom, adresse, téléphone, logo</li>
+        <li><strong>Année scolaire :</strong> Créez l'année en cours (ex: 2025-2026)</li>
+        <li><strong>Système de notation :</strong> Sur 10 ou sur 20, pondération D1/D2/Composition</li>
+        <li><strong>Utilisateurs :</strong> Créez les comptes Secrétaire, Comptable, Directeur</li>
+    </ul>
+
+    <h2>4. Inscription des élèves</h2>
+    <ol>
+        <li>Créez d'abord les <strong>classes</strong> (Menu → Classes)</li>
+        <li>Puis les <strong>élèves</strong> (Menu → Élèves → Nouveau)</li>
+        <li>Enfin, <strong>inscrivez</strong> l'élève dans sa classe (Menu → Inscriptions)</li>
+    </ol>
+    <div class="tip"><strong>💡 Astuce :</strong> Vous pouvez importer une liste d'élèves depuis Excel (Menu → Import Excel).</div>
+
+    <h2>5. Saisie des notes</h2>
+    <ol>
+        <li>Menu → <strong>Notes</strong></li>
+        <li>Sélectionnez la classe et la période (Trimestre 1/2/3)</li>
+        <li>Sélectionnez l'élève</li>
+        <li>Remplissez les notes pour chaque matière : D1, D2, Composition</li>
+        <li>La moyenne se calcule automatiquement</li>
+        <li>Cliquez <strong>Enregistrer</strong></li>
+    </ol>
+    <div class="tip"><strong>💡 Notes décimales :</strong> Tapez directement 14,5 ou 12.75. Les deux formats sont acceptés.</div>
+
+    <h2>6. Génération des bulletins</h2>
+    <ol>
+        <li>Menu → <strong>Notes</strong> → sélectionnez l'élève</li>
+        <li>Cliquez <strong>Générer le bulletin</strong></li>
+        <li>Le bulletin PDF est créé avec : photo, notes, moyenne, rang, conduite, décision</li>
+        <li>Le bulletin contient un <strong>QR code</strong> vérifiable en ligne</li>
+    </ol>
+
+    <h2>7. Paiements</h2>
+    <ol>
+        <li>Menu → <strong>Paiements</strong></li>
+        <li>Cliquez <strong>Nouveau paiement</strong></li>
+        <li>Sélectionnez l'élève, le montant, le mode de paiement</li>
+        <li>Le reçu généré contient aussi un QR code anti-fraude</li>
+    </ol>
+
+    <h2>8. Vérification en ligne</h2>
+    <p>Scannez le QR code d'un bulletin ou reçu avec n'importe quel scanner (caméra téléphone). Le navigateur ouvrira :</p>
+    <p style="color:var(--green);font-family:monospace">https://schoolmanager-bf.github.io/verification.html</p>
+    <p>Les données du document s'affichent pour comparaison avec le document papier.</p>
+
+    <h2>9. Mode réseau (Pack Réseau Pro)</h2>
+    <ol>
+        <li><strong>PC Serveur :</strong> Paramètres → Réseau → ☑️ Activer serveur → Démarrer</li>
+        <li><strong>PC Client :</strong> Paramètres → Réseau → entrer l'IP du serveur → Se connecter</li>
+    </ol>
+    <p>Les données sont synchronisées en temps réel entre tous les PC connectés.</p>
+
+    <h2>10. Sauvegardes</h2>
+    <p>Menu → <strong>Sauvegarde</strong> → Exportez la base de données sur une clé USB. Il est recommandé de sauvegarder chaque semaine.</p>
+
+    <h2>11. Raccourcis et astuces</h2>
+    <ul>
+        <li><strong>Échap</strong> : ferme la fenêtre active</li>
+        <li><strong>Clic dans le vide</strong> : ferme les popups</li>
+        <li><strong>Double-clic</strong> sur une ligne : modifie l'élément</li>
+        <li><strong>Ctrl+C/V</strong> : copier/coller dans les champs texte</li>
+    </ul>
+</div>
+
+<footer>
+    <p>🎓 Yiriba — © 2026 <a href="https://www.linkedin.com/in/bénéwendé-dieudonné-tassembédo-122514289/" target="_blank">Bénéwendé Dieudonné Tassembédo</a></p>
+    <p style="margin-top:12px"><a href="manuel.html">Manuel</a> · <a href="blog.html">Blog</a> · <a href="conditions.html">Conditions</a></p>
+</footer>
+
+<a href="https://wa.me/22677676931?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20Yiriba%20BF" target="_blank" class="wa-float" aria-label="Chat WhatsApp">
+    <span class="wa-label">Besoin d'aide ?</span>
+    <span class="wa-icon">💬</span>
+</a>
+</body>
+</html>

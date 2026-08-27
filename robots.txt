@@ -1,0 +1,22 @@
+# SchoolManager BF - Robots.txt
+# Optimisé pour le SEO
+
+User-agent: *
+Allow: /
+Disallow: /download/
+
+# Sitemap
+Sitemap: https://schoolmanager-bf.github.io/sitemap.xml
+
+# Crawl-delay (optionnel, pour ne pas surcharger)
+# Crawl-delay: 1
+
+# Moteurs de recherche spécifiques
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

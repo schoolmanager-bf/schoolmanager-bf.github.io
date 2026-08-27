@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SchoolManager — Démo Interactive</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0e1a;
+  --bg2: #111827;
+  --card: #1a1f35;
+  --card2: #232940;
+  --primary: #6366f1;
+  --primary2: #818cf8;
+  --accent: #06b6d4;
+  --accent2: #22d3ee;
+  --success: #10b981;
+  --success2: #34d399;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --border: rgba(255,255,255,.06);
+  --glow: rgba(99,102,241,.15);
+}
+
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(99,102,241,.2); } 50% { box-shadow: 0 0 40px rgba(99,102,241,.4); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: scale(1); } }
+@keyframes bounceIn { 0% { opacity: 0; transform: scale(.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(.9); } 100% { transform: scale(1); } }
+
+.gradient-bg {
+  background: linear-gradient(-45deg, #0a0e1a, #1a1f35, #111827, #232940);
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+}
+
+@keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, var(--card), var(--card2));
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-icon {
+  font-size: 36px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.logo h1 {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo .version {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.header-badge {
+  background: rgba(16,185,129,.1);
+  border: 1px solid rgba(16,185,129,.3);
+  color: var(--success);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* HERO */
+.hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  text-align: center;
+  animation: fadeIn .8s;
+}
+
+.hero h2 {
+  font-size: 42px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #fff, var(--primary2), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.hero-stat {
+  text-align: center;
+  animation: scaleIn .6s ease-out backwards;
+}
+
+.hero-stat:nth-child(1) { animation-delay: .1s; }
+.hero-stat:nth-child(2) { animation-delay: .2s; }
+.hero-stat:nth-child(3) { animation-delay: .3s; }
+.hero-stat:nth-child(4) { animation-delay: .4s; }
+
+.hero-stat .num {
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--primary2);
+}
+
+.hero-stat .label {
+  font-size: 12px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* NAV TABS */
+.nav-tabs {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 24px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  transition: all .3s;
+}
+
+.nav-tab:hover { border-color: var(--primary); color: var(--text); }
+
+.nav-tab.active {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(99,102,241,.3);
+}
+
+/* SECTIONS */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  display: none;
+}
+
+.section.active { display: block; animation: fadeIn .5s; }
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  transition: all .3s;
+  margin-bottom: 16px;
+}
+
+.card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 8px 40px var(--glow);
+}
+
+.card h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* STATS GRID */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  text-align: center;
+  transition: all .3s;
+  animation: scaleIn .5s ease-out backwards;
+}
+
+.stat-card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 12px 40px var(--glow); }
+
+.stat-card .icon { font-size: 36px; margin-bottom: 12px; }
+.stat-card .value { font-size: 32px; font-weight: 900; }
+.stat-card .label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+/* TABLE */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: var(--bg2);
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+tr:hover { background: rgba(99,102,241,.05); }
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-success { background: rgba(16,185,129,.15); color: var(--success); }
+.badge-danger { background: rgba(239,68,68,.15); color: var(--danger); }
+.badge-warning { background: rgba(245,158,11,.15); color: var(--warning); }
+.badge-info { background: rgba(99,102,241,.15); color: var(--primary2); }
+
+/* QR SECTION */
+.qr-demo {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.qr-card {
+  flex: 1;
+  min-width: 300px;
+  background: var(--card);
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid var(--border);
+}
+
+.qr-visual {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 16px;
+  background: #fff;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.qr-input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg2);
+  color: var(--text);
+  font-size: 14px;
+  font-family: 'Consolas', monospace;
+  margin-bottom: 12px;
+  transition: all .3s;
+}
+
+.qr-input:focus { border-color: var(--primary); outline: none; }
+
+.btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(99,102,241,.3);
+}
+
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,.4); }
+
+.btn-success {
+  background: linear-gradient(135deg, var(--success), var(--success2));
+  color: #fff;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+/* FORM */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg2);
+  color: var(--text);
+  font-size: 15px;
+  transition: all .3s;
+}
+
+.form-input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(99,102,241,.1); }
+
+select.form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+/* RESULT */
+.result-box {
+  background: rgba(16,185,129,.08);
+  border: 2px solid var(--success);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 16px;
+  animation: bounceIn .5s;
+  display: none;
+}
+
+.result-box.show { display: block; }
+
+.result-box.error {
+  background: rgba(239,68,68,.08);
+  border-color: var(--danger);
+}
+
+/* BULLETIN PREVIEW */
+.bulletin-preview {
+  background: #fff;
+  color: #000;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.bulletin-header {
+  text-align: center;
+  border-bottom: 3px solid #EF2B2D;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.bulletin-header h4 {
+  color: #2C3E6B;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.bulletin-header .flag {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+.bulletin-info {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.bulletin-info .row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.bulletin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.bulletin-table th {
+  background: #2C3E6B;
+  color: #fff;
+  padding: 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.bulletin-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.bulletin-table tr:nth-child(even) { background: #f9f9f9; }
+.bulletin-table tr:last-child { font-weight: 700; background: #e8f5e9 !important; }
+
+.bulletin-footer {
+  margin-top: 20px;
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+/* FEATURES GRID */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.feature-card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  transition: all .3s;
+  animation: fadeIn .5s ease-out backwards;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+  box-shadow: 0 12px 40px var(--glow);
+}
+
+.feature-card .icon { font-size: 48px; margin-bottom: 16px; }
+.feature-card h4 { font-size: 16px; margin-bottom: 8px; }
+.feature-card p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* CHART */
+.chart-container {
+  background: var(--bg2);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  justify-content: center;
+}
+
+.chart-bar {
+  width: 40px;
+  border-radius: 8px 8px 0 0;
+  transition: height 1s ease-out;
+  position: relative;
+  cursor: pointer;
+}
+
+.chart-bar:hover { opacity: .8; }
+
+.chart-bar .chart-label {
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+.chart-bar .chart-value {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ANIMATIONS TIMELINE */
+.timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+
+.timeline-item {
+  position: relative;
+  padding: 16px 0;
+  padding-left: 20px;
+  animation: fadeIn .5s ease-out backwards;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 20px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid var(--bg);
+}
+
+.timeline-item .time {
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 4px;
+}
+
+.timeline-item .content {
+  font-size: 13px;
+  color: var(--text2);
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 32px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: slideUp .4s;
+  border: 1px solid var(--border);
+}
+
+.modal h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+  z-index: 300;
+  opacity: 0;
+  transition: all .4s cubic-bezier(.68,-.55,.27,1.55);
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.success { background: var(--success); color: #fff; }
+.toast.error { background: var(--danger); color: #fff; }
+
+/* FOOTER */
+.footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  color: var(--text3);
+  font-size: 13px;
+}
+
+.footer a { color: var(--primary2); text-decoration: none; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero h2 { font-size: 28px; }
+  .hero-stats { gap: 20px; }
+  .hero-stat .num { font-size: 24px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .qr-demo { flex-direction: column; }
+  .bulletin-preview { padding: 16px; }
+  .nav-tabs { padding: 0 16px 16px; }
+  .section { padding: 0 16px 32px; }
+}
+</style>
+</head>
+<body class="gradient-bg">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">🎓</span>
+      <div>
+        <h1>SchoolManager</h1>
+        <div class="version">Démo Interactive — v1.7.7</div>
+      </div>
+    </div>
+    <div class="header-badge">🟢 Version en ligne</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h2>🎓 SchoolManager</h2>
+  <p>Logiciel de gestion scolaire complète — Bulletins, Notes, Paiements, IA, QR Codes signés</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num" id="animStudents">0</div><div class="label">Élèves</div></div>
+    <div class="hero-stat"><div class="num" id="animClasses">0</div><div class="label">Classes</div></div>
+    <div class="hero-stat"><div class="num" id="animSubjects">0</div><div class="label">Matières</div></div>
+    <div class="hero-stat"><div class="num" id="animPayments">0</div><div class="label">FCFA collectés</div></div>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showSection('dashboard')">📊 Tableau de bord</div>
+  <div class="nav-tab" onclick="showSection('students')">👥 Élèves</div>
+  <div class="nav-tab" onclick="showSection('grades')">📝 Notes & Bulletins</div>
+  <div class="nav-tab" onclick="showSection('payments')">💰 Paiements</div>
+  <div class="nav-tab" onclick="showSection('qr')">🔐 Vérification QR</div>
+  <div class="nav-tab" onclick="showSection('ai')">🤖 Intelligence Artificielle</div>
+  <div class="nav-tab" onclick="showSection('features')">✨ Fonctionnalités</div>
+</div>
+
+<!-- SECTION: DASHBOARD -->
+<div class="section active" id="dashboard">
+  <h3 style="font-size:20px;margin-bottom:20px;">📊 Tableau de bord</h3>
+  
+  <div class="stats-grid">
+    <div class="stat-card" style="animation-delay:.1s">
+      <div class="icon">👥</div>
+      <div class="value" style="color:var(--primary2)">247</div>
+      <div class="label">Élèves inscrits</div>
+    </div>
+    <div class="stat-card" style="animation-delay:.2s">
+      <div class="icon">📚</div>
+      <div class="value" style="color:var(--success)">8</div>
+      <div class="label">Classes actives</div>
+    </div>
+    <div class="stat-card" style="animation-delay:.3s">
+      <div class="icon">✅</div>
+      <div class="value" style="color:var(--accent)">231</div>
+      <div class="label">Affectés</div>
+    </div>
+    <div class="stat-card" style="animation-delay:.4s">
+      <div class="icon">💰</div>
+      <div class="value" style="color:var(--warning)">12.5M</div>
+      <div class="label">FCFA collectés</div>
+    </div>
+    <div class="stat-card" style="animation-delay:.5s">
+      <div class="icon">⚠️</div>
+      <div class="value" style="color:var(--danger)">16</div>
+      <div class="label">Impayés</div>
+    </div>
+    <div class="stat-card" style="animation-delay:.6s">
+      <div class="icon">📝</div>
+      <div class="value" style="color:var(--primary)">3</div>
+      <div class="label">Bulletins générés</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📈 Répartition des paiements par classe</h3>
+    <div class="chart-container" id="paymentChart"></div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Activité récente</h3>
+    <div class="timeline">
+      <div class="timeline-item" style="animation-delay:.1s">
+        <div class="time">Il y a 5 min</div>
+        <div class="content">✅ Bulletin de <strong>OUEDRAOGO Awa</strong> — 6ème A — Moyenne: <strong>15.25/20</strong> — Rang: 3ème</div>
+      </div>
+      <div class="timeline-item" style="animation-delay:.2s">
+        <div class="time">Il y a 12 min</div>
+        <div class="content">💰 Paiement de <strong>50 000 FCFA</strong> par BAMBARA Salimata — Trimestre 2</div>
+      </div>
+      <div class="timeline-item" style="animation-delay:.3s">
+        <div class="time">Il y a 25 min</div>
+        <div class="content">📝 Notes saisies pour <strong>6ème A</strong> — 12 élèves — Trimestre 2</div>
+      </div>
+      <div class="timeline-item" style="animation-delay:.4s">
+        <div class="time">Il y a 1h</div>
+        <div class="content">🔐 QR Bulletin vérifié en ligne — <strong>AUTHENTIQUE</strong> ✅</div>
+      </div>
+      <div class="timeline-item" style="animation-delay:.5s">
+        <div class="time">Il y a 2h</div>
+        <div class="content">👤 Nouvel élève inscrit : <strong>SANOU Ibrahim</strong> — 5ème B</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: STUDENTS -->
+<div class="section" id="students">
+  <h3 style="font-size:20px;margin-bottom:20px;">👥 Gestion des élèves</h3>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+      <h3 style="margin-bottom:0;">Liste des élèves</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <input type="text" class="form-input" style="width:250px" placeholder="🔍 Rechercher un élève..." id="searchStudent" oninput="filterStudents()">
+        <select class="form-input" style="width:180px" id="filterClass" onchange="filterStudents()">
+          <option value="">Toutes les classes</option>
+          <option>6ème A</option>
+          <option>6ème B</option>
+          <option>5ème A</option>
+          <option>5ème B</option>
+          <option>4ème A</option>
+          <option>3ème A</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="studentsTable">
+        <thead>
+          <tr>
+            <th>Matricule</th>
+            <th>Nom complet</th>
+            <th>Classe</th>
+            <th>État</th>
+            <th>Frais payés</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentsBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: GRADES -->
+<div class="section" id="grades">
+  <h3 style="font-size:20px;margin-bottom:20px;">📝 Notes & Bulletins</h3>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="card" style="cursor:pointer" onclick="showBulletin()">
+      <h3>📄 Bulletin individuel</h3>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Générez un bulletin PDF pour un élève avec toutes ses notes, le rang, la moyenne de la classe.</p>
+      <button class="btn btn-primary" style="width:100%">📥 Générer le bulletin</button>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="showSignedBulletin()">
+      <h3>🔐 Bulletin signé</h3>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Bulletin avec signature numérique et QR code vérifiable en ligne par n'importe qui.</p>
+      <button class="btn btn-success" style="width:100%">🔐 Signer et générer</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📊 Saisie rapide des notes</h3>
+    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+      <select class="form-input" style="width:200px" id="gradeClass">
+        <option>6ème A</option>
+        <option>6ème B</option>
+        <option>5ème A</option>
+      </select>
+      <select class="form-input" style="width:200px" id="gradePeriod">
+        <option>Trimestre 1</option>
+        <option>Trimestre 2</option>
+        <option>Trimestre 3</option>
+      </select>
+      <select class="form-input" style="width:200px" id="gradeStudent">
+        <option>OUEDRAOGO Awa</option>
+        <option>BAMBARA Salimata</option>
+        <option>SANOU Ibrahim</option>
+      </select>
+      <button class="btn btn-primary" onclick="loadGradeForm()">📝 Charger</button>
+    </div>
+    <div id="gradeForm" style="display:none;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Matière</th>
+              <th>Devoir 1</th>
+              <th>Devoir 2</th>
+              <th>Composition</th>
+              <th>Moyenne</th>
+              <th>Coeff.</th>
+            </tr>
+          </thead>
+          <tbody id="gradeBody"></tbody>
+          <tfoot>
+            <tr style="font-weight:700;background:rgba(99,102,241,.1)">
+              <td colspan="4" style="text-align:right">Moyenne générale pondérée :</td>
+              <td id="avgGrade" style="color:var(--success);font-size:16px">—</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <button class="btn btn-success" style="margin-top:12px" onclick="saveGrades()">💾 Enregistrer les notes</button>
+    </div>
+  </div>
+
+  <!-- BULLETIN PREVIEW -->
+  <div class="card" id="bulletinCard" style="display:none;">
+    <h3>📄 Aperçu du bulletin</h3>
+    <div class="bulletin-preview" id="bulletinPreview"></div>
+  </div>
+</div>
+
+<!-- SECTION: PAYMENTS -->
+<div class="section" id="payments">
+  <h3 style="font-size:20px;margin-bottom:20px;">💰 Gestion des paiements</h3>
+
+  <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+    <div class="stat-card">
+      <div class="icon">💰</div>
+      <div class="value" style="color:var(--success)">12 550 000</div>
+      <div class="label">Total collecté (FCFA)</div>
+    </div>
+    <div class="stat-card">
+      <div class="icon">✅</div>
+      <div class="value" style="color:var(--accent)">189</div>
+      <div class="label">Élèves à jour</div>
+    </div>
+    <div class="stat-card">
+      <div class="icon">⚠️</div>
+      <div class="value" style="color:var(--danger)">16</div>
+      <div class="label">Impayés</div>
+    </div>
+    <div class="stat-card">
+      <div class="icon">📱</div>
+      <div class="value" style="color:var(--warning)">42</div>
+      <div class="label">Rappels WhatsApp envoyés</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Derniers paiements</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Élève</th>
+            <th>Classe</th>
+            <th>Montant</th>
+            <th>Période</th>
+            <th>Reçu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>20/08/2026</td><td>OUEDRAOGO Awa</td><td>6ème A</td><td style="color:var(--success);font-weight:700">50 000 FCFA</td><td>Trimestre 2</td><td><span class="badge badge-success">✅ Généré</span></td></tr>
+          <tr><td>19/08/2026</td><td>BAMBARA Salimata</td><td>6ème A</td><td style="color:var(--success);font-weight:700">50 000 FCFA</td><td>Trimestre 2</td><td><span class="badge badge-success">✅ Généré</span></td></tr>
+          <tr><td>18/08/2026</td><td>SANOU Ibrahim</td><td>5ème B</td><td style="color:var(--success);font-weight:700">35 000 FCFA</td><td>Trimestre 1</td><td><span class="badge badge-success">✅ Généré</span></td></tr>
+          <tr><td>17/08/2026</td><td>KABORÉ Fatima</td><td>4ème A</td><td style="color:var(--warning);font-weight:700">25 000 FCFA</td><td>Partiel</td><td><span class="badge badge-warning">⏳ En attente</span></td></tr>
+          <tr><td>15/08/2026</td><td>TRAORÉ Amadou</td><td>3ème A</td><td style="color:var(--danger);font-weight:700">0 FCFA</td><td>Trimestre 2</td><td><span class="badge badge-danger">❌ Impayé</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📱 Rappels WhatsApp</h3>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Envoyez automatiquement des rappels de paiement via WhatsApp aux parents d'élèves en retard.</p>
+    <button class="btn btn-success" onclick="sendWhatsAppDemo()">📱 Envoyer les rappels WhatsApp</button>
+    <div id="whatsappResult" class="result-box" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+<!-- SECTION: QR -->
+<div class="section" id="qr">
+  <h3 style="font-size:20px;margin-bottom:20px;">🔐 Vérification QR en ligne</h3>
+
+  <div class="qr-demo">
+    <div class="qr-card">
+      <h3>📱 Scanner un QR code</h3>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px;">
+        Scannez le QR code d'un bulletin avec l'appareil photo de votre téléphone. La page de vérification s'ouvre automatiquement.
+      </p>
+      <div class="qr-visual">📷</div>
+      <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:12px;">
+        N'importe quel scanner QR suffit — Appareil photo, WhatsApp, Google Lens
+      </p>
+    </div>
+
+    <div class="qr-card" style="flex:2;">
+      <h3>🔍 Vérification manuelle</h3>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px;">
+        Collez le contenu d'un QR code pour vérifier son authenticité. Le système vérifie l'empreinte HMAC garantissant que le document n'a pas été falsifié.
+      </p>
+      
+      <textarea class="qr-input" rows="3" id="qrInput" placeholder="Collez le contenu du QR code ici...&#10;Ex: SM-BUL|SM260051|Trimestre 1|15.25|OUEDRAOGO Awa|6ème A|AABBCCDD"></textarea>
+      
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px;color:var(--text2);margin-bottom:6px;display:block;">Clé de sécurité de l'établissement</label>
+        <input type="text" class="qr-input" id="qrSecret" value="SchoolManager-BulletinSecurity-2026!@#BurkinaFaso" style="font-size:12px;">
+      </div>
+      
+      <button class="btn btn-primary" onclick="verifyQR()" style="width:100%">✅ Vérifier l'authenticité</button>
+
+      <div id="qrResult" class="result-box"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>🧪 Mode démo — Testez avec des données</h3>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Cliquez pour charger un exemple et vérifiez qu'il est AUTHENTIQUE :</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="testQR('authentic')">✅ Bulletin authentique</button>
+      <button class="btn btn-outline" onclick="testQR('receipt')">🧾 Reçu authentique</button>
+      <button class="btn btn-danger" onclick="testQR('forged')">❌ Document falsifié</button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: AI -->
+<div class="section" id="ai">
+  <h3 style="font-size:20px;margin-bottom:20px;">🤖 Intelligence Artificielle</h3>
+
+  <div class="features-grid" style="margin-bottom:24px;">
+    <div class="feature-card" style="animation-delay:.1s">
+      <div class="icon">📊</div>
+      <h4>Prédiction des résultats</h4>
+      <p>L'IA prédit les résultats futurs de chaque élève en analysant les tendances de ses notes sur les trimestres précédents.</p>
+      <div style="margin-top:12px;padding:12px;background:var(--bg2);border-radius:10px;">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">Prédiction pour OUEDRAOGO Awa</div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
+          <span>Trimestre 3 prévu</span>
+          <span style="color:var(--success);font-weight:700">15.80/20</span>
+        </div>
+        <div style="height:6px;background:var(--bg);border-radius:3px;margin-top:8px;overflow:hidden;">
+          <div style="width:79%;height:100%;background:linear-gradient(90deg,var(--primary),var(--success));border-radius:3px;transition:width 1s;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card" style="animation-delay:.2s">
+      <div class="icon">⚠️</div>
+      <h4>Détection d'anomalies</h4>
+      <p>L'IA détecte automatiquement les anomalies : chutes brutales de notes, absences inhabituelles, résultats suspects.</p>
+      <div style="margin-top:12px;padding:12px;background:rgba(239,68,68,.08);border-radius:10px;border:1px solid rgba(239,68,68,.2);">
+        <div style="font-size:12px;color:var(--danger);font-weight:600;">⚠️ Alerte : SANOU Ibrahim</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px;">Note en Maths : 18 → 08 — Chute de 10 points détectée</div>
+      </div>
+    </div>
+
+    <div class="feature-card" style="animation-delay:.3s">
+      <div class="icon">📈</div>
+      <h4>Analyse de dispersion</h4>
+      <p>Mesure l'homogénéité des résultats de la classe. Un indice élevé signale des écarts importants entre les élèves.</p>
+      <div style="margin-top:12px;padding:12px;background:rgba(245,158,11,.08);border-radius:10px;border:1px solid rgba(245,158,11,.2);">
+        <div style="font-size:12px;color:var(--warning);font-weight:600;">⚠️ Hétérogène</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px;">Écart-type : 4.2 — Les notes sont dispersées</div>
+      </div>
+    </div>
+
+    <div class="feature-card" style="animation-delay:.4s">
+      <div class="icon">🎯</div>
+      <h4>Recommandations</h4>
+      <p>L'IA suggère des actions concrètes pour améliorer les résultats : surveiller un élève, renforcer une matière, etc.</p>
+      <div style="margin-top:12px;padding:12px;background:rgba(99,102,241,.08);border-radius:10px;border:1px solid rgba(99,102,241,.2);">
+        <div style="font-size:12px;color:var(--primary2);font-weight:600;">💡 Recommandation</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px;">Renforcer les cours de Maths en 6ème A — moyenne : 10.2/20</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔍 Analyser une classe</h3>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+      <select class="form-input" style="width:200px" id="aiClass">
+        <option>6ème A</option>
+        <option>6ème B</option>
+        <option>5ème A</option>
+      </select>
+      <select class="form-input" style="width:200px" id="aiPeriod">
+        <option>Trimestre 1</option>
+        <option>Trimestre 2</option>
+        <option>Toutes les périodes</option>
+      </select>
+      <button class="btn btn-primary" onclick="analyzeClass()">🤖 Analyser avec l'IA</button>
+    </div>
+    <div id="aiResult" class="result-box"></div>
+  </div>
+</div>
+
+<!-- SECTION: FEATURES -->
+<div class="section" id="features">
+  <h3 style="font-size:20px;margin-bottom:20px;">✨ Toutes les fonctionnalités</h3>
+
+  <div class="features-grid">
+    <div class="feature-card" style="animation-delay:.05s">
+      <div class="icon">🎓</div>
+      <h4>Gestion scolaire complète</h4>
+      <p>Inscription, suivi, promotion automatique des élèves. Gestion des classes, matières, enseignants et emplois du temps.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.1s">
+      <div class="icon">📝</div>
+      <h4>Notes & Bulletins</h4>
+      <p>Saisie rapide des notes, calcul automatique des moyennes, génération de bulletins PDF signés avec QR code vérifiable en ligne.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.15s">
+      <div class="icon">💰</div>
+      <h4>Finances & Paiements</h4>
+      <p>Suivi des frais de scolarité par élève, détection automatique des impayés, reçus PDF, rappels WhatsApp intégrés.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.2s">
+      <div class="icon">🤖</div>
+      <h4>Intelligence Artificielle</h4>
+      <p>Prédiction des résultats, détection d'anomalies, analyse de dispersion, recommandations personnalisées pour chaque élève.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.25s">
+      <div class="icon">🔐</div>
+      <h4>Sécurité avancée</h4>
+      <p>QR codes signés HMAC, vérification en ligne, signatures numériques, gestion des rôles (Admin, Secrétaire, Comptable).</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.3s">
+      <div class="icon">📊</div>
+      <h4>Rapports & Exports</h4>
+      <p>Export PDF et Excel, listes d'élèves, résultats par classe, statistiques, tableaux de bord interactifs.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.35s">
+      <div class="icon">📱</div>
+      <h4>Rappels WhatsApp</h4>
+      <p>Envoi automatique de rappels de paiement via WhatsApp aux parents d'élèves en retard.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.4s">
+      <div class="icon">🌍</div>
+      <h4>100% Français</h4>
+      <p>Interface entièrement en français, adaptée au contexte burkinabè. Drapeau, devise FCFA, noms locaux.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.45s">
+      <div class="icon">💾</div>
+      <h4>Sauvegarde automatique</h4>
+      <p>Sauvegardes automatiques + manuelles sur clé USB ou dossier personnalisé. Restauration en un clic.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.5s">
+      <div class="icon">👥</div>
+      <h4>Multi-utilisateurs</h4>
+      <p>Plusieurs comptes avec permissions personnalisées. Admin, Secrétaire, Comptable — chaque rôle a ses accès.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.55s">
+      <div class="icon">📅</div>
+      <h4>Emploi du temps</h4>
+      <p>Création et gestion des emplois du temps par classe. Jours fériés intégrés, calendrier scolaire.</p>
+    </div>
+    <div class="feature-card" style="animation-delay:.6s">
+      <div class="icon">🖼️</div>
+      <h4>Logo & Personnalisation</h4>
+      <p>Logo de l'école sur tous les documents. Nom, adresse, téléphone — personnalisez chaque bulletin.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px;text-align:center;">
+    <h3 style="justify-content:center;">💰 Tarification</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:16px;">
+      <div style="padding:20px;background:var(--bg2);border-radius:16px;border:1px solid var(--border);">
+        <div style="font-size:24px;font-weight:900;color:var(--accent);">1 mois</div>
+        <div style="font-size:28px;font-weight:900;margin:8px 0;">15 000</div>
+        <div style="font-size:12px;color:var(--text3);">FCFA</div>
+      </div>
+      <div style="padding:20px;background:var(--bg2);border-radius:16px;border:2px solid var(--success);">
+        <div style="font-size:12px;color:var(--success);font-weight:700;margin-bottom:4px;">⭐ POPULAIRE</div>
+        <div style="font-size:24px;font-weight:900;color:var(--success);">1 an</div>
+        <div style="font-size:28px;font-weight:900;margin:8px 0;">100 000</div>
+        <div style="font-size:12px;color:var(--text3);">FCFA</div>
+      </div>
+      <div style="padding:20px;background:var(--bg2);border-radius:16px;border:1px solid var(--primary);">
+        <div style="font-size:24px;font-weight:900;color:var(--primary2);">2 ans</div>
+        <div style="font-size:28px;font-weight:900;margin:8px 0;">200 000</div>
+        <div style="font-size:12px;color:var(--text3);">FCFA</div>
+      </div>
+      <div style="padding:20px;background:var(--bg2);border-radius:16px;border:1px solid var(--warning);">
+        <div style="font-size:24px;font-weight:900;color:var(--warning);">5 ans</div>
+        <div style="font-size:28px;font-weight:900;margin:8px 0;">500 000</div>
+        <div style="font-size:12px;color:var(--text3);">FCFA</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>🎓 <strong>SchoolManager</strong> — Logiciel de gestion scolaire</p>
+  <p style="margin-top:8px;">Développé par <strong>Bénéwendé Dieudonné Tassembédo</strong></p>
+  <p style="margin-top:4px;">📞 +226 77 67 69 31 • ✉️ dieudonnetassembedo07@gmail.com</p>
+  <p style="margin-top:8px;">
+    <a href="https://schoolmanager-bf.github.io">🌐 Site officiel</a> • 
+    <a href="https://github.com/schoolmanager-bf">💻 GitHub</a> • 
+    <a href="https://schoolmanager-bf.github.io/verification.html">🔍 Vérification QR</a>
+  </p>
+  <p style="margin-top:12px;font-size:11px;color:var(--text3);">© 2026 SchoolManager — Tous droits réservés</p>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+const students = [
+  { mat: 'SM260001', nom: 'OUEDRAOGO Awa', classe: '6ème A', etat: 'Inscrit', paye: 150000, total: 200000 },
+  { mat: 'SM260002', nom: 'BAMBARA Salimata', classe: '6ème A', etat: 'Inscrit', paye: 200000, total: 200000 },
+  { mat: 'SM260003', nom: 'SANOU Ibrahim', classe: '5ème B', etat: 'Affecté par l\'État', paye: 100000, total: 200000 },
+  { mat: 'SM260004', nom: 'KABORÉ Fatima', classe: '4ème A', etat: 'Inscrit', paye: 50000, total: 200000 },
+  { mat: 'SM260005', nom: 'TRAORÉ Amadou', classe: '3ème A', etat: 'Inscrit', paye: 0, total: 200000 },
+  { mat: 'SM260006', nom: 'DIALLO Mariam', classe: '6ème B', etat: 'Inscrit', paye: 200000, total: 200000 },
+  { mat: 'SM260007', nom: 'ZONGO Paul', classe: '5ème A', etat: 'Affecté par l\'État', paye: 180000, total: 200000 },
+  { mat: 'SM260008', nom: 'Compaoré ISSA', classe: '6ème A', etat: 'Inscrit', paye: 120000, total: 200000 },
+];
+
+const subjects = [
+  { nom: 'Français', coef: 3 },
+  { nom: 'Mathématiques', coef: 3 },
+  { nom: 'Physique-Chimie', coef: 2 },
+  { nom: 'Histoire-Géo', coef: 2 },
+  { nom: 'Anglais', coef: 2 },
+  { nom: 'SVT', coef: 1 },
+  { nom: 'EPS', coef: 1 },
+  { nom: 'Informatique', coef: 1 },
+];
+
+const gradesData = {
+  'SM260001': [14, 16, 15, 12, 13, 14, 16, 15],
+  'SM260002': [16, 15, 14, 15, 14, 13, 15, 14],
+};
+
+// ===== NAVIGATION =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ===== STUDENTS TABLE =====
+function renderStudents(list) {
+  const tbody = document.getElementById('studentsBody');
+  tbody.innerHTML = list.map(s => `
+    <tr>
+      <td style="font-family:monospace;font-size:12px;">${s.mat}</td>
+      <td><strong>${s.nom}</strong></td>
+      <td>${s.classe}</td>
+      <td><span class="badge ${s.etat.includes('Affecté') ? 'badge-info' : 'badge-success'}">${s.etat}</span></td>
+      <td style="font-weight:700;color:${s.paye >= s.total ? 'var(--success)' : s.paye > 0 ? 'var(--warning)' : 'var(--danger)'}">${s.paye.toLocaleString()} / ${s.total.toLocaleString()} FCFA</td>
+      <td><button class="btn btn-outline" style="padding:6px 12px;font-size:11px" onclick="showStudentDetail('${s.mat}')">👁️ Voir</button></td>
+    </tr>
+  `).join('');
+}
+
+function filterStudents() {
+  const search = document.getElementById('searchStudent').value.toLowerCase();
+  const cls = document.getElementById('filterClass').value;
+  const filtered = students.filter(s => {
+    if (cls && s.classe !== cls) return false;
+    if (search && !s.nom.toLowerCase().includes(search) && !s.mat.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  renderStudents(filtered);
+}
+
+function showStudentDetail(mat) {
+  const s = students.find(x => x.mat === mat);
+  if (!s) return;
+  showToast(`👤 ${s.nom} — ${s.classe} — ${s.etat}`, false);
+}
+
+// ===== GRADES =====
+function loadGradeForm() {
+  const mat = document.getElementById('gradeStudent').selectedOptions[0]?.textContent;
+  const student = students.find(s => s.nom === mat);
+  const grades = gradesData[student?.mat] || subjects.map(() => Math.floor(Math.random() * 10 + 10));
+  
+  const tbody = document.getElementById('gradeBody');
+  tbody.innerHTML = subjects.map((sub, i) => {
+    const d1 = grades[i] || 0;
+    const d2 = Math.min(20, d1 + Math.floor(Math.random() * 4 - 2));
+    const comp = Math.min(20, Math.floor((d1 + d2) / 2) + Math.floor(Math.random() * 4 - 2));
+    const avg = ((d1 + d2 + comp * 2) / 4).toFixed(2);
+    return `<tr>
+      <td><strong>${sub.nom}</strong> <span style="font-size:11px;color:var(--text3)">×${sub.coef}</span></td>
+      <td><input type="number" min="0" max="20" value="${d1}" style="width:70px;padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text);text-align:center;" onchange="calcAvg()"></td>
+      <td><input type="number" min="0" max="20" value="${d2}" style="width:70px;padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text);text-align:center;" onchange="calcAvg()"></td>
+      <td><input type="number" min="0" max="20" value="${comp}" style="width:70px;padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text);text-align:center;" onchange="calcAvg()"></td>
+      <td style="font-weight:700;color:var(--primary2)">${avg}</td>
+      <td style="color:var(--text3)">${sub.coef}</td>
+    </tr>`;
+  }).join('');
+  
+  document.getElementById('gradeForm').style.display = 'block';
+  calcAvg();
+}
+
+function calcAvg() {
+  const rows = document.querySelectorAll('#gradeBody tr');
+  let totalPond = 0, totalCoef = 0;
+  rows.forEach((row, i) => {
+    const inputs = row.querySelectorAll('input');
+    const d1 = parseFloat(inputs[0].value) || 0;
+    const d2 = parseFloat(inputs[1].value) || 0;
+    const comp = parseFloat(inputs[2].value) || 0;
+    const avg = (d1 + d2 + comp * 2) / 4;
+    row.children[4].textContent = avg.toFixed(2);
+    totalPond += avg * subjects[i].coef;
+    totalCoef += subjects[i].coef;
+  });
+  document.getElementById('avgGrade').textContent = totalCoef > 0 ? (totalPond / totalCoef).toFixed(2) + '/20' : '—';
+}
+
+function saveGrades() {
+  showToast('✅ Notes enregistrées avec succès !', false);
+}
+
+// ===== BULLETIN =====
+function showBulletin() {
+  const card = document.getElementById('bulletinCard');
+  const preview = document.getElementById('bulletinPreview');
+  card.style.display = 'block';
+  
+  preview.innerHTML = `
+    <div class="bulletin-header">
+      <div class="flag">🇧🇫</div>
+      <h4>École Primaire Sainte Marie</h4>
+      <div style="font-size:12px;color:#666;">Ouaga 2000, Burkina Faso</div>
+    </div>
+    <div style="text-align:center;font-size:14px;font-weight:700;color:#EF2B2D;margin-bottom:12px;">BULLETIN DE NOTES — TRIMESTRE 2</div>
+    <div style="text-align:center;font-size:11px;color:#666;margin-bottom:12px;">Année scolaire : 2025-2026</div>
+    <div class="bulletin-info">
+      <div class="row"><span><strong>Élève :</strong> OUEDRAOGO Awa</span><span><strong>Matricule :</strong> SM260001</span></div>
+      <div class="row"><span><strong>Classe :</strong> 6ème A</span><span><strong>Effectif :</strong> 32 élèves</span></div>
+    </div>
+    <table class="bulletin-table">
+      <thead><tr><th>Matière</th><th>Devoir 1</th><th>Devoir 2</th><th>Comp.</th><th>Moyenne</th><th>Coef.</th></tr></thead>
+      <tbody>
+        <tr><td>Français</td><td>14</td><td>16</td><td>15</td><td>15.00</td><td>3</td></tr>
+        <tr><td>Mathématiques</td><td>12</td><td>14</td><td>15</td><td>14.00</td><td>3</td></tr>
+        <tr><td>Physique-Chimie</td><td>13</td><td>15</td><td>14</td><td>14.00</td><td>2</td></tr>
+        <tr><td>Histoire-Géo</td><td>15</td><td>13</td><td>14</td><td>14.00</td><td>2</td></tr>
+        <tr><td>Anglais</td><td>14</td><td>12</td><td>13</td><td>13.00</td><td>2</td></tr>
+        <tr><td>SVT</td><td>16</td><td>15</td><td>14</td><td>14.75</td><td>1</td></tr>
+        <tr><td>EPS</td><td>15</td><td>16</td><td>15</td><td>15.25</td><td>1</td></tr>
+        <tr><td>Informatique</td><td>14</td><td>15</td><td>16</td><td>15.25</td><td>1</td></tr>
+        <tr><td colspan="4" style="text-align:right">MOYENNE GÉNÉRALE :</td><td style="color:#10b981;font-size:14px">14.25</td><td></td></tr>
+      </tbody>
+    </table>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:#333;margin-bottom:12px;">
+      <div>📍 Rang : <strong>3ème / 32</strong></div>
+      <div>📊 Moy. haute : <strong>17.50</strong></div>
+      <div>📉 Moy. basse : <strong>08.25</strong></div>
+    </div>
+    <div style="background:#e8f5e9;padding:10px;border-radius:8px;text-align:center;font-size:12px;font-weight:700;color:#2e7d32;margin-bottom:12px;">
+      ✅ ADMISSIBLE
+    </div>
+    <div class="bulletin-footer">
+      <div>Document signé électroniquement — École Primaire Sainte Marie © 2026</div>
+      <div style="margin-top:4px;">📱 Scannez le QR code pour vérifier l'authenticité</div>
+    </div>
+  `;
+  
+  card.scrollIntoView({ behavior: 'smooth' });
+}
+
+function showSignedBulletin() {
+  showBulletin();
+  showToast('🔐 Bulletin signé — QR code généré', false);
+}
+
+// ===== QR VERIFICATION =====
+function verifyQR() {
+  const input = document.getElementById('qrInput').value.trim();
+  const secret = document.getElementById('qrSecret').value.trim();
+  const result = document.getElementById('qrResult');
+  
+  if (!input) {
+    result.className = 'result-box show error';
+    result.innerHTML = '❌ Veuillez coller le contenu d\'un QR code.';
+    return;
+  }
+  
+  // Simple HMAC verification simulation
+  const parts = input.split('|');
+  const type = parts[0];
+  
+  if (type === 'SM-BUL') {
+    const empreinte = parts[parts.length - 1];
+    const data = parts.slice(1, -1).join('|');
+    
+    // Simulate HMAC verification
+    const isValid = empreinte && empreinte.length >= 4;
+    
+    if (isValid) {
+      result.className = 'result-box show';
+      result.innerHTML = `
+        <div style="text-align:center;margin-bottom:16px;">
+          <div style="font-size:48px;margin-bottom:8px;">✅</div>
+          <div style="font-size:20px;font-weight:800;color:var(--success);">AUTHENTIQUE</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">Document vérifié avec succès</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
+          <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Type :</strong> Bulletin scolaire</div>
+          <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Matricule :</strong> ${parts[1] || '—'}</div>
+          <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Période :</strong> ${parts[2] || '—'}</div>
+          <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Moyenne :</strong> ${parts[3] || '—'}/20</div>
+          <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Élève :</strong> ${parts[4] || '—'}</div>
+          <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Classe :</strong> ${parts[5] || '—'}</div>
+        </div>
+      `;
+    } else {
+      result.className = 'result-box show error';
+      result.innerHTML = '<div style="text-align:center"><div style="font-size:48px;margin-bottom:8px;">❌</div><div style="font-size:20px;font-weight:800;color:var(--danger);">NON VÉRIFIÉ</div></div>';
+    }
+  } else if (type === 'SM-REC') {
+    result.className = 'result-box show';
+    result.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:48px;margin-bottom:8px;">✅</div>
+        <div style="font-size:20px;font-weight:800;color:var(--success);">REÇU AUTHENTIQUE</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">Reçu de paiement vérifié</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
+        <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Type :</strong> Reçu de paiement</div>
+        <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Élève :</strong> ${parts[2] || '—'}</div>
+        <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Montant :</strong> ${parts[3] || '—'} FCFA</div>
+        <div style="padding:8px;background:var(--bg2);border-radius:8px;"><strong>Date :</strong> ${parts[4] || '—'}</div>
+      </div>
+    `;
+  } else {
+    result.className = 'result-box show error';
+    result.innerHTML = '<div style="text-align:center"><div style="font-size:48px;margin-bottom:8px;">❌</div><div style="font-size:20px;font-weight:800;color:var(--danger);">FORMAT INCONNU</div></div>';
+  }
+}
+
+function testQR(type) {
+  const input = document.getElementById('qrInput');
+  if (type === 'authentic') {
+    input.value = 'SM-BUL|SM260001|Trimestre 2|14.25|OUEDRAOGO Awa|6ème A|AABBCCDD';
+  } else if (type === 'receipt') {
+    input.value = 'SM-REC|000123|BAMBARA Salimata|50000|20260820|11223344';
+  } else if (type === 'forged') {
+    input.value = 'SM-BUL|SM260099|Trimestre 2|20.00|FAKE NAME|XXème Z|00000000';
+  }
+  verifyQR();
+}
+
+// ===== AI ANALYSIS =====
+function analyzeClass() {
+  const result = document.getElementById('aiResult');
+  result.className = 'result-box show';
+  result.innerHTML = `
+    <h4 style="margin-bottom:12px;">🤖 Analyse IA — 6ème A — Trimestre 1</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+      <div style="padding:12px;background:var(--bg2);border-radius:10px;">
+        <div style="font-size:12px;color:var(--text3);">Moyenne de classe</div>
+        <div style="font-size:20px;font-weight:800;color:var(--primary2);">13.45/20</div>
+      </div>
+      <div style="padding:12px;background:var(--bg2);border-radius:10px;">
+        <div style="font-size:12px;color:var(--text3);">Moyenne la plus haute</div>
+        <div style="font-size:20px;font-weight:800;color:var(--success);">17.50/20</div>
+      </div>
+      <div style="padding:12px;background:var(--bg2);border-radius:10px;">
+        <div style style="font-size:12px;color:var(--text3);">Moyenne la plus basse</div>
+        <div style="font-size:20px;font-weight:800;color:var(--danger);">08.25/20</div>
+      </div>
+      <div style="padding:12px;background:var(--bg2);border-radius:10px;">
+        <div style="font-size:12px;color:var(--text3);">Taux de réussite</div>
+        <div style="font-size:20px;font-weight:800;color:var(--success);">94%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:12px;background:rgba(245,158,11,.08);border-radius:10px;border:1px solid rgba(245,158,11,.2);">
+      <div style="font-size:12px;color:var(--warning);font-weight:600;">⚠️ Analyse de dispersion</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:4px;">Hétérogène — Écart-type : 3.8 — Les notes sont dispersées. Recommandation : groupes de niveau en Maths.</div>
+    </div>
+    <div style="margin-top:12px;padding:12px;background:rgba(239,68,68,.08);border-radius:10px;border:1px solid rgba(239,68,68,.2);">
+      <div style="font-size:12px;color:var(--danger);font-weight:600;">⚠️ Alertes</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:4px;">• TRAORÉ Amadou : chute de notes en Maths (16 → 08)<br>• 2 élèves en dessous de 10/20 — suivi recommandé</div>
+    </div>
+  `;
+}
+
+// ===== WHATSAPP DEMO =====
+function sendWhatsAppDemo() {
+  const result = document.getElementById('whatsappResult');
+  result.className = 'result-box show';
+  result.innerHTML = `
+    <h4 style="margin-bottom:12px;">📱 Rappels WhatsApp envoyés</h4>
+    <div style="font-size:13px;">
+      <div style="padding:8px;background:var(--bg2);border-radius:8px;margin-bottom:8px;">
+        ✅ <strong>TRAORÉ Amadou</strong> (3ème A) — 0 impayés signalés — <a href="https://wa.me/22677676931?text=Bonjour, SchoolManager signale un impayé pour TRAORÉ Amadou." target="_blank" style="color:var(--accent);">📱 Envoyer</a>
+      </div>
+      <div style="padding:8px;background:var(--bg2);border-radius:8px;margin-bottom:8px;">
+        ✅ <strong>KABORÉ Fatima</strong> (4ème A) — Reste : 150 000 FCFA — <a href="https://wa.me/22677676931?text=Bonjour, SchoolManager signale un impayé pour KABORÉ Fatima." target="_blank" style="color:var(--accent);">📱 Envoyer</a>
+      </div>
+    </div>
+  `;
+}
+
+// ===== TOAST =====
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (isError ? 'error' : 'success');
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+// ===== ANIMATIONS =====
+function animateCounter(el, target, suffix = '') {
+  let current = 0;
+  const step = Math.ceil(target / 40);
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    el.textContent = current.toLocaleString() + suffix;
+  }, 30);
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  renderStudents(students);
+  
+  // Animate hero stats
+  setTimeout(() => animateCounter(document.getElementById('animStudents'), 247), 300);
+  setTimeout(() => animateCounter(document.getElementById('animClasses'), 8), 500);
+  setTimeout(() => animateCounter(document.getElementById('animSubjects'), 15), 700);
+  setTimeout(() => animateCounter(document.getElementById('animPayments'), 12550000), 900);
+  
+  // Animate chart
+  setTimeout(() => {
+    const chart = document.getElementById('paymentChart');
+    const data = [
+      { label: '6ème A', value: 85, color: 'var(--primary)' },
+      { label: '6ème B', value: 70, color: 'var(--accent)' },
+      { label: '5ème A', value: 60, color: 'var(--success)' },
+      { label: '5ème B', value: 55, color: 'var(--warning)' },
+      { label: '4ème A', value: 40, color: 'var(--danger)' },
+      { label: '3ème A', value: 30, color: 'var(--primary2)' },
+    ];
+    chart.innerHTML = data.map(d => `
+      <div class="chart-bar" style="height:0;background:${d.color};width:60px;">
+        <div class="chart-value">${d.value}%</div>
+        <div class="chart-label">${d.label}</div>
+      </div>
+    `).join('');
+    setTimeout(() => {
+      chart.querySelectorAll('.chart-bar').forEach(bar => {
+        bar.style.height = bar.querySelector('.chart-value').textContent;
+      });
+    }, 100);
+  }, 500);
+});
+</script>
+</body>
+</html>
