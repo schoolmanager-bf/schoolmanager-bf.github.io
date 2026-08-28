@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designs Hacker — Yiriba Generator</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler-icons-webfont@latest/tabler-icons.min.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #e0e0e0; font-family: 'JetBrains Mono', monospace; padding: 2rem; }
+  
+  h1 { text-align: center; font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; color: #00ff41; text-shadow: 0 0 20px #00ff41; }
+  .subtitle { text-align: center; color: #666; font-size: 0.85rem; margin-bottom: 3rem; }
+  
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+  
+  .design-card {
+    border-radius: 16px; overflow: hidden; position: relative;
+    transition: transform 0.3s, box-shadow 0.3s; cursor: pointer;
+  }
+  .design-card:hover { transform: translateY(-4px); }
+  
+  .design-label {
+    position: absolute; top: 16px; left: 16px; z-index: 10;
+    padding: 6px 16px; border-radius: 8px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2px; font-family: 'Orbitron', sans-serif;
+  }
+  .design-num {
+    position: absolute; top: 16px; right: 16px; z-index: 10;
+    width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 700;
+  }
+  
+  .mockup { padding: 20px; min-height: 420px; }
+  
+  /* ═══ DESIGN 1: MATRIX ═══ */
+  .d1 { background: #000000; border: 1px solid #003300; box-shadow: 0 0 30px rgba(0,255,65,0.1); }
+  .d1:hover { box-shadow: 0 0 40px rgba(0,255,65,0.3); }
+  .d1 .design-label { background: rgba(0,255,65,0.15); color: #00ff41; border: 1px solid #00ff41; }
+  .d1 .design-num { background: #00ff41; color: #000; }
+  .d1 .sidebar { background: #050a05; border-right: 1px solid #003300; }
+  .d1 .logo { color: #00ff41; font-family: 'Orbitron'; font-size: 1.4rem; text-shadow: 0 0 10px #00ff41; }
+  .d1 .nav-item { color: #006600; }
+  .d1 .nav-item.active { color: #00ff41; background: rgba(0,255,65,0.1); border-left: 2px solid #00ff41; }
+  .d1 .nav-item:hover { color: #00cc33; }
+  .d1 .input { background: #000; border: 1px solid #003300; color: #00ff41; font-family: 'Share Tech Mono'; }
+  .d1 .input:focus { border-color: #00ff41; box-shadow: 0 0 10px rgba(0,255,65,0.3); }
+  .d1 .btn-primary { background: #00ff41; color: #000; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+  .d1 .btn-primary:hover { box-shadow: 0 0 20px #00ff41; }
+  .d1 .title { color: #00ff41; }
+  .d1 .card { background: #0a0f0a; border: 1px solid #003300; }
+  .d1 .label { color: #006600; text-transform: uppercase; letter-spacing: 3px; font-size: 9px; }
+  .d1 .select { background: #000; border: 1px solid #003300; color: #00ff41; }
+  .d1 .output { background: #000; border: 1px solid #003300; color: #00ff41; font-family: 'Share Tech Mono'; font-size: 10px; }
+  .d1 .accent { color: #00ff41; }
+  .d1 .muted { color: #004400; }
+  
+  /* ═══ DESIGN 2: CYBERPUNK ═══ */
+  .d2 { background: #0d0221; border: 1px solid #ff00ff33; box-shadow: 0 0 30px rgba(255,0,255,0.1); }
+  .d2:hover { box-shadow: 0 0 40px rgba(255,0,255,0.3); }
+  .d2 .design-label { background: rgba(255,0,255,0.15); color: #ff00ff; border: 1px solid #ff00ff; }
+  .d2 .design-num { background: #ff00ff; color: #000; }
+  .d2 .sidebar { background: #0a0118; border-right: 1px solid #ff00ff33; }
+  .d2 .logo { color: #ff00ff; font-family: 'Orbitron'; font-size: 1.4rem; text-shadow: 0 0 10px #ff00ff; }
+  .d2 .nav-item { color: #660066; }
+  .d2 .nav-item.active { color: #ff00ff; background: rgba(255,0,255,0.1); border-left: 2px solid #ff00ff; }
+  .d2 .nav-item:hover { color: #cc00cc; }
+  .d2 .input { background: #0a0118; border: 1px solid #ff00ff33; color: #ff80ff; font-family: 'Share Tech Mono'; }
+  .d2 .input:focus { border-color: #ff00ff; box-shadow: 0 0 10px rgba(255,0,255,0.3); }
+  .d2 .btn-primary { background: linear-gradient(135deg, #ff00ff, #8800ff); color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+  .d2 .btn-primary:hover { box-shadow: 0 0 20px #ff00ff; }
+  .d2 .title { color: #ff00ff; }
+  .d2 .card { background: #0d0221; border: 1px solid #ff00ff33; }
+  .d2 .label { color: #660066; text-transform: uppercase; letter-spacing: 3px; font-size: 9px; }
+  .d2 .select { background: #0a0118; border: 1px solid #ff00ff33; color: #ff80ff; }
+  .d2 .output { background: #0a0118; border: 1px solid #ff00ff33; color: #ff80ff; font-family: 'Share Tech Mono'; font-size: 10px; }
+  .d2 .accent { color: #ff00ff; }
+  .d2 .muted { color: #440044; }
+  .d2 .glitch { animation: glitch 2s infinite; }
+  @keyframes glitch {
+    0%, 90%, 100% { text-shadow: 0 0 10px #ff00ff; }
+    92% { text-shadow: -2px 0 #00ffff, 2px 0 #ff0000; }
+    94% { text-shadow: 2px 0 #00ffff, -2px 0 #ff0000; }
+  }
+  
+  /* ═══ DESIGN 3: DARK WEB ═══ */
+  .d3 { background: #0a0a0a; border: 1px solid #ff000033; box-shadow: 0 0 30px rgba(255,0,0,0.1); }
+  .d3:hover { box-shadow: 0 0 40px rgba(255,0,0,0.3); }
+  .d3 .design-label { background: rgba(255,0,0,0.15); color: #ff0000; border: 1px solid #ff0000; }
+  .d3 .design-num { background: #ff0000; color: #000; }
+  .d3 .sidebar { background: #050505; border-right: 1px solid #ff000022; }
+  .d3 .logo { color: #ff0000; font-family: 'Orbitron'; font-size: 1.4rem; text-shadow: 0 0 10px #ff0000; }
+  .d3 .nav-item { color: #440000; }
+  .d3 .nav-item.active { color: #ff0000; background: rgba(255,0,0,0.1); border-left: 2px solid #ff0000; }
+  .d3 .nav-item:hover { color: #cc0000; }
+  .d3 .input { background: #0a0a0a; border: 1px solid #ff000033; color: #ff4444; font-family: 'Share Tech Mono'; }
+  .d3 .input:focus { border-color: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.3); }
+  .d3 .btn-primary { background: linear-gradient(135deg, #ff0000, #990000); color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+  .d3 .btn-primary:hover { box-shadow: 0 0 20px #ff0000; }
+  .d3 .title { color: #ff0000; }
+  .d3 .card { background: #0f0f0f; border: 1px solid #ff000022; }
+  .d3 .label { color: #440000; text-transform: uppercase; letter-spacing: 3px; font-size: 9px; }
+  .d3 .select { background: #0a0a0a; border: 1px solid #ff000033; color: #ff4444; }
+  .d3 .output { background: #050505; border: 1px solid #ff000033; color: #ff4444; font-family: 'Share Tech Mono'; font-size: 10px; }
+  .d3 .accent { color: #ff0000; }
+  .d3 .muted { color: #330000; }
+  
+  /* ═══ DESIGN 4: GHOST PROTOCOL ═══ */
+  .d4 { background: #060d1a; border: 1px solid #00d4ff33; box-shadow: 0 0 30px rgba(0,212,255,0.1); }
+  .d4:hover { box-shadow: 0 0 40px rgba(0,212,255,0.3); }
+  .d4 .design-label { background: rgba(0,212,255,0.15); color: #00d4ff; border: 1px solid #00d4ff; }
+  .d4 .design-num { background: #00d4ff; color: #000; }
+  .d4 .sidebar { background: #030810; border-right: 1px solid #00d4ff22; }
+  .d4 .logo { color: #00d4ff; font-family: 'Orbitron'; font-size: 1.4rem; text-shadow: 0 0 10px #00d4ff; }
+  .d4 .nav-item { color: #003344; }
+  .d4 .nav-item.active { color: #00d4ff; background: rgba(0,212,255,0.1); border-left: 2px solid #00d4ff; }
+  .d4 .nav-item:hover { color: #0099bb; }
+  .d4 .input { background: #060d1a; border: 1px solid #00d4ff22; color: #00d4ff; font-family: 'Share Tech Mono'; }
+  .d4 .input:focus { border-color: #00d4ff; box-shadow: 0 0 10px rgba(0,212,255,0.3); }
+  .d4 .btn-primary { background: linear-gradient(135deg, #00d4ff, #0066ff); color: #000; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+  .d4 .btn-primary:hover { box-shadow: 0 0 20px #00d4ff; }
+  .d4 .title { color: #00d4ff; }
+  .d4 .card { background: #080f1f; border: 1px solid #00d4ff22; }
+  .d4 .label { color: #003344; text-transform: uppercase; letter-spacing: 3px; font-size: 9px; }
+  .d4 .select { background: #060d1a; border: 1px solid #00d4ff22; color: #00d4ff; }
+  .d4 .output { background: #030810; border: 1px solid #00d4ff22; color: #00d4ff; font-family: 'Share Tech Mono'; font-size: 10px; }
+  .d4 .accent { color: #00d4ff; }
+  .d4 .muted { color: #002233; }
+  
+  /* ═══ DESIGN 5: TERMINAL ═══ */
+  .d5 { background: #0c0c0c; border: 1px solid #33ff3333; box-shadow: 0 0 30px rgba(51,255,51,0.1); }
+  .d5:hover { box-shadow: 0 0 40px rgba(51,255,51,0.3); }
+  .d5 .design-label { background: rgba(51,255,51,0.15); color: #33ff33; border: 1px solid #33ff33; font-family: 'Share Tech Mono'; }
+  .d5 .design-num { background: #33ff33; color: #000; font-family: 'Share Tech Mono'; }
+  .d5 .sidebar { background: #080808; border-right: 2px solid #33ff3333; }
+  .d5 .logo { color: #33ff33; font-family: 'Share Tech Mono'; font-size: 1.2rem; }
+  .d5 .nav-item { color: #1a5c1a; font-family: 'Share Tech Mono'; }
+  .d5 .nav-item.active { color: #33ff33; background: rgba(51,255,51,0.05); border-left: 2px solid #33ff33; }
+  .d5 .input { background: #0c0c0c; border: 1px solid #1a5c1a; color: #33ff33; font-family: 'Share Tech Mono'; border-radius: 0; }
+  .d5 .input:focus { border-color: #33ff33; box-shadow: inset 0 0 10px rgba(51,255,51,0.1); }
+  .d5 .btn-primary { background: #1a5c1a; color: #33ff33; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; border-radius: 0; font-family: 'Share Tech Mono'; }
+  .d5 .btn-primary:hover { background: #33ff33; color: #000; }
+  .d5 .title { color: #33ff33; font-family: 'Share Tech Mono'; }
+  .d5 .card { background: #0c0c0c; border: 1px solid #1a5c1a; border-radius: 0; }
+  .d5 .label { color: #1a5c1a; text-transform: uppercase; letter-spacing: 3px; font-size: 9px; font-family: 'Share Tech Mono'; }
+  .d5 .select { background: #0c0c0c; border: 1px solid #1a5c1a; color: #33ff33; font-family: 'Share Tech Mono'; border-radius: 0; }
+  .d5 .output { background: #000; border: 1px solid #1a5c1a; color: #33ff33; font-family: 'Share Tech Mono'; font-size: 10px; border-radius: 0; }
+  .d5 .accent { color: #33ff33; }
+  .d5 .muted { color: #1a5c1a; }
+  .d5 .prompt { color: #33ff33; }
+  .d5 .cursor { animation: blink 1s infinite; }
+  @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+  
+  /* ═══ DESIGN 6: NEON ORANGE ═══ */
+  .d6 { background: #0a0600; border: 1px solid #ff660033; box-shadow: 0 0 30px rgba(255,102,0,0.1); }
+  .d6:hover { box-shadow: 0 0 40px rgba(255,102,0,0.3); }
+  .d6 .design-label { background: rgba(255,102,0,0.15); color: #ff6600; border: 1px solid #ff6600; }
+  .d6 .design-num { background: #ff6600; color: #000; }
+  .d6 .sidebar { background: #050300; border-right: 1px solid #ff660022; }
+  .d6 .logo { color: #ff6600; font-family: 'Orbitron'; font-size: 1.4rem; text-shadow: 0 0 10px #ff6600; }
+  .d6 .nav-item { color: #442200; }
+  .d6 .nav-item.active { color: #ff6600; background: rgba(255,102,0,0.1); border-left: 2px solid #ff6600; }
+  .d6 .nav-item:hover { color: #cc5200; }
+  .d6 .input { background: #0a0600; border: 1px solid #ff660033; color: #ff9944; font-family: 'Share Tech Mono'; }
+  .d6 .input:focus { border-color: #ff6600; box-shadow: 0 0 10px rgba(255,102,0,0.3); }
+  .d6 .btn-primary { background: linear-gradient(135deg, #ff6600, #cc3300); color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+  .d6 .btn-primary:hover { box-shadow: 0 0 20px #ff6600; }
+  .d6 .title { color: #ff6600; }
+  .d6 .card { background: #0c0800; border: 1px solid #ff660022; }
+  .d6 .label { color: #442200; text-transform: uppercase; letter-spacing: 3px; font-size: 9px; }
+  .d6 .select { background: #0a0600; border: 1px solid #ff660033; color: #ff9944; }
+  .d6 .output { background: #050300; border: 1px solid #ff660033; color: #ff9944; font-family: 'Share Tech Mono'; font-size: 10px; }
+  .d6 .accent { color: #ff6600; }
+  .d6 .muted { color: #331100; }
+
+  /* ═══ SHARED MOCKUP ═══ */
+  .mockup-layout { display: flex; height: 380px; }
+  .mock-sidebar { width: 200px; padding: 16px 0; flex-shrink: 0; display: flex; flex-direction: column; }
+  .mock-logo { padding: 0 16px 16px; font-size: 1.1rem; font-weight: 700; }
+  .mock-nav { flex: 1; padding: 0 8px; }
+  .nav-item { padding: 8px 16px; border-radius: 8px; margin: 2px 0; font-size: 11px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+  .mock-content { flex: 1; padding: 20px; overflow: hidden; }
+  .title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+  .subtitle-sm { font-size: 10px; margin-bottom: 16px; }
+  .card { border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .label { display: block; margin-bottom: 6px; font-size: 9px; }
+  .input { width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 11px; outline: none; margin-bottom: 12px; font-family: inherit; }
+  .select { width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 11px; outline: none; margin-bottom: 12px; }
+  .btn-primary { display: inline-block; padding: 8px 20px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; font-family: inherit; }
+  .output { width: 100%; height: 80px; border-radius: 8px; padding: 10px; font-size: 10px; resize: none; outline: none; font-family: inherit; }
+  .btn-row { display: flex; gap: 8px; margin-top: 12px; }
+  .btn-sm { padding: 6px 12px; border: none; border-radius: 6px; font-size: 10px; cursor: pointer; font-family: inherit; background: #1a1a1a; color: #666; }
+  .mock-bottom { margin-top: auto; padding: 8px 16px; font-size: 9px; border-top: 1px solid #222; }
+  
+  .scanline {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none; z-index: 5;
+  }
+</style>
+</head>
+<body>
+
+<h1>⚡ YIRIBA — Designs Hacker</h1>
+<p class="subtitle">Choisis le design qui te plaît pour le Générateur de Licences</p>
+
+<div class="grid">
+
+<!-- ═══ DESIGN 1: MATRIX ═══ -->
+<div class="design-card d1">
+  <div class="design-label">01 — MATRIX</div>
+  <div class="design-num">1</div>
+  <div class="scanline"></div>
+  <div class="mockup">
+    <div class="mockup-layout">
+      <div class="mock-sidebar sidebar">
+        <div class="mock-logo logo">🔑 YIRIBA</div>
+        <div class="mock-nav">
+          <div class="nav-item active">🔑 Générer</div>
+          <div class="nav-item">📋 En masse</div>
+          <div class="nav-item">🔍 Vérifier</div>
+          <div class="nav-item">🚫 Révoquer</div>
+          <div class="nav-item">📜 Historique</div>
+          <div class="nav-item">📊 Dashboard</div>
+        </div>
+        <div class="mock-bottom muted">CLÉ SECRÈTE<br><span class="accent">••••••••••••</span></div>
+      </div>
+      <div class="mock-content">
+        <div class="title">Générer une licence</div>
+        <div class="subtitle-sm muted">// créez une nouvelle licence pour un client</div>
+        <div class="card">
+          <div class="label">NOM DE L'ÉCOLE</div>
+          <input class="input" value="École La Perle" readonly>
+          <div class="label">HARDWARE ID</div>
+          <input class="input" value="4672-5466-9DFF-8A17" readonly>
+          <div class="label">PACK</div>
+          <select class="select"><option>🎓 DEMO</option><option>🏫 ÉCOLE</option><option>🌐 RÉSEAU PRO</option></select>
+          <button class="btn-primary">🔑 GÉNÉRER</button>
+        </div>
+        <div class="card">
+          <div class="label">LICENCE GÉNÉRÉE</div>
+          <textarea class="output" readonly>{"ecole":"École La Perle","pack":"ECOLE"...}</textarea>
+          <div class="btn-row">
+            <button class="btn-sm">📋 Copier</button>
+            <button class="btn-sm">💾 Exporter</button>
+            <button class="btn-sm">✉️ Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DESIGN 2: CYBERPUNK ═══ -->
+<div class="design-card d2">
+  <div class="design-label">02 — CYBERPUNK</div>
+  <div class="design-num">2</div>
+  <div class="scanline"></div>
+  <div class="mockup">
+    <div class="mockup-layout">
+      <div class="mock-sidebar sidebar">
+        <div class="mock-logo logo glitch">🔑 YIRIBA</div>
+        <div class="mock-nav">
+          <div class="nav-item active">🔑 Générer</div>
+          <div class="nav-item">📋 En masse</div>
+          <div class="nav-item">🔍 Vérifier</div>
+          <div class="nav-item">🚫 Révoquer</div>
+          <div class="nav-item">📜 Historique</div>
+          <div class="nav-item">📊 Dashboard</div>
+        </div>
+        <div class="mock-bottom muted">CLÉ SECRÈTE<br><span class="accent">••••••••••••</span></div>
+      </div>
+      <div class="mock-content">
+        <div class="title">Générer une licence</div>
+        <div class="subtitle-sm muted">// créez une nouvelle licence pour un client</div>
+        <div class="card">
+          <div class="label">NOM DE L'ÉCOLE</div>
+          <input class="input" value="École La Perle" readonly>
+          <div class="label">HARDWARE ID</div>
+          <input class="input" value="4672-5466-9DFF-8A17" readonly>
+          <div class="label">PACK</div>
+          <select class="select"><option>🎓 DEMO</option><option>🏫 ÉCOLE</option><option>🌐 RÉSEAU PRO</option></select>
+          <button class="btn-primary">🔑 GÉNÉRER</button>
+        </div>
+        <div class="card">
+          <div class="label">LICENCE GÉNÉRÉE</div>
+          <textarea class="output" readonly>{"ecole":"École La Perle","pack":"ECOLE"...}</textarea>
+          <div class="btn-row">
+            <button class="btn-sm">📋 Copier</button>
+            <button class="btn-sm">💾 Exporter</button>
+            <button class="btn-sm">✉️ Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DESIGN 3: DARK WEB ═══ -->
+<div class="design-card d3">
+  <div class="design-label">03 — DARK WEB</div>
+  <div class="design-num">3</div>
+  <div class="scanline"></div>
+  <div class="mockup">
+    <div class="mockup-layout">
+      <div class="mock-sidebar sidebar">
+        <div class="mock-logo logo">💀 YIRIBA</div>
+        <div class="mock-nav">
+          <div class="nav-item active">🔑 Générer</div>
+          <div class="nav-item">📋 En masse</div>
+          <div class="nav-item">🔍 Vérifier</div>
+          <div class="nav-item">🚫 Révoquer</div>
+          <div class="nav-item">📜 Historique</div>
+          <div class="nav-item">📊 Dashboard</div>
+        </div>
+        <div class="mock-bottom muted">CLÉ SECRÈTE<br><span class="accent">••••••••••••</span></div>
+      </div>
+      <div class="mock-content">
+        <div class="title">Générer une licence</div>
+        <div class="subtitle-sm muted">// créez une nouvelle licence pour un client</div>
+        <div class="card">
+          <div class="label">NOM DE L'ÉCOLE</div>
+          <input class="input" value="École La Perle" readonly>
+          <div class="label">HARDWARE ID</div>
+          <input class="input" value="4672-5466-9DFF-8A17" readonly>
+          <div class="label">PACK</div>
+          <select class="select"><option>🎓 DEMO</option><option>🏫 ÉCOLE</option><option>🌐 RÉSEAU PRO</option></select>
+          <button class="btn-primary">🔑 GÉNÉRER</button>
+        </div>
+        <div class="card">
+          <div class="label">LICENCE GÉNÉRÉE</div>
+          <textarea class="output" readonly>{"ecole":"École La Perle","pack":"ECOLE"...}</textarea>
+          <div class="btn-row">
+            <button class="btn-sm">📋 Copier</button>
+            <button class="btn-sm">💾 Exporter</button>
+            <button class="btn-sm">✉️ Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DESIGN 4: GHOST PROTOCOL ═══ -->
+<div class="design-card d4">
+  <div class="design-label">04 — GHOST</div>
+  <div class="design-num">4</div>
+  <div class="scanline"></div>
+  <div class="mockup">
+    <div class="mockup-layout">
+      <div class="mock-sidebar sidebar">
+        <div class="mock-logo logo">👻 YIRIBA</div>
+        <div class="mock-nav">
+          <div class="nav-item active">🔑 Générer</div>
+          <div class="nav-item">📋 En masse</div>
+          <div class="nav-item">🔍 Vérifier</div>
+          <div class="nav-item">🚫 Révoquer</div>
+          <div class="nav-item">📜 Historique</div>
+          <div class="nav-item">📊 Dashboard</div>
+        </div>
+        <div class="mock-bottom muted">CLÉ SECRÈTE<br><span class="accent">••••••••••••</span></div>
+      </div>
+      <div class="mock-content">
+        <div class="title">Générer une licence</div>
+        <div class="subtitle-sm muted">// créez une nouvelle licence pour un client</div>
+        <div class="card">
+          <div class="label">NOM DE L'ÉCOLE</div>
+          <input class="input" value="École La Perle" readonly>
+          <div class="label">HARDWARE ID</div>
+          <input class="input" value="4672-5466-9DFF-8A17" readonly>
+          <div class="label">PACK</div>
+          <select class="select"><option>🎓 DEMO</option><option>🏫 ÉCOLE</option><option>🌐 RÉSEAU PRO</option></select>
+          <button class="btn-primary">🔑 GÉNÉRER</button>
+        </div>
+        <div class="card">
+          <div class="label">LICENCE GÉNÉRÉE</div>
+          <textarea class="output" readonly>{"ecole":"École La Perle","pack":"ECOLE"...}</textarea>
+          <div class="btn-row">
+            <button class="btn-sm">📋 Copier</button>
+            <button class="btn-sm">💾 Exporter</button>
+            <button class="btn-sm">✉️ Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DESIGN 5: TERMINAL ═══ -->
+<div class="design-card d5">
+  <div class="design-label">05 — TERMINAL</div>
+  <div class="design-num">5</div>
+  <div class="scanline"></div>
+  <div class="mockup">
+    <div class="mockup-layout">
+      <div class="mock-sidebar sidebar">
+        <div class="mock-logo logo"><span class="prompt">$</span> YIRIBA</div>
+        <div class="mock-nav">
+          <div class="nav-item active"><span class="prompt">&gt;</span> gen</div>
+          <div class="nav-item"><span class="prompt">&gt;</span> bulk</div>
+          <div class="nav-item"><span class="prompt">&gt;</span> verify</div>
+          <div class="nav-item"><span class="prompt">&gt;</span> revoke</div>
+          <div class="nav-item"><span class="prompt">&gt;</span> history</div>
+          <div class="nav-item"><span class="prompt">&gt;</span> stats</div>
+        </div>
+        <div class="mock-bottom muted"><span class="prompt">$</span> cat secret.key<br><span class="accent">••••••••••••</span><span class="cursor">_</span></div>
+      </div>
+      <div class="mock-content">
+        <div class="title"><span class="prompt">$</span> yiriba --generate</div>
+        <div class="subtitle-sm muted">// initialise license generation module</div>
+        <div class="card">
+          <div class="label"><span class="prompt">[</span>SCHOOL_NAME<span class="prompt">]</span></div>
+          <input class="input" value="École La Perle" readonly>
+          <div class="label"><span class="prompt">[</span>HARDWARE_ID<span class="prompt">]</span></div>
+          <input class="input" value="4672-5466-9DFF-8A17" readonly>
+          <div class="label"><span class="prompt">[</span>PACK<span class="prompt">]</span></div>
+          <select class="select"><option>DEMO</option><option>ECOLE</option><option>RESEAU_PRO</option></select>
+          <button class="btn-primary"><span class="prompt">&gt;</span> EXECUTE</button>
+        </div>
+        <div class="card">
+          <div class="label"><span class="prompt">[</span>OUTPUT<span class="prompt">]</span></div>
+          <textarea class="output" readonly>{ "status": "OK", "school": "La Perle", "pack": "ECOLE" }</textarea>
+          <div class="btn-row">
+            <button class="btn-sm"><span class="prompt">$</span> cp</button>
+            <button class="btn-sm"><span class="prompt">$</span> export</button>
+            <button class="btn-sm"><span class="prompt">$</span> mail</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DESIGN 6: NEON ORANGE ═══ -->
+<div class="design-card d6">
+  <div class="design-label">06 — NEON ORANGE</div>
+  <div class="design-num">6</div>
+  <div class="scanline"></div>
+  <div class="mockup">
+    <div class="mockup-layout">
+      <div class="mock-sidebar sidebar">
+        <div class="mock-logo logo">⚡ YIRIBA</div>
+        <div class="mock-nav">
+          <div class="nav-item active">🔑 Générer</div>
+          <div class="nav-item">📋 En masse</div>
+          <div class="nav-item">🔍 Vérifier</div>
+          <div class="nav-item">🚫 Révoquer</div>
+          <div class="nav-item">📜 Historique</div>
+          <div class="nav-item">📊 Dashboard</div>
+        </div>
+        <div class="mock-bottom muted">CLÉ SECRÈTE<br><span class="accent">••••••••••••</span></div>
+      </div>
+      <div class="mock-content">
+        <div class="title">Générer une licence</div>
+        <div class="subtitle-sm muted">// créez une nouvelle licence pour un client</div>
+        <div class="card">
+          <div class="label">NOM DE L'ÉCOLE</div>
+          <input class="input" value="École La Perle" readonly>
+          <div class="label">HARDWARE ID</div>
+          <input class="input" value="4672-5466-9DFF-8A17" readonly>
+          <div class="label">PACK</div>
+          <select class="select"><option>🎓 DEMO</option><option>🏫 ÉCOLE</option><option>🌐 RÉSEAU PRO</option></select>
+          <button class="btn-primary">🔑 GÉNÉRER</button>
+        </div>
+        <div class="card">
+          <div class="label">LICENCE GÉNÉRÉE</div>
+          <textarea class="output" readonly>{"ecole":"École La Perle","pack":"ECOLE"...}</textarea>
+          <div class="btn-row">
+            <button class="btn-sm">📋 Copier</button>
+            <button class="btn-sm">💾 Exporter</button>
+            <button class="btn-sm">✉️ Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,7 +1,1 @@
-{
-  "version": "2.1.0",
-  "download_url": "https://schoolmanager-bf.github.io/download/Yiriba_Setup_2.1.0.exe",
-  "filename": "Yiriba_Setup_2.1.0.exe",
-  "release_notes": "MAJ auto, LoggerService, permissions réseau, guide réseau pas à pas, mode démo",
-  "min_version": "2.0.0"
-}
+2.1.1
