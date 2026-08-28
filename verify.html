@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification Yiriba — Authenticité des documents</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        :root { --green: #009E49; --red: #CE1126; --dark: #0F172A; --card: #1E293B; --text: #F1F5F9; --muted: #94A3B8; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; background:var(--dark); color:var(--text); min-height:100vh; display:flex; align-items:center; justify-content:center; }
+        .container { max-width:500px; width:100%; padding:20px; }
+        .card { background:var(--card); border-radius:16px; padding:40px; text-align:center; border:1px solid rgba(255,255,255,.06); }
+        .logo { font-size:48px; margin-bottom:16px; }
+        h1 { font-size:24px; font-weight:800; margin-bottom:8px; }
+        .subtitle { color:var(--muted); font-size:14px; margin-bottom:30px; }
+        .input-group { margin-bottom:20px; }
+        input { width:100%; padding:14px 16px; border-radius:10px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.05); color:var(--text); font-size:16px; outline:none; transition:.2s; }
+        input:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(0,158,73,.2); }
+        input::placeholder { color:var(--muted); }
+        button { width:100%; padding:14px; border-radius:10px; border:none; background:var(--green); color:#fff; font-size:16px; font-weight:700; cursor:pointer; transition:.3s; }
+        button:hover { background:#007A3A; transform:translateY(-1px); }
+        button:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+        .result { margin-top:24px; padding:20px; border-radius:12px; display:none; }
+        .result.valid { display:block; background:rgba(0,158,73,.15); border:1px solid rgba(0,158,73,.3); }
+        .result.invalid { display:block; background:rgba(206,17,38,.15); border:1px solid rgba(206,17,38,.3); }
+        .result-icon { font-size:48px; margin-bottom:12px; }
+        .result-title { font-size:18px; font-weight:700; margin-bottom:8px; }
+        .result-details { font-size:13px; color:var(--muted); text-align:left; }
+        .result-details p { margin:4px 0; }
+        .result-details strong { color:var(--text); }
+        .spinner { display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,.3); border-radius:50%; border-top-color:#fff; animation:spin .8s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .footer { text-align:center; margin-top:20px; font-size:12px; color:var(--muted); }
+        .footer a { color:var(--green); text-decoration:none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo">🔐</div>
+            <h1>Vérification de document</h1>
+            <p class="subtitle">Scannez le QR code ou collez le lien de vérification</p>
+            
+            <div class="input-group">
+                <input type="text" id="docInput" placeholder="Collez le lien ou l'ID du document..." autocomplete="off">
+            </div>
+            
+            <button id="verifyBtn" onclick="verifyDocument()">
+                🔍 Vérifier l'authenticité
+            </button>
+            
+            <div id="result" class="result"></div>
+        </div>
+        <div class="footer">
+            <p>Sécurisé par <a href="/">Yiriba</a> — Vérification HMAC-SHA256</p>
+        </div>
+    </div>
+
+    <script>
+    // Clé secrète HMAC (même que dans l'app)
+    // ATTENTION: Cette clé est visible côté client. Pour une sécurité maximale,
+    // utilisez un serveur backend pour la vérification.
+    const HMAC_SECRET = "SM-QR-Verify-Secret-2026-BF-SchoolManager!@#";
+    
+    // Vérifier si un paramètre ID est dans l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const docId = urlParams.get('id');
+    if (docId) {
+        document.getElementById('docInput').value = docId;
+        verifyDocument();
+    }
+    
+    async function verifyDocument() {
+        const input = document.getElementById('docInput').value.trim();
+        const resultDiv = document.getElementById('result');
+        const btn = document.getElementById('verifyBtn');
+        
+        if (!input) {
+            resultDiv.className = 'result invalid';
+            resultDiv.innerHTML = '<div class="result-icon">❌</div><div class="result-title">Entrez un lien ou un ID</div>';
+            return;
+        }
+        
+        // Afficher le spinner
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Vérification...';
+        resultDiv.className = 'result';
+        resultDiv.innerHTML = '';
+        
+        // Simuler un délai de vérification
+        await new Promise(r => setTimeout(r, 800));
+        
+        try {
+            // Extraire l'ID et le hash du lien
+            let documentId, expectedHash;
+            
+            if (input.includes('verify?id=')) {
+                // Format URL: https://schoolmanager-bf.github.io/verify?id=DOCID.HASH
+                const idPart = input.split('verify?id=')[1];
+                if (idPart.includes('.')) {
+                    [documentId, expectedHash] = idPart.split('.');
+                } else {
+                    documentId = idPart;
+                    expectedHash = null;
+                }
+            } else if (input.includes('.')) {
+                // Format direct: DOCID.HASH
+                [documentId, expectedHash] = input.split('.');
+            } else {
+                documentId = input;
+                expectedHash = null;
+            }
+            
+            // Calculer le hash HMAC
+            const computedHash = await computeHmac(documentId);
+            
+            // Vérifier
+            const isAuthentic = expectedHash 
+                ? computedHash === expectedHash.toLowerCase()
+                : true; // Si pas de hash fourni, on ne peut pas vérifier
+            
+            if (isAuthentic && expectedHash) {
+                // Document authentique
+                const docInfo = parseDocumentId(documentId);
+                
+                resultDiv.className = 'result valid';
+                resultDiv.innerHTML = `
+                    <div class="result-icon">✅</div>
+                    <div class="result-title">Document AUTHENTIQUE</div>
+                    <div class="result-details">
+                        <p><strong>Type :</strong> ${docInfo.type}</p>
+                        <p><strong>Élève :</strong> ${docInfo.studentName || 'N/A'}</p>
+                        <p><strong>Matricule :</strong> ${docInfo.matricule || 'N/A'}</p>
+                        <p><strong>Période :</strong> ${docInfo.period || 'N/A'}</p>
+                        <p><strong>Moyenne :</strong> ${docInfo.average || 'N/A'}</p>
+                        <p><strong>ID Document :</strong> ${documentId}</p>
+                        <p><strong>Hash :</strong> ${computedHash.substring(0, 16)}...</p>
+                        <p style="margin-top:12px;color:#009E49;">✅ Ce document a été généré par Yiriba et n'a pas été modifié.</p>
+                    </div>
+                `;
+            } else if (!expectedHash) {
+                // Pas de hash fourni
+                resultDiv.className = 'result invalid';
+                resultDiv.innerHTML = `
+                    <div class="result-icon">⚠️</div>
+                    <div class="result-title">Lien incomplet</div>
+                    <div class="result-details">
+                        <p>Ce lien ne contient pas de hash de vérification.</p>
+                        <p>Scannez le QR code complet pour une vérification sécurisée.</p>
+                    </div>
+                `;
+            } else {
+                // Document falsifié
+                resultDiv.className = 'result invalid';
+                resultDiv.innerHTML = `
+                    <div class="result-icon">❌</div>
+                    <div class="result-title">Document FALSIFIÉ</div>
+                    <div class="result-details">
+                        <p><strong>Le hash ne correspond pas.</strong></p>
+                        <p>Ce document a été modifié ou falsifié après sa création.</p>
+                        <p style="margin-top:8px;color:#CE1126;">⚠️ Ne pas accepter ce document.</p>
+                    </div>
+                `;
+            }
+        } catch (e) {
+            resultDiv.className = 'result invalid';
+            resultDiv.innerHTML = `
+                <div class="result-icon">❌</div>
+                <div class="result-title">Erreur de vérification</div>
+                <div class="result-details">
+                    <p>${e.message}</p>
+                </div>
+            `;
+        }
+        
+        btn.disabled = false;
+        btn.innerHTML = '🔍 Vérifier l\'authenticité';
+    }
+    
+    async function computeHmac(message) {
+        const encoder = new TextEncoder();
+        const keyData = encoder.encode(HMAC_SECRET);
+        const msgData = encoder.encode(message);
+        
+        const key = await crypto.subtle.importKey(
+            'raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+        );
+        
+        const signature = await crypto.subtle.sign('HMAC', key, msgData);
+        return Array.from(new Uint8Array(signature))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('');
+    }
+    
+    function parseDocumentId(id) {
+        // Format: TYPE-MATRICULE-PERIOD-HASH_PREFIX
+        const parts = id.split('-');
+        return {
+            type: parts[0] === 'BUL' ? 'Bulletin' : parts[0] === 'REC' ? 'Reçu' : parts[0],
+            matricule: parts.length > 1 ? parts[1] : null,
+            period: parts.length > 2 ? parts[2] : null,
+            studentName: null,
+            average: null
+        };
+    }
+    </script>
+</body>
+</html>
