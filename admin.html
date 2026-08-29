@@ -3,343 +3,304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yiriba Admin — Gestion complète</title>
+    <title>Yiriba Admin — Panel complet</title>
     <link rel="icon" href="assets/logo-yiriba.svg" type="image/svg+xml">
     <style>
-        :root { --bg:#0a0e17; --card:#111827; --border:#1e293b; --text:#e2e8f0; --muted:#64748b; --green:#10b981; --red:#ef4444; --yellow:#f59e0b; --blue:#3b82f6; }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; min-height:100vh; }
-        .login-screen { display:flex; justify-content:center; align-items:center; min-height:100vh; }
-        .login-box { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:48px; width:420px; text-align:center; }
-        .login-box h1 { font-size:28px; margin-bottom:8px; }
-        .login-box .subtitle { color:var(--muted); margin-bottom:32px; }
-        .login-box input { width:100%; padding:14px 18px; background:var(--bg); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:16px; margin-bottom:16px; outline:none; }
-        .login-box input:focus { border-color:var(--green); }
-        .login-box button { width:100%; padding:14px; background:var(--green); color:#fff; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:.2s; }
-        .login-box button:hover { background:#059669; }
-        .login-error { color:var(--red); font-size:14px; margin-top:12px; display:none; }
-        .dashboard { display:none; }
-        .topbar { background:var(--card); border-bottom:1px solid var(--border); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; }
-        .topbar h2 { font-size:20px; }
-        .topbar .logout { color:var(--red); cursor:pointer; font-size:14px; font-weight:600; background:none; border:none; }
-        .content { padding:32px; max-width:1200px; margin:0 auto; }
-        .tabs { display:flex; gap:4px; margin-bottom:32px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:4px; }
-        .tab { flex:1; padding:12px; text-align:center; border:none; background:transparent; color:var(--muted); font-size:14px; font-weight:600; cursor:pointer; border-radius:8px; transition:.2s; }
-        .tab.active { background:var(--green); color:#fff; }
-        .tab:hover:not(.active) { color:var(--text); background:rgba(255,255,255,.05); }
-        .panel { display:none; }
-        .panel.active { display:block; }
-        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:32px; }
-        .stat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px; text-align:center; }
-        .stat-card .number { font-size:36px; font-weight:800; }
-        .stat-card .label { color:var(--muted); font-size:13px; margin-top:4px; }
-        .stat-card.green .number { color:var(--green); }
-        .stat-card.red .number { color:var(--red); }
-        .stat-card.blue .number { color:var(--blue); }
-        .stat-card.yellow .number { color:var(--yellow); }
-        .table-card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:24px; }
-        .table-header { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
-        .table-header h3 { font-size:16px; }
-        table { width:100%; border-collapse:collapse; }
-        th { text-align:left; padding:12px 24px; font-size:12px; text-transform:uppercase; color:var(--muted); letter-spacing:1px; border-bottom:1px solid var(--border); }
-        td { padding:14px 24px; font-size:14px; border-bottom:1px solid rgba(255,255,255,.03); }
-        tr:hover { background:rgba(255,255,255,.02); }
-        .badge { padding:4px 12px; border-radius:50px; font-size:12px; font-weight:600; }
-        .badge-active { background:rgba(16,185,129,.15); color:var(--green); }
-        .badge-revoked { background:rgba(239,68,68,.15); color:var(--red); }
-        .form-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:24px; }
-        .form-card h3 { margin-bottom:16px; font-size:16px; }
-        .form-row { display:flex; gap:12px; margin-bottom:12px; }
-        .form-row input, .form-row textarea, .form-row select { flex:1; padding:12px 16px; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:14px; outline:none; font-family:inherit; }
-        .form-row input:focus, .form-row textarea:focus { border-color:var(--green); }
-        .form-row textarea { min-height:80px; resize:vertical; }
-        .btn { padding:12px 24px; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; transition:.2s; }
-        .btn-red { background:var(--red); color:#fff; }
-        .btn-green { background:var(--green); color:#fff; }
-        .btn-blue { background:var(--blue); color:#fff; }
-        .btn:hover { opacity:.85; transform:translateY(-1px); }
-        .toast { position:fixed; bottom:24px; right:24px; padding:16px 24px; border-radius:10px; font-weight:600; z-index:999; animation:slideIn .3s; }
-        .toast-success { background:var(--green); color:#fff; }
-        .toast-error { background:var(--red); color:#fff; }
-        @keyframes slideIn { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-        .loading { text-align:center; padding:40px; color:var(--muted); }
-        .preview-box { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:16px; margin-top:12px; font-family:monospace; font-size:13px; color:var(--green); white-space:pre-wrap; }
-        .section-title { font-size:18px; font-weight:700; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); }
-        .info-text { color:var(--muted); font-size:13px; margin-bottom:16px; }
+        :root{--bg:#0a0e17;--card:#111827;--border:#1e293b;--text:#e2e8f0;--muted:#64748b;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--purple:#8b5cf6;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;min-height:100vh;}
+        .login-screen{display:flex;justify-content:center;align-items:center;min-height:100vh;}
+        .login-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:48px;width:420px;text-align:center;}
+        .login-box h1{font-size:28px;margin-bottom:8px;}
+        .login-box .sub{color:var(--muted);margin-bottom:32px;}
+        .login-box input{width:100%;padding:14px 18px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:16px;margin-bottom:16px;outline:none;}
+        .login-box input:focus{border-color:var(--green);}
+        .login-box button{width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;}
+        .login-box button:hover{background:#059669;}
+        .login-err{color:var(--red);font-size:14px;margin-top:12px;display:none;}
+        .dash{display:none;}
+        .topbar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;}
+        .topbar h2{font-size:18px;}
+        .topbar .logout{color:var(--red);cursor:pointer;font-size:13px;font-weight:600;background:none;border:none;}
+        .content{padding:24px 32px;max-width:1200px;margin:0 auto;}
+        .tabs{display:flex;gap:2px;margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;overflow-x:auto;}
+        .tab{flex:0 0 auto;padding:10px 16px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;border-radius:8px;transition:.2s;white-space:nowrap;}
+        .tab.active{background:var(--green);color:#fff;}
+        .tab:hover:not(.active){color:var(--text);background:rgba(255,255,255,.05);}
+        .panel{display:none;} .panel.active{display:block;}
+        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px;}
+        .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;}
+        .stat .n{font-size:32px;font-weight:800;} .stat .l{color:var(--muted);font-size:12px;margin-top:4px;}
+        .stat.green .n{color:var(--green);} .stat.red .n{color:var(--red);} .stat.blue .n{color:var(--blue);} .stat.yellow .n{color:var(--yellow);} .stat.purple .n{color:var(--purple);}
+        .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;}
+        .card h3{margin-bottom:12px;font-size:16px;}
+        .card .info{color:var(--muted);font-size:13px;margin-bottom:16px;}
+        .row{display:flex;gap:12px;margin-bottom:12px;}
+        .row input,.row textarea,.row select{flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;outline:none;font-family:inherit;}
+        .row input:focus,.row textarea:focus{border-color:var(--green);}
+        .row textarea{min-height:60px;resize:vertical;}
+        .row label{min-width:100px;padding-top:10px;font-size:13px;color:var(--muted);}
+        .btn{padding:10px 20px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;transition:.15s;}
+        .btn:hover{opacity:.85;}
+        .btn-green{background:var(--green);color:#fff;} .btn-red{background:var(--red);color:#fff;} .btn-blue{background:var(--blue);color:#fff;} .btn-yellow{background:var(--yellow);color:#000;} .btn-purple{background:var(--purple);color:#fff;}
+        .badge{padding:3px 10px;border-radius:50px;font-size:11px;font-weight:600;}
+        .b-active{background:rgba(16,185,129,.15);color:var(--green);}
+        .b-revoked{background:rgba(239,68,68,.15);color:var(--red);}
+        .b-info{background:rgba(59,130,246,.15);color:var(--blue);}
+        .b-warn{background:rgba(245,158,11,.15);color:var(--yellow);}
+        table{width:100%;border-collapse:collapse;}
+        th{text-align:left;padding:10px 16px;font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:1px;border-bottom:1px solid var(--border);}
+        td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.03);}
+        tr:hover{background:rgba(255,255,255,.02);}
+        .mono{font-family:monospace;font-size:12px;}
+        .toast{position:fixed;bottom:24px;right:24px;padding:14px 20px;border-radius:10px;font-weight:600;z-index:999;animation:si .3s;}
+        .t-ok{background:var(--green);color:#fff;} .t-err{background:var(--red);color:#fff;}
+        @keyframes si{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+        .loading{text-align:center;padding:40px;color:var(--muted);}
+        .preview{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin-top:12px;font-family:monospace;font-size:12px;color:var(--green);white-space:pre-wrap;max-height:200px;overflow-y:auto;}
+        .chart-bar{display:flex;align-items:flex-end;gap:4px;height:100px;margin-top:12px;}
+        .bar{flex:1;background:var(--green);border-radius:4px 4px 0 0;min-width:20px;transition:.3s;}
+        .bar:hover{background:#059669;}
+        a{color:var(--green);text-decoration:none;}
     </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
     <div class="login-box">
         <div style="font-size:48px;margin-bottom:16px;">🔐</div>
         <h1>Yiriba Admin</h1>
-        <p class="subtitle">Gestion des licences & mises à jour</p>
-        <input type="password" id="passwordInput" placeholder="Mot de passe admin" autofocus onkeydown="if(event.key==='Enter')login()">
+        <p class="sub">Panel d'administration complet</p>
+        <input type="password" id="pw" placeholder="Mot de passe" autofocus onkeydown="if(event.key==='Enter')login()">
         <button onclick="login()">Se connecter</button>
-        <p class="login-error" id="loginError">Mot de passe incorrect</p>
+        <p class="login-err" id="pwErr">Mot de passe incorrect</p>
     </div>
 </div>
 
-<div class="dashboard" id="dashboard">
+<!-- DASHBOARD -->
+<div class="dash" id="dash">
     <div class="topbar">
-        <h2>🌳 Yiriba — Admin Panel</h2>
+        <h2>🌳 Yiriba Admin</h2>
         <button class="logout" onclick="logout()">Déconnexion</button>
     </div>
     <div class="content">
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('licenses')">🔑 Licences</button>
-            <button class="tab" onclick="showTab('site')">🌐 Site web</button>
-            <button class="tab" onclick="showTab('app')">📱 Application</button>
+        <div class="tabs" id="tabsBar">
+            <button class="tab active" onclick="showTab('lic')">🔑 Licences</button>
+            <button class="tab" onclick="showTab('analytics')">📊 Analytics</button>
+            <button class="tab" onclick="showTab('revenue')">💰 Revenus</button>
+            <button class="tab" onclick="showTab('notif')">🔔 Notifications</button>
+            <button class="tab" onclick="showTab('history')">📜 Historique</button>
+            <button class="tab" onclick="showTab('security')">🛡️ Sécurité</button>
+            <button class="tab" onclick="showTab('config')">⚙️ Config</button>
+            <button class="tab" onclick="showTab('site')">🌐 Site/MAJ</button>
         </div>
 
-        <!-- ═══ LICENCES ═══ -->
-        <div class="panel active" id="panel-licenses">
-            <div class="stats-grid">
-                <div class="stat-card blue"><div class="number" id="statTotal">...</div><div class="label">Total</div></div>
-                <div class="stat-card green"><div class="number" id="statActive">...</div><div class="label">Actives</div></div>
-                <div class="stat-card red"><div class="number" id="statRevoked">...</div><div class="label">Révoquées</div></div>
+        <!-- LICENCES -->
+        <div class="panel active" id="p-lic">
+            <div class="stats">
+                <div class="stat blue"><div class="n" id="sTotal">..</div><div class="l">Total</div></div>
+                <div class="stat green"><div class="n" id="sActive">..</div><div class="l">Actives</div></div>
+                <div class="stat red"><div class="n" id="sRevoked">..</div><div class="l">Révoquées</div></div>
+                <div class="stat yellow"><div class="n" id="sPacks">..</div><div class="l">Packs</div></div>
             </div>
-            <div class="form-card">
+            <div class="card">
                 <h3>⚡ Action rapide</h3>
-                <div class="form-row">
-                    <input type="text" id="licenseInput" placeholder="Nom de l'école">
-                    <button class="btn btn-red" onclick="revokeLicense()">🚫 Révoquer</button>
-                    <button class="btn btn-green" onclick="reactivateLicense()">✅ Réactiver</button>
+                <div class="row">
+                    <input id="licIn" placeholder="Nom école ou HW ID">
+                    <button class="btn btn-red" onclick="revoke()">🚫 Révoquer</button>
+                    <button class="btn btn-green" onclick="reactivate()">✅ Réactiver</button>
                 </div>
             </div>
-            <div class="table-card">
-                <div class="table-header">
-                    <h3>📋 Toutes les licences</h3>
-                    <button class="btn btn-blue" onclick="loadLicenses()" style="padding:8px 16px;font-size:12px;">🔄 Rafraîchir</button>
+            <div class="card" style="padding:0;">
+                <div style="padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);">
+                    <h3 style="margin:0;">📋 Licences</h3>
+                    <div>
+                        <button class="btn btn-blue" onclick="loadLicenses()" style="padding:6px 12px;">🔄</button>
+                        <a href="${API}/api/admin/export" target="_blank" class="btn btn-yellow" style="padding:6px 12px;display:inline-block;">📥 CSV</a>
+                    </div>
                 </div>
-                <table>
-                    <thead><tr><th>École</th><th>Pack</th><th>HW ID</th><th>Activation</th><th>Expire</th><th>Statut</th></tr></thead>
-                    <tbody id="licenseTable"><tr><td colspan="6" class="loading">Chargement...</td></tr></tbody>
-                </table>
+                <table><thead><tr><th>École</th><th>Pack</th><th>HW ID</th><th>Activation</th><th>Expire</th><th>Statut</th></tr></thead>
+                <tbody id="licTb"><tr><td colspan="6" class="loading">Chargement...</td></tr></tbody></table>
             </div>
         </div>
 
-        <!-- ═══ SITE WEB ═══ -->
-        <div class="panel" id="panel-site">
-            <div class="form-card">
-                <h3>📥 Mise à jour du site web</h3>
-                <p class="info-text">Modifie le fichier <code>latest.txt</code> pour contrôler ce que les utilisateurs voient quand ils vérifient les mises à jour.</p>
-                <div class="form-row">
-                    <label style="min-width:100px;padding-top:12px;font-size:13px;">Version</label>
-                    <input type="text" id="siteVersion" placeholder="ex: 2.3.0">
-                </div>
-                <div class="form-row">
-                    <label style="min-width:100px;padding-top:12px;font-size:13px;">Lien ZIP</label>
-                    <input type="text" id="siteDownloadUrl" placeholder="https://schoolmanager-bf.github.io/download/Yiriba_Setup_2.3.0.exe">
-                </div>
-                <div class="form-row">
-                    <label style="min-width:100px;padding-top:12px;font-size:13px;">Fichier</label>
-                    <input type="text" id="siteFilename" placeholder="Yiriba_Setup_2.3.0.exe">
-                </div>
-                <div class="form-row">
-                    <label style="min-width:100px;padding-top:12px;font-size:13px;">Notes</label>
-                    <textarea id="siteReleaseNotes" placeholder="Nouvelles fonctionnalités, corrections..."></textarea>
-                </div>
-                <div class="preview-box" id="sitePreview">{ "version": "...", ... }</div>
-                <div style="margin-top:16px;">
-                    <button class="btn btn-green" onclick="updateSite()">💾 Mettre à jour le site</button>
-                </div>
+        <!-- ANALYTICS -->
+        <div class="panel" id="p-analytics">
+            <div class="stats">
+                <div class="stat blue"><div class="n" id="aTotal">..</div><div class="l">Total licences</div></div>
+                <div class="stat green"><div class="n" id="aActive">..</div><div class="l">Actives</div></div>
+                <div class="stat red"><div class="n" id="aRevoked">..</div><div class="l">Révoquées</div></div>
+                <div class="stat purple"><div class="n" id="aActivations">..</div><div class="l">Activations (30j)</div></div>
             </div>
-            <div class="form-card">
+            <div class="card">
+                <h3>📈 Activations par jour (30 derniers jours)</h3>
+                <div class="chart-bar" id="chartActivations"><div class="loading">Chargement...</div></div>
+            </div>
+            <div class="card">
+                <h3>📊 Répartition par pack</h3>
+                <div id="packBreakdown" style="margin-top:12px;"></div>
+            </div>
+            <div class="card">
+                <h3>🕐 Dernières activations</h3>
+                <table><thead><tr><th>École</th><th>Pack</th><th>HW ID</th><th>Date</th></tr></thead>
+                <tbody id="recentActTb"><tr><td colspan="4" class="loading">...</td></tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- REVENUE -->
+        <div class="panel" id="p-revenue">
+            <div class="stats">
+                <div class="stat green"><div class="n" id="rRevenue">..</div><div class="l">Revenu total (FCFA)</div></div>
+                <div class="stat blue"><div class="n" id="rEcole">..</div><div class="l">Pack École</div></div>
+                <div class="stat purple"><div class="n" id="rReseau">..</div><div class="l">Pack Réseau Pro</div></div>
+            </div>
+            <div class="card">
+                <h3>💰 Détail des packs</h3>
+                <table><thead><tr><th>Pack</th><th>Prix</th><th>Ventes</th><th>Total</th></tr></thead>
+                <tbody id="revTb"></tbody></table>
+            </div>
+            <div class="card">
+                <h3>📥 Export</h3>
+                <p class="info">Télécharge la liste complète des licences en CSV pour ta comptabilité.</p>
+                <a href="${API}/api/admin/export" target="_blank" class="btn btn-green">📥 Exporter CSV</a>
+            </div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="panel" id="p-notif">
+            <div class="card">
+                <h3>🔔 Nouvelle notification</h3>
+                <p class="info">Envoie un message à tous les utilisateurs de Yiriba (affiché au prochain démarrage).</p>
+                <div class="row"><label>Titre</label><input id="nTitle" placeholder="Ex: Mise à jour disponible"></div>
+                <div class="row"><label>Message</label><textarea id="nMsg" placeholder="Description de la notification..."></textarea></div>
+                <div class="row"><label>Type</label>
+                    <select id="nType"><option value="info">ℹ️ Info</option><option value="warning">⚠️ Alerte</option><option value="update">🔄 MAJ</option></select>
+                </div>
+                <button class="btn btn-green" onclick="createNotif()">📤 Envoyer</button>
+            </div>
+            <div class="card" style="padding:0;">
+                <div style="padding:16px 24px;border-bottom:1px solid var(--border);"><h3 style="margin:0;">📨 Notifications actives</h3></div>
+                <table><thead><tr><th>Titre</th><th>Message</th><th>Type</th><th>Date</th><th></th></tr></thead>
+                <tbody id="notifTb"><tr><td colspan="5" class="loading">...</td></tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div class="panel" id="p-history">
+            <div class="card" style="padding:0;">
+                <div style="padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);">
+                    <h3 style="margin:0;">📜 Historique des actions</h3>
+                    <button class="btn btn-blue" onclick="loadLogs()" style="padding:6px 12px;">🔄</button>
+                </div>
+                <table><thead><tr><th>Date</th><th>Action</th><th>Cible</th><th>Détails</th></tr></thead>
+                <tbody id="logTb"><tr><td colspan="4" class="loading">Chargement...</td></tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- SECURITY -->
+        <div class="panel" id="p-security">
+            <div class="card">
+                <h3>🛡️ Détection d'abus</h3>
+                <p class="info">Licences activées sur plus de PCs que le max autorisé.</p>
+                <table><thead><tr><th>École</th><th>Pack</th><th>Max PC</th><th>PC détectés</th><th>HW IDs</th></tr></thead>
+                <tbody id="abuseTb"><tr><td colspan="5" class="loading">Vérification...</td></tr></tbody></table>
+            </div>
+        </div>
+
+        <!-- CONFIG -->
+        <div class="panel" id="p-config">
+            <div class="card">
+                <h3>⚙️ Configuration des packs</h3>
+                <p class="info">Modifie les limites et prix des packs. Les changements s'appliquent aux prochaines activations.</p>
+                <div id="packConfig"></div>
+                <button class="btn btn-green" onclick="savePacks()" style="margin-top:16px;">💾 Sauvegarder</button>
+            </div>
+        </div>
+
+        <!-- SITE/MAJ -->
+        <div class="panel" id="p-site">
+            <div class="card">
                 <h3>🌐 Configuration GitHub</h3>
-                <p class="info-text">Pour modifier le site, il faut un token GitHub avec accès au repo. Crée un token sur <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--green);">github.com/settings/tokens</a> avec le scope <code>repo</code>.</p>
-                <div class="form-row">
-                    <input type="password" id="githubToken" placeholder="Token GitHub (ghp_...)" value="">
-                    <button class="btn btn-blue" onclick="saveGithubToken()" style="white-space:nowrap;">💾 Sauvegarder</button>
-                </div>
+                <p class="info">Token avec scope <code>repo</code> — <a href="https://github.com/settings/tokens" target="_blank">créer ici</a></p>
+                <div class="row"><input type="password" id="ghTok" placeholder="Token GitHub (ghp_...)"><button class="btn btn-blue" onclick="saveGH()">💾</button></div>
             </div>
-        </div>
-
-        <!-- ═══ APPLICATION ═══ -->
-        <div class="panel" id="panel-app">
-            <div class="form-card">
-                <h3>📱 Mise à jour de l'application</h3>
-                <p class="info-text">Configure la nouvelle version disponible pour les utilisateurs de Yiriba desktop.</p>
-                <div class="form-row">
-                    <label style="min-width:120px;padding-top:12px;font-size:13px;">Version</label>
-                    <input type="text" id="appVersion" placeholder="ex: 2.3.0">
-                </div>
-                <div class="form-row">
-                    <label style="min-width:120px;padding-top:12px;font-size:13px;">Lien setup</label>
-                    <input type="text" id="appDownloadUrl" placeholder="https://schoolmanager-bf.github.io/download/Yiriba_Setup_2.3.0.exe">
-                </div>
-                <div class="form-row">
-                    <label style="min-width:120px;padding-top:12px;font-size:13px;">Nom fichier</label>
-                    <input type="text" id="appFilename" placeholder="Yiriba_Setup_2.3.0.exe">
-                </div>
-                <div class="form-row">
-                    <label style="min-width:120px;padding-top:12px;font-size:13px;">Release notes</label>
-                    <textarea id="appReleaseNotes" placeholder="Corrections de bugs, nouvelles fonctionnalités..."></textarea>
-                </div>
-                <div class="preview-box" id="appPreview">{ "version": "...", ... }</div>
-                <div style="margin-top:16px;">
-                    <button class="btn btn-green" onclick="updateApp()">🚀 Publier la mise à jour</button>
-                </div>
+            <div class="card">
+                <h3>📱 Mise à jour application</h3>
+                <div class="row"><label>Version</label><input id="appVer" placeholder="2.3.0"></div>
+                <div class="row"><label>Lien setup</label><input id="appUrl" placeholder="https://...exe"></div>
+                <div class="row"><label>Fichier</label><input id="appFn" placeholder="Yiriba_Setup_2.3.0.exe"></div>
+                <div class="row"><label>Notes</label><textarea id="appNotes" placeholder="Changelog..."></textarea></div>
+                <div class="preview" id="appPrv">{}</div>
+                <button class="btn btn-green" onclick="updateSite('app')" style="margin-top:12px;">🚀 Publier MAJ</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-const API = 'https://yiriba-license.onrender.com';
-const SITE_REPO = 'schoolmanager-bf/schoolmanager-bf.github.io';
-const SITE_BRANCH = 'main';
-const ADMIN_PASSWORD = 'yiriba-admin-2026';
-let token = '';
-let githubToken = localStorage.getItem('gh_token') || '';
+const API='https://yiriba-license.onrender.com';
+const REPO='schoolmanager-bf/schoolmanager-bf.github.io';
+const PASS='yiriba-admin-2026';
+let tk='',gh='';
+const P={DEMO:{p:0},ECOLE:{p:250000},'RESEAU_PRO':{p:450000}};
 
-// ═══ LOGIN ═══
-function login() {
-    const pw = document.getElementById('passwordInput').value;
-    if (pw !== ADMIN_PASSWORD) { document.getElementById('loginError').style.display = 'block'; return; }
-    token = pw;
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    if (githubToken) document.getElementById('githubToken').value = githubToken;
-    loadLicenses();
-    loadCurrentSiteVersion();
-}
-function logout() { token = ''; document.getElementById('dashboard').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('passwordInput').value = ''; }
+function login(){const p=document.getElementById('pw').value;if(p!==PASS){document.getElementById('pwErr').style.display='block';return;}tk=p;gh=localStorage.getItem('gh')||'';document.getElementById('loginScreen').style.display='none';document.getElementById('dash').style.display='block';document.getElementById('ghTok').value=gh;loadLicenses();loadAnalytics();loadNotifs();loadLogs();loadAbuse();loadPacks();loadCurrentVersion();}
+function logout(){tk='';document.getElementById('dash').style.display='none';document.getElementById('loginScreen').style.display='flex';}
+function showTab(n){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));event.target.classList.add('active');document.getElementById('p-'+n).classList.add('active');}
+function toast(m,t){const e=document.createElement('div');e.className='toast t-'+t;e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),4000);}
+function hdr(){return{'Authorization':'Bearer '+tk};}
 
-// ═══ TABS ═══
-function showTab(name) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById('panel-' + name).classList.add('active');
-}
+// LICENSES
+async function loadLicenses(){try{const r=await fetch(API+'/api/admin/list',{headers:hdr()});const d=await r.json();if(d.error){toast(d.error,'err');return;}document.getElementById('sTotal').textContent=d.total||0;document.getElementById('sActive').textContent=d.active||0;document.getElementById('sRevoked').textContent=d.revoked||0;document.getElementById('sPacks').textContent=d.by_pack?Object.keys(d.by_pack).length:0;const ls=d.licenses||[];const tb=document.getElementById('licTb');if(!ls.length){tb.innerHTML='<tr><td colspan="6" class="loading">Aucune</td></tr>';return;}tb.innerHTML=ls.map(l=>`<tr><td><b>${l.school_name}</b></td><td>${l.pack}</td><td class="mono">${l.hardware_id||'—'}</td><td>${l.date_activation||'—'}</td><td>${l.date_expiration||'—'}</td><td>${l.is_revoked?'<span class="badge b-revoked">Révoquée</span>':'<span class="badge b-active">Active</span>'}</td></tr>`).join('');}catch(e){toast('Erreur: '+e.message,'err');}}
 
-// ═══ TOAST ═══
-function toast(msg, type) { const el = document.createElement('div'); el.className = 'toast toast-' + type; el.textContent = msg; document.body.appendChild(el); setTimeout(() => el.remove(), 4000); }
+async function revoke(){const v=document.getElementById('licIn').value.trim();if(!v)return;try{const r=await fetch(API+'/api/admin/revoke-quick',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({school_name:v,code:'yiriba-revoke-2026'})});const d=await r.json();if(d.success){toast('"'+v+'" révoquée!','ok');loadLicenses();log('REVOKE',v);loadLogs();}else toast(d.error,'err');}catch(e){toast(e.message,'err');}}
 
-// ═══ LICENSES ═══
-async function loadLicenses() {
-    try {
-        const res = await fetch(`${API}/api/admin/list`, { headers: { 'Authorization': `Bearer ${token}` } });
-        const data = await res.json();
-        if (data.error) { toast(data.error, 'error'); return; }
-        document.getElementById('statTotal').textContent = data.total || 0;
-        document.getElementById('statActive').textContent = data.active || 0;
-        document.getElementById('statRevoked').textContent = data.revoked || 0;
-        const licenses = data.licenses || [];
-        const tbody = document.getElementById('licenseTable');
-        if (!licenses.length) { tbody.innerHTML = '<tr><td colspan="6" class="loading">Aucune licence</td></tr>'; return; }
-        tbody.innerHTML = licenses.map(l => `<tr>
-            <td><strong>${l.school_name}</strong></td><td>${l.pack}</td>
-            <td style="font-family:monospace;font-size:12px;">${l.hardware_id || '—'}</td>
-            <td>${l.date_activation || '—'}</td><td>${l.date_expiration || '—'}</td>
-            <td>${l.is_revoked ? '<span class="badge badge-revoked">Révoquée</span>' : '<span class="badge badge-active">Active</span>'}</td>
-        </tr>`).join('');
-    } catch (e) { toast('Erreur: ' + e.message, 'error'); }
-}
+async function reactivate(){const v=document.getElementById('licIn').value.trim();if(!v)return;try{const r=await fetch(API+'/api/admin/reactivate-quick',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({school_name:v,code:'yiriba-revoke-2026'})});const d=await r.json();if(d.success){toast('"'+v+'" réactivée!','ok');loadLicenses();log('REACTIVATE',v);loadLogs();}else toast(d.error,'err');}catch(e){toast(e.message,'err');}}
 
-async function revokeLicense() {
-    const input = document.getElementById('licenseInput').value.trim();
-    if (!input) { toast('Entrez un nom d\'école', 'error'); return; }
-    try {
-        const res = await fetch(`${API}/api/admin/revoke-quick`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ school_name: input, code: 'yiriba-revoke-2026' }) });
-        const data = await res.json();
-        if (data.success) { toast(`"${input}" révoquée !`, 'success'); loadLicenses(); } else toast(data.error, 'error');
-    } catch (e) { toast('Erreur: ' + e.message, 'error'); }
-}
+// ANALYTICS
+async function loadAnalytics(){try{const r=await fetch(API+'/api/admin/analytics',{headers:hdr()});const d=await r.json();if(d.error)return;document.getElementById('aTotal').textContent=d.total||0;document.getElementById('aActive').textContent=d.active||0;document.getElementById('aRevoked').textContent=d.revoked||0;const totalAct=d.daily_activations?d.daily_activations.reduce((s,x)=>s+x.count,0):0;document.getElementById('aActivations').textContent=totalAct;const bp=d.by_pack||{};document.getElementById('packBreakdown').innerHTML=Object.entries(bp).map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span>${k}</span><span class="badge b-info">${v}</span></div>`).join('');const days=d.daily_activations||[];const maxC=Math.max(...days.map(d=>d.count),1);document.getElementById('chartActivations').innerHTML=days.map(d=>`<div class="bar" style="height:${(d.count/maxC)*100}%" title="${d.day}: ${d.count}"></div>`).join('')||'<span style="color:var(--muted);font-size:13px;">Aucune donnée</span>';const ra=d.recent_activations||[];document.getElementById('recentActTb').innerHTML=ra.map(a=>`<tr><td>${a.school_name||'—'}</td><td>${a.pack||'—'}</td><td class="mono">${a.hardware_id||'—'}</td><td>${a.created_at||'—'}</td></tr>`).join('')||'<tr><td colspan="4">Aucune</td></tr>';}catch(e){}}
 
-async function reactivateLicense() {
-    const input = document.getElementById('licenseInput').value.trim();
-    if (!input) { toast('Entrez un nom d\'école', 'error'); return; }
-    try {
-        const res = await fetch(`${API}/api/admin/reactivate-quick`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ school_name: input, code: 'yiriba-revoke-2026' }) });
-        const data = await res.json();
-        if (data.success) { toast(`"${input}" réactivée !`, 'success'); loadLicenses(); } else toast(data.error, 'error');
-    } catch (e) { toast('Erreur: ' + e.message, 'error'); }
-}
+// REVENUE
+async function loadRevenue(){try{const r=await fetch(API+'/api/admin/analytics',{headers:hdr()});const d=await r.json();if(d.error)return;const rp=d.by_pack||{};const prices={DEMO:0,ECOLE:250000,'RESEAU_PRO':450000};document.getElementById('rRevenue').textContent=(d.total_revenue||0).toLocaleString()+' FCFA';document.getElementById('rEcole').textContent=(rp.ECOLE||0);document.getElementById('rReseau').textContent=(rp.RESEAU_PRO||0);const tb=document.getElementById('revTb');tb.innerHTML=Object.entries(rp).map(([k,v])=>`<tr><td>${k}</td><td>${(prices[k]||0).toLocaleString()} FCFA</td><td>${v}</td><td><b>${((prices[k]||0)*v).toLocaleString()} FCFA</b></td></tr>`).join('');}catch(e){}}
 
-// ═══ GITHUB ═══
-function saveGithubToken() {
-    githubToken = document.getElementById('githubToken').value.trim();
-    localStorage.setItem('gh_token', githubToken);
-    toast('Token sauvegardé !', 'success');
-}
+// NOTIFICATIONS
+async function loadNotifs(){try{const r=await fetch(API+'/api/admin/notifications',{headers:hdr()});const d=await r.json();const tb=document.getElementById('notifTb');if(!d.length){tb.innerHTML='<tr><td colspan="5" class="loading">Aucune</td></tr>';return;}tb.innerHTML=d.map(n=>`<tr><td><b>${n.title}</b></td><td>${n.message}</td><td><span class="badge b-${n.type==='warning'?'warn':'info'}">${n.type}</span></td><td>${n.created_at||''}</td><td><button class="btn btn-red" onclick="delNotif(${n.id})" style="padding:4px 8px;font-size:11px;">✕</button></td></tr>`).join('');}catch(e){}}
 
-async function githubUpdateFile(path, content, message) {
-    if (!githubToken) { toast('Token GitHub requis', 'error'); return false; }
-    const url = `https://api.github.com/repos/${SITE_REPO}/contents/${path}`;
-    // Get current SHA
-    const getRes = await fetch(url, { headers: { 'Authorization': `token ${githubToken}`, 'Accept': 'application/vnd.github.v3+json' } });
-    const fileData = await getRes.json();
-    const sha = fileData.sha;
-    // Update
-    const body = { message, content: btoa(unescape(encodeURIComponent(content))), sha, branch: SITE_BRANCH };
-    const putRes = await fetch(url, { method: 'PUT', headers: { 'Authorization': `token ${githubToken}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
-    if (putRes.ok) return true;
-    const err = await putRes.json();
-    throw new Error(err.message || 'GitHub API error');
-}
+async function createNotif(){const t=document.getElementById('nTitle').value.trim(),m=document.getElementById('nMsg').value.trim(),ty=document.getElementById('nType').value;if(!t||!m){toast('Titre et message requis','err');return;}try{const r=await fetch(API+'/api/admin/notifications',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:t,message:m,type:ty})});const d=await r.json();if(d.success){toast('Notification créée!','ok');document.getElementById('nTitle').value='';document.getElementById('nMsg').value='';loadNotifs();log('NOTIFICATION',t,m);loadLogs();}else toast(d.error,'err');}catch(e){toast(e.message,'err');}}
 
-// ═══ SITE UPDATE ═══
-async function loadCurrentSiteVersion() {
-    try {
-        const res = await fetch('https://schoolmanager-bf.github.io/latest.txt');
-        const data = await res.json();
-        document.getElementById('siteVersion').value = data.version || '';
-        document.getElementById('siteDownloadUrl').value = data.download_url || '';
-        document.getElementById('siteFilename').value = data.filename || '';
-        document.getElementById('siteReleaseNotes').value = data.release_notes || '';
-        document.getElementById('appVersion').value = data.version || '';
-        document.getElementById('appDownloadUrl').value = data.download_url || '';
-        document.getElementById('appFilename').value = data.filename || '';
-        document.getElementById('appReleaseNotes').value = data.release_notes || '';
-        updatePreview('site');
-        updatePreview('app');
-    } catch (e) { console.log('Could not load current version'); }
-}
+async function delNotif(id){try{await fetch(API+'/api/admin/notifications/'+id,{method:'DELETE',headers:hdr()});loadNotifs();}catch(e){}}
 
-function updatePreview(type) {
-    const version = document.getElementById(type + 'Version').value;
-    const url = document.getElementById(type + 'DownloadUrl').value;
-    const filename = document.getElementById(type + 'Filename').value;
-    const notes = document.getElementById(type + 'ReleaseNotes').value;
-    const json = JSON.stringify({ version, download_url: url, filename, release_notes: notes }, null, 2);
-    document.getElementById(type + 'Preview').textContent = json;
-}
+// HISTORY
+async function loadLogs(){try{const r=await fetch(API+'/api/admin/logs',{headers:hdr()});const d=await r.json();const tb=document.getElementById('logTb');if(!d.length){tb.innerHTML='<tr><td colspan="4" class="loading">Aucune action</td></tr>';return;}tb.innerHTML=d.map(l=>`<tr><td class="mono" style="font-size:11px;">${l.created_at||''}</td><td><span class="badge b-info">${l.action}</span></td><td>${l.target||'—'}</td><td style="font-size:12px;">${l.details||'—'}</td></tr>`).join('');}catch(e){}}
 
-['siteVersion', 'siteDownloadUrl', 'siteFilename', 'siteReleaseNotes'].forEach(id => {
-    document.getElementById(id).addEventListener('input', () => updatePreview('site'));
-});
-['appVersion', 'appDownloadUrl', 'appFilename', 'appReleaseNotes'].forEach(id => {
-    document.getElementById(id).addEventListener('input', () => updatePreview('app'));
-});
+async function log(action,target,details){try{await fetch(API+'/api/admin/logs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,target,details})});}catch(e){}}
 
-async function updateSite() {
-    const version = document.getElementById('siteVersion').value.trim();
-    const url = document.getElementById('siteDownloadUrl').value.trim();
-    const filename = document.getElementById('siteFilename').value.trim();
-    const notes = document.getElementById('siteReleaseNotes').value.trim();
-    if (!version || !url) { toast('Version et URL requises', 'error'); return; }
-    const json = JSON.stringify({ version, download_url: url, filename, release_notes: notes }, null, 2);
-    try {
-        await githubUpdateFile('latest.txt', json, `Update site: version ${version}`);
-        toast(`Site mis à jour → v${version} !`, 'success');
-    } catch (e) { toast('Erreur GitHub: ' + e.message, 'error'); }
-}
+// SECURITY
+async function loadAbuse(){try{const r=await fetch(API+'/api/admin/abuse',{headers:hdr()});const d=await r.json();const tb=document.getElementById('abuseTb');if(!d.length){tb.innerHTML='<tr><td colspan="5" style="color:var(--green);padding:20px;">✅ Aucun abus détecté</td></tr>';return;}tb.innerHTML=d.map(a=>`<tr><td><b>${a.school_name}</b></td><td>${a.pack}</td><td>${a.max_pc}</td><td style="color:var(--red);font-weight:700;">${a.pc_count}</td><td class="mono">${a.hw_ids}</td></tr>`).join('');}catch(e){}}
 
-async function updateApp() {
-    const version = document.getElementById('appVersion').value.trim();
-    const url = document.getElementById('appDownloadUrl').value.trim();
-    const filename = document.getElementById('appFilename').value.trim();
-    const notes = document.getElementById('appReleaseNotes').value.trim();
-    if (!version || !url) { toast('Version et URL requises', 'error'); return; }
-    const json = JSON.stringify({ version, download_url: url, filename, release_notes: notes }, null, 2);
-    try {
-        await githubUpdateFile('latest.txt', json, `Update app auto-update: version ${version}`);
-        toast(`Application mise à jour → v${version} !`, 'success');
-    } catch (e) { toast('Erreur GitHub: ' + e.message, 'error'); }
-}
+// PACKS CONFIG
+async function loadPacks(){try{const r=await fetch(API+'/api/admin/packs',{headers:hdr()});const d=await r.json();const c=document.getElementById('packConfig');c.innerHTML=d.map(p=>`<div style="border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
+<h4 style="margin-bottom:12px;">${p.name} <span class="badge b-info">${p.prix.toLocaleString()} FCFA</span></h4>
+<div class="row"><label>Max élèves</label><input type="number" data-pack="${p.name}" data-field="max_eleves" value="${p.max_eleves}"></div>
+<div class="row"><label>Max PC</label><input type="number" data-pack="${p.name}" data-field="max_pc" value="${p.max_pc}"></div>
+<div class="row"><label>Durée (jours)</label><input type="number" data-pack="${p.name}" data-field="duree_jours" value="${p.duree_jours}"></div>
+<div class="row"><label>Prix (FCFA)</label><input type="number" data-pack="${p.name}" data-field="prix" value="${p.prix}"></div>
+<div class="row"><label>Features</label><input data-pack="${p.name}" data-field="features" value="${p.features||''}"></div>
+</div>`).join('');}catch(e){}}
+
+async function savePacks(){const packs=[];document.querySelectorAll('[data-pack]').forEach(el=>{const n=el.dataset.pack,f=el.dataset.field;let p=packs.find(x=>x.name===n);if(!p){p={name:n};packs.push(p);}p[f]=f==='features'?el.value:parseInt(el.value)||0;});try{const r=await fetch(API+'/api/admin/packs',{method:'PUT',headers:{'Content-Type':'application/json',...hdr()},body:JSON.stringify({packs})});const d=await r.json();if(d.success){toast('Packs sauvegardés!','ok');}else toast(d.error,'err');}catch(e){toast(e.message,'err');}}
+
+// SITE UPDATE
+function saveGH(){gh=document.getElementById('ghTok').value.trim();localStorage.setItem('gh',gh);toast('Token sauvegardé','ok');}
+async function loadCurrentVersion(){try{const r=await fetch('https://schoolmanager-bf.github.io/latest.txt');const d=await r.json();document.getElementById('appVer').value=d.version||'';document.getElementById('appUrl').value=d.download_url||'';document.getElementById('appFn').value=d.filename||'';document.getElementById('appNotes').value=d.release_notes||'';updPrv();}catch(e){}}
+function updPrv(){const v={version:document.getElementById('appVer').value,download_url:document.getElementById('appUrl').value,filename:document.getElementById('appFn').value,release_notes:document.getElementById('appNotes').value};document.getElementById('appPrv').textContent=JSON.stringify(v,null,2);}
+['appVer','appUrl','appFn','appNotes'].forEach(id=>document.getElementById(id).addEventListener('input',updPrv));
+
+async function updateSite(t){const v=document.getElementById('appVer').value.trim(),u=document.getElementById('appUrl').value.trim(),fn=document.getElementById('appFn').value.trim(),n=document.getElementById('appNotes').value.trim();if(!v||!u){toast('Version et URL requises','err');return;}const json=JSON.stringify({version:v,download_url:u,filename:fn,release_notes:n},null,2);if(!gh){toast('Token GitHub requis','err');return;}try{const url=`https://api.github.com/repos/${REPO}/contents/latest.txt`;const g=await fetch(url,{headers:{'Authorization':'token '+gh,'Accept':'application/vnd.github.v3+json'}});const fd=await g.json();const body={message:`Update v${v}`,content:btoa(unescape(encodeURIComponent(json))),sha:fd.sha,branch:'main'};const p=await fetch(url,{method:'PUT',headers:{'Authorization':'token '+gh,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify(body)});if(p.ok){toast('MAJ v'+v+' publiée!','ok');log('SITE_UPDATE',v);loadLogs();}else{const e=await p.json();toast(e.message,'err');}}catch(e){toast('Erreur: '+e.message,'err');}}
+
+// INIT
+loadRevenue();
 </script>
 </body>
 </html>
