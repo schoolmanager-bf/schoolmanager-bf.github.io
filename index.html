@@ -303,7 +303,7 @@
     <div class="packs-grid">
         <div class="pack-card reveal">
             <div class="pack-name">🎓 Démo</div>
-            <div class="pack-price">Gratuit</div>
+            <div class="pack-price" id="price-demo">Gratuit</div>
             <ul class="pack-features">
                 <li>150 élèves maximum</li>
                 <li>1 PC</li>
@@ -315,7 +315,7 @@
         </div>
         <div class="pack-card popular reveal">
             <div class="pack-name">🏫 École</div>
-            <div class="pack-price">250 000 FCFA <small style="font-size:14px;color:var(--muted);">à vie</small></div>
+            <div class="pack-price" id="price-ecole">250 000 FCFA <small style="font-size:14px;color:var(--muted);">à vie</small></div>
             <ul class="pack-features">
                 <li>Élèves illimités</li>
                 <li>1 PC</li>
@@ -327,7 +327,7 @@
         </div>
         <div class="pack-card reveal">
             <div class="pack-name">🌐 Réseau Pro</div>
-            <div class="pack-price">450 000 FCFA <small style="font-size:14px;color:var(--muted);">à vie</small></div>
+            <div class="pack-price" id="price-reseau">450 000 FCFA <small style="font-size:14px;color:var(--muted);">à vie</small></div>
             <ul class="pack-features">
                 <li>Élèves illimités</li>
                 <li>5 PC en réseau</li>
@@ -555,6 +555,28 @@ window.addEventListener('scroll', () => {
             if(el) el.textContent=(BASE+count).toLocaleString('fr-FR');
         });
     }
+})();
+</script>
+
+<script>
+// Dynamic pricing from API
+(async function(){
+    try {
+        const r = await fetch('https://yiriba-license.onrender.com/api/packs');
+        const packs = await r.json();
+        packs.forEach(p => {
+            if (p.name === 'DEMO') {
+                const el = document.getElementById('price-demo');
+                if (el) el.innerHTML = 'Gratuit';
+            } else if (p.name === 'ECOLE') {
+                const el = document.getElementById('price-ecole');
+                if (el) el.innerHTML = p.prix.toLocaleString('fr-FR') + ' FCFA <small style="font-size:14px;color:var(--muted);">à vie</small>';
+            } else if (p.name === 'RESEAU_PRO') {
+                const el = document.getElementById('price-reseau');
+                if (el) el.innerHTML = p.prix.toLocaleString('fr-FR') + ' FCFA <small style="font-size:14px;color:var(--muted);">à vie</small>';
+            }
+        });
+    } catch(e) {}
 })();
 </script>
 </body>
