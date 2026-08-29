@@ -241,11 +241,23 @@
 <script>
 const API='https://yiriba-license.onrender.com';
 const REPO='schoolmanager-bf/schoolmanager-bf.github.io';
-const _p=['yiriba','-admin','-2026'];const PASS=_p[0]+_p[1]+_p[2];
 let tk='',gh='';
 const P={DEMO:{p:0},ECOLE:{p:250000},'RESEAU_PRO':{p:450000}};
 
-function login(){const p=document.getElementById('pw').value;if(p!==PASS){document.getElementById('pwErr').style.display='block';return;}tk=p;gh=localStorage.getItem('gh')||'';document.getElementById('loginScreen').style.display='none';document.getElementById('dash').style.display='block';document.getElementById('ghTok').value=gh;loadLicenses();loadAnalytics();loadNotifs();loadLogs();loadAbuse();loadPacks();loadCurrentVersion();}
+async function login(){
+    const p=document.getElementById('pw').value;
+    try{
+        const r=await fetch(API+'/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:p})});
+        const d=await r.json();
+        if(!d.success){document.getElementById('pwErr').style.display='block';return;}
+        tk=d.token;
+        gh=localStorage.getItem('gh')||'';
+        document.getElementById('loginScreen').style.display='none';
+        document.getElementById('dash').style.display='block';
+        document.getElementById('ghTok').value=gh;
+        loadLicenses();loadAnalytics();loadNotifs();loadLogs();loadAbuse();loadPacks();loadCurrentVersion();
+    }catch(e){document.getElementById('pwErr').textContent='Erreur de connexion';document.getElementById('pwErr').style.display='block';}
+}
 function logout(){tk='';document.getElementById('dash').style.display='none';document.getElementById('loginScreen').style.display='flex';}
 function showTab(n){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));event.target.classList.add('active');document.getElementById('p-'+n).classList.add('active');}
 function toast(m,t){const e=document.createElement('div');e.className='toast t-'+t;e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),4000);}
