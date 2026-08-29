@@ -1,1 +1,6 @@
-2.1.1
+{
+  "version": "2.2.0",
+  "download_url": "https://schoolmanager-bf.github.io/download/Yiriba_Setup_2.2.0.exe",
+  "filename": "Yiriba_Setup_2.2.0.exe",
+  "release_notes": "Fix des moyennes et rangs, suppression signature Parent, Directeur Général, bulletin individuel, vérification de licence en ligne, splash screen corrigé"
+}
