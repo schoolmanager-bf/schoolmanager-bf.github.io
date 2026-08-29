@@ -3,26 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yiriba Admin — Gestion des licences</title>
+    <title>Yiriba Admin — Gestion complète</title>
     <link rel="icon" href="assets/logo-yiriba.svg" type="image/svg+xml">
     <style>
-        :root {
-            --bg: #0a0e17;
-            --card: #111827;
-            --border: #1e293b;
-            --text: #e2e8f0;
-            --muted: #64748b;
-            --green: #10b981;
-            --red: #ef4444;
-            --yellow: #f59e0b;
-            --blue: #3b82f6;
-        }
+        :root { --bg:#0a0e17; --card:#111827; --border:#1e293b; --text:#e2e8f0; --muted:#64748b; --green:#10b981; --red:#ef4444; --yellow:#f59e0b; --blue:#3b82f6; }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; min-height:100vh; }
-
-        /* LOGIN */
         .login-screen { display:flex; justify-content:center; align-items:center; min-height:100vh; }
-        .login-box { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:48px; width:400px; text-align:center; }
+        .login-box { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:48px; width:420px; text-align:center; }
         .login-box h1 { font-size:28px; margin-bottom:8px; }
         .login-box .subtitle { color:var(--muted); margin-bottom:32px; }
         .login-box input { width:100%; padding:14px 18px; background:var(--bg); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:16px; margin-bottom:16px; outline:none; }
@@ -30,16 +18,18 @@
         .login-box button { width:100%; padding:14px; background:var(--green); color:#fff; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; transition:.2s; }
         .login-box button:hover { background:#059669; }
         .login-error { color:var(--red); font-size:14px; margin-top:12px; display:none; }
-
-        /* DASHBOARD */
         .dashboard { display:none; }
         .topbar { background:var(--card); border-bottom:1px solid var(--border); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; }
         .topbar h2 { font-size:20px; }
         .topbar .logout { color:var(--red); cursor:pointer; font-size:14px; font-weight:600; background:none; border:none; }
         .content { padding:32px; max-width:1200px; margin:0 auto; }
-
-        /* STATS */
-        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:32px; }
+        .tabs { display:flex; gap:4px; margin-bottom:32px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:4px; }
+        .tab { flex:1; padding:12px; text-align:center; border:none; background:transparent; color:var(--muted); font-size:14px; font-weight:600; cursor:pointer; border-radius:8px; transition:.2s; }
+        .tab.active { background:var(--green); color:#fff; }
+        .tab:hover:not(.active) { color:var(--text); background:rgba(255,255,255,.05); }
+        .panel { display:none; }
+        .panel.active { display:block; }
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:32px; }
         .stat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px; text-align:center; }
         .stat-card .number { font-size:36px; font-weight:800; }
         .stat-card .label { color:var(--muted); font-size:13px; margin-top:4px; }
@@ -47,8 +37,6 @@
         .stat-card.red .number { color:var(--red); }
         .stat-card.blue .number { color:var(--blue); }
         .stat-card.yellow .number { color:var(--yellow); }
-
-        /* TABLE */
         .table-card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:24px; }
         .table-header { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
         .table-header h3 { font-size:16px; }
@@ -59,183 +47,298 @@
         .badge { padding:4px 12px; border-radius:50px; font-size:12px; font-weight:600; }
         .badge-active { background:rgba(16,185,129,.15); color:var(--green); }
         .badge-revoked { background:rgba(239,68,68,.15); color:var(--red); }
-        .btn-sm { padding:6px 16px; border:none; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; margin:0 4px; }
-        .btn-revoke { background:rgba(239,68,68,.15); color:var(--red); }
-        .btn-reactivate { background:rgba(16,185,129,.15); color:var(--green); }
-        .btn-sm:hover { opacity:.8; }
-
-        /* REVOKE FORM */
-        .revoke-form { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:24px; }
-        .revoke-form h3 { margin-bottom:16px; font-size:16px; }
-        .revoke-form .row { display:flex; gap:12px; }
-        .revoke-form input { flex:1; padding:12px 16px; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:14px; outline:none; }
-        .revoke-form input:focus { border-color:var(--green); }
-        .revoke-form button { padding:12px 24px; border:none; border-radius:8px; font-weight:600; cursor:pointer; }
-        .revoke-btn { background:var(--red); color:#fff; }
-        .reactivate-btn { background:var(--green); color:#fff; }
+        .form-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:24px; }
+        .form-card h3 { margin-bottom:16px; font-size:16px; }
+        .form-row { display:flex; gap:12px; margin-bottom:12px; }
+        .form-row input, .form-row textarea, .form-row select { flex:1; padding:12px 16px; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:14px; outline:none; font-family:inherit; }
+        .form-row input:focus, .form-row textarea:focus { border-color:var(--green); }
+        .form-row textarea { min-height:80px; resize:vertical; }
+        .btn { padding:12px 24px; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; transition:.2s; }
+        .btn-red { background:var(--red); color:#fff; }
+        .btn-green { background:var(--green); color:#fff; }
+        .btn-blue { background:var(--blue); color:#fff; }
+        .btn:hover { opacity:.85; transform:translateY(-1px); }
         .toast { position:fixed; bottom:24px; right:24px; padding:16px 24px; border-radius:10px; font-weight:600; z-index:999; animation:slideIn .3s; }
         .toast-success { background:var(--green); color:#fff; }
         .toast-error { background:var(--red); color:#fff; }
-        @keyframes slideIn { from { transform:translateY(20px); opacity:0; } to { transform:translateY(0); opacity:1; } }
-
+        @keyframes slideIn { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
         .loading { text-align:center; padding:40px; color:var(--muted); }
+        .preview-box { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:16px; margin-top:12px; font-family:monospace; font-size:13px; color:var(--green); white-space:pre-wrap; }
+        .section-title { font-size:18px; font-weight:700; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+        .info-text { color:var(--muted); font-size:13px; margin-bottom:16px; }
     </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
     <div class="login-box">
         <div style="font-size:48px;margin-bottom:16px;">🔐</div>
         <h1>Yiriba Admin</h1>
-        <p class="subtitle">Gestion des licences</p>
+        <p class="subtitle">Gestion des licences & mises à jour</p>
         <input type="password" id="passwordInput" placeholder="Mot de passe admin" autofocus onkeydown="if(event.key==='Enter')login()">
         <button onclick="login()">Se connecter</button>
         <p class="login-error" id="loginError">Mot de passe incorrect</p>
     </div>
 </div>
 
-<!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
     <div class="topbar">
-        <h2>🌳 Yiriba — Admin</h2>
+        <h2>🌳 Yiriba — Admin Panel</h2>
         <button class="logout" onclick="logout()">Déconnexion</button>
     </div>
     <div class="content">
-        <!-- STATS -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card blue"><div class="number" id="statTotal">...</div><div class="label">Total licences</div></div>
-            <div class="stat-card green"><div class="number" id="statActive">...</div><div class="label">Actives</div></div>
-            <div class="stat-card red"><div class="number" id="statRevoked">...</div><div class="label">Révoquées</div></div>
-            <div class="stat-card yellow"><div class="number" id="statPacks">...</div><div class="label">Packs</div></div>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('licenses')">🔑 Licences</button>
+            <button class="tab" onclick="showTab('site')">🌐 Site web</button>
+            <button class="tab" onclick="showTab('app')">📱 Application</button>
         </div>
 
-        <!-- REVOKE/REACTIVATE -->
-        <div class="revoke-form">
-            <h3>⚡ Action rapide</h3>
-            <div class="row">
-                <input type="text" id="actionInput" placeholder="Nom de l'école ou Hardware ID">
-                <button class="revoke-btn" onclick="revokeLicense()">🚫 Révoquer</button>
-                <button class="reactivate-btn" onclick="reactivateLicense()">✅ Réactiver</button>
+        <!-- ═══ LICENCES ═══ -->
+        <div class="panel active" id="panel-licenses">
+            <div class="stats-grid">
+                <div class="stat-card blue"><div class="number" id="statTotal">...</div><div class="label">Total</div></div>
+                <div class="stat-card green"><div class="number" id="statActive">...</div><div class="label">Actives</div></div>
+                <div class="stat-card red"><div class="number" id="statRevoked">...</div><div class="label">Révoquées</div></div>
+            </div>
+            <div class="form-card">
+                <h3>⚡ Action rapide</h3>
+                <div class="form-row">
+                    <input type="text" id="licenseInput" placeholder="Nom de l'école">
+                    <button class="btn btn-red" onclick="revokeLicense()">🚫 Révoquer</button>
+                    <button class="btn btn-green" onclick="reactivateLicense()">✅ Réactiver</button>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>📋 Toutes les licences</h3>
+                    <button class="btn btn-blue" onclick="loadLicenses()" style="padding:8px 16px;font-size:12px;">🔄 Rafraîchir</button>
+                </div>
+                <table>
+                    <thead><tr><th>École</th><th>Pack</th><th>HW ID</th><th>Activation</th><th>Expire</th><th>Statut</th></tr></thead>
+                    <tbody id="licenseTable"><tr><td colspan="6" class="loading">Chargement...</td></tr></tbody>
+                </table>
             </div>
         </div>
 
-        <!-- LIST -->
-        <div class="table-card">
-            <div class="table-header">
-                <h3>📋 Licences</h3>
-                <button class="btn-sm btn-reactivate" onclick="loadData()">🔄 Rafraîchir</button>
+        <!-- ═══ SITE WEB ═══ -->
+        <div class="panel" id="panel-site">
+            <div class="form-card">
+                <h3>📥 Mise à jour du site web</h3>
+                <p class="info-text">Modifie le fichier <code>latest.txt</code> pour contrôler ce que les utilisateurs voient quand ils vérifient les mises à jour.</p>
+                <div class="form-row">
+                    <label style="min-width:100px;padding-top:12px;font-size:13px;">Version</label>
+                    <input type="text" id="siteVersion" placeholder="ex: 2.3.0">
+                </div>
+                <div class="form-row">
+                    <label style="min-width:100px;padding-top:12px;font-size:13px;">Lien ZIP</label>
+                    <input type="text" id="siteDownloadUrl" placeholder="https://schoolmanager-bf.github.io/download/Yiriba_Setup_2.3.0.exe">
+                </div>
+                <div class="form-row">
+                    <label style="min-width:100px;padding-top:12px;font-size:13px;">Fichier</label>
+                    <input type="text" id="siteFilename" placeholder="Yiriba_Setup_2.3.0.exe">
+                </div>
+                <div class="form-row">
+                    <label style="min-width:100px;padding-top:12px;font-size:13px;">Notes</label>
+                    <textarea id="siteReleaseNotes" placeholder="Nouvelles fonctionnalités, corrections..."></textarea>
+                </div>
+                <div class="preview-box" id="sitePreview">{ "version": "...", ... }</div>
+                <div style="margin-top:16px;">
+                    <button class="btn btn-green" onclick="updateSite()">💾 Mettre à jour le site</button>
+                </div>
             </div>
-            <table>
-                <thead>
-                    <tr><th>École</th><th>Pack</th><th>Hardware ID</th><th>Activation</th><th>Expire</th><th>Élèves max</th><th>Statut</th></tr>
-                </thead>
-                <tbody id="licenseTable">
-                    <tr><td colspan="7" class="loading">Chargement...</td></tr>
-                </tbody>
-            </table>
+            <div class="form-card">
+                <h3>🌐 Configuration GitHub</h3>
+                <p class="info-text">Pour modifier le site, il faut un token GitHub avec accès au repo. Crée un token sur <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--green);">github.com/settings/tokens</a> avec le scope <code>repo</code>.</p>
+                <div class="form-row">
+                    <input type="password" id="githubToken" placeholder="Token GitHub (ghp_...)" value="">
+                    <button class="btn btn-blue" onclick="saveGithubToken()" style="white-space:nowrap;">💾 Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ APPLICATION ═══ -->
+        <div class="panel" id="panel-app">
+            <div class="form-card">
+                <h3>📱 Mise à jour de l'application</h3>
+                <p class="info-text">Configure la nouvelle version disponible pour les utilisateurs de Yiriba desktop.</p>
+                <div class="form-row">
+                    <label style="min-width:120px;padding-top:12px;font-size:13px;">Version</label>
+                    <input type="text" id="appVersion" placeholder="ex: 2.3.0">
+                </div>
+                <div class="form-row">
+                    <label style="min-width:120px;padding-top:12px;font-size:13px;">Lien setup</label>
+                    <input type="text" id="appDownloadUrl" placeholder="https://schoolmanager-bf.github.io/download/Yiriba_Setup_2.3.0.exe">
+                </div>
+                <div class="form-row">
+                    <label style="min-width:120px;padding-top:12px;font-size:13px;">Nom fichier</label>
+                    <input type="text" id="appFilename" placeholder="Yiriba_Setup_2.3.0.exe">
+                </div>
+                <div class="form-row">
+                    <label style="min-width:120px;padding-top:12px;font-size:13px;">Release notes</label>
+                    <textarea id="appReleaseNotes" placeholder="Corrections de bugs, nouvelles fonctionnalités..."></textarea>
+                </div>
+                <div class="preview-box" id="appPreview">{ "version": "...", ... }</div>
+                <div style="margin-top:16px;">
+                    <button class="btn btn-green" onclick="updateApp()">🚀 Publier la mise à jour</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
 const API = 'https://yiriba-license.onrender.com';
+const SITE_REPO = 'schoolmanager-bf/schoolmanager-bf.github.io';
+const SITE_BRANCH = 'main';
 const ADMIN_PASSWORD = 'yiriba-admin-2026';
 let token = '';
+let githubToken = localStorage.getItem('gh_token') || '';
 
+// ═══ LOGIN ═══
 function login() {
     const pw = document.getElementById('passwordInput').value;
-    if (pw !== ADMIN_PASSWORD) {
-        document.getElementById('loginError').style.display = 'block';
-        return;
-    }
+    if (pw !== ADMIN_PASSWORD) { document.getElementById('loginError').style.display = 'block'; return; }
     token = pw;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    loadData();
+    if (githubToken) document.getElementById('githubToken').value = githubToken;
+    loadLicenses();
+    loadCurrentSiteVersion();
+}
+function logout() { token = ''; document.getElementById('dashboard').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('passwordInput').value = ''; }
+
+// ═══ TABS ═══
+function showTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('panel-' + name).classList.add('active');
 }
 
-function logout() {
-    token = '';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('passwordInput').value = '';
-}
+// ═══ TOAST ═══
+function toast(msg, type) { const el = document.createElement('div'); el.className = 'toast toast-' + type; el.textContent = msg; document.body.appendChild(el); setTimeout(() => el.remove(), 4000); }
 
-function toast(msg, type) {
-    const el = document.createElement('div');
-    el.className = `toast toast-${type}`;
-    el.textContent = msg;
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 4000);
-}
-
-async function loadData() {
+// ═══ LICENSES ═══
+async function loadLicenses() {
     try {
-        const res = await fetch(`${API}/api/admin/list`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await fetch(`${API}/api/admin/list`, { headers: { 'Authorization': `Bearer ${token}` } });
         const data = await res.json();
         if (data.error) { toast(data.error, 'error'); return; }
-
         document.getElementById('statTotal').textContent = data.total || 0;
         document.getElementById('statActive').textContent = data.active || 0;
         document.getElementById('statRevoked').textContent = data.revoked || 0;
-        document.getElementById('statPacks').textContent = data.by_pack ? Object.keys(data.by_pack).length : 0;
-
         const licenses = data.licenses || [];
         const tbody = document.getElementById('licenseTable');
-        if (licenses.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="loading">Aucune licence</td></tr>';
-            return;
-        }
-        tbody.innerHTML = licenses.map(l => `
-            <tr>
-                <td><strong>${l.school_name}</strong></td>
-                <td>${l.pack}</td>
-                <td style="font-family:monospace;font-size:12px;">${l.hardware_id || '—'}</td>
-                <td>${l.date_activation || '—'}</td>
-                <td>${l.date_expiration || '—'}</td>
-                <td>${l.max_eleves === -1 ? '∞' : l.max_eleves}</td>
-                <td>${l.is_revoked
-                    ? '<span class="badge badge-revoked">Révoquée</span>'
-                    : '<span class="badge badge-active">Active</span>'
-                }</td>
-            </tr>
-        `).join('');
-    } catch (e) {
-        toast('Erreur de connexion: ' + e.message, 'error');
-    }
+        if (!licenses.length) { tbody.innerHTML = '<tr><td colspan="6" class="loading">Aucune licence</td></tr>'; return; }
+        tbody.innerHTML = licenses.map(l => `<tr>
+            <td><strong>${l.school_name}</strong></td><td>${l.pack}</td>
+            <td style="font-family:monospace;font-size:12px;">${l.hardware_id || '—'}</td>
+            <td>${l.date_activation || '—'}</td><td>${l.date_expiration || '—'}</td>
+            <td>${l.is_revoked ? '<span class="badge badge-revoked">Révoquée</span>' : '<span class="badge badge-active">Active</span>'}</td>
+        </tr>`).join('');
+    } catch (e) { toast('Erreur: ' + e.message, 'error'); }
 }
 
 async function revokeLicense() {
-    const input = document.getElementById('actionInput').value.trim();
+    const input = document.getElementById('licenseInput').value.trim();
     if (!input) { toast('Entrez un nom d\'école', 'error'); return; }
     try {
-        const res = await fetch(`${API}/api/admin/revoke-quick`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ school_name: input, code: 'yiriba-revoke-2026' })
-        });
+        const res = await fetch(`${API}/api/admin/revoke-quick`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ school_name: input, code: 'yiriba-revoke-2026' }) });
         const data = await res.json();
-        if (data.success) { toast(`Licence "${input}" révoquée !`, 'success'); loadData(); }
-        else toast(data.error, 'error');
+        if (data.success) { toast(`"${input}" révoquée !`, 'success'); loadLicenses(); } else toast(data.error, 'error');
     } catch (e) { toast('Erreur: ' + e.message, 'error'); }
 }
 
 async function reactivateLicense() {
-    const input = document.getElementById('actionInput').value.trim();
+    const input = document.getElementById('licenseInput').value.trim();
     if (!input) { toast('Entrez un nom d\'école', 'error'); return; }
     try {
-        const res = await fetch(`${API}/api/admin/reactivate-quick`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ school_name: input, code: 'yiriba-revoke-2026' })
-        });
+        const res = await fetch(`${API}/api/admin/reactivate-quick`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ school_name: input, code: 'yiriba-revoke-2026' }) });
         const data = await res.json();
-        if (data.success) { toast(`Licence "${input}" réactivée !`, 'success'); loadData(); }
-        else toast(data.error, 'error');
+        if (data.success) { toast(`"${input}" réactivée !`, 'success'); loadLicenses(); } else toast(data.error, 'error');
     } catch (e) { toast('Erreur: ' + e.message, 'error'); }
+}
+
+// ═══ GITHUB ═══
+function saveGithubToken() {
+    githubToken = document.getElementById('githubToken').value.trim();
+    localStorage.setItem('gh_token', githubToken);
+    toast('Token sauvegardé !', 'success');
+}
+
+async function githubUpdateFile(path, content, message) {
+    if (!githubToken) { toast('Token GitHub requis', 'error'); return false; }
+    const url = `https://api.github.com/repos/${SITE_REPO}/contents/${path}`;
+    // Get current SHA
+    const getRes = await fetch(url, { headers: { 'Authorization': `token ${githubToken}`, 'Accept': 'application/vnd.github.v3+json' } });
+    const fileData = await getRes.json();
+    const sha = fileData.sha;
+    // Update
+    const body = { message, content: btoa(unescape(encodeURIComponent(content))), sha, branch: SITE_BRANCH };
+    const putRes = await fetch(url, { method: 'PUT', headers: { 'Authorization': `token ${githubToken}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
+    if (putRes.ok) return true;
+    const err = await putRes.json();
+    throw new Error(err.message || 'GitHub API error');
+}
+
+// ═══ SITE UPDATE ═══
+async function loadCurrentSiteVersion() {
+    try {
+        const res = await fetch('https://schoolmanager-bf.github.io/latest.txt');
+        const data = await res.json();
+        document.getElementById('siteVersion').value = data.version || '';
+        document.getElementById('siteDownloadUrl').value = data.download_url || '';
+        document.getElementById('siteFilename').value = data.filename || '';
+        document.getElementById('siteReleaseNotes').value = data.release_notes || '';
+        document.getElementById('appVersion').value = data.version || '';
+        document.getElementById('appDownloadUrl').value = data.download_url || '';
+        document.getElementById('appFilename').value = data.filename || '';
+        document.getElementById('appReleaseNotes').value = data.release_notes || '';
+        updatePreview('site');
+        updatePreview('app');
+    } catch (e) { console.log('Could not load current version'); }
+}
+
+function updatePreview(type) {
+    const version = document.getElementById(type + 'Version').value;
+    const url = document.getElementById(type + 'DownloadUrl').value;
+    const filename = document.getElementById(type + 'Filename').value;
+    const notes = document.getElementById(type + 'ReleaseNotes').value;
+    const json = JSON.stringify({ version, download_url: url, filename, release_notes: notes }, null, 2);
+    document.getElementById(type + 'Preview').textContent = json;
+}
+
+['siteVersion', 'siteDownloadUrl', 'siteFilename', 'siteReleaseNotes'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => updatePreview('site'));
+});
+['appVersion', 'appDownloadUrl', 'appFilename', 'appReleaseNotes'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => updatePreview('app'));
+});
+
+async function updateSite() {
+    const version = document.getElementById('siteVersion').value.trim();
+    const url = document.getElementById('siteDownloadUrl').value.trim();
+    const filename = document.getElementById('siteFilename').value.trim();
+    const notes = document.getElementById('siteReleaseNotes').value.trim();
+    if (!version || !url) { toast('Version et URL requises', 'error'); return; }
+    const json = JSON.stringify({ version, download_url: url, filename, release_notes: notes }, null, 2);
+    try {
+        await githubUpdateFile('latest.txt', json, `Update site: version ${version}`);
+        toast(`Site mis à jour → v${version} !`, 'success');
+    } catch (e) { toast('Erreur GitHub: ' + e.message, 'error'); }
+}
+
+async function updateApp() {
+    const version = document.getElementById('appVersion').value.trim();
+    const url = document.getElementById('appDownloadUrl').value.trim();
+    const filename = document.getElementById('appFilename').value.trim();
+    const notes = document.getElementById('appReleaseNotes').value.trim();
+    if (!version || !url) { toast('Version et URL requises', 'error'); return; }
+    const json = JSON.stringify({ version, download_url: url, filename, release_notes: notes }, null, 2);
+    try {
+        await githubUpdateFile('latest.txt', json, `Update app auto-update: version ${version}`);
+        toast(`Application mise à jour → v${version} !`, 'success');
+    } catch (e) { toast('Erreur GitHub: ' + e.message, 'error'); }
 }
 </script>
 </body>
