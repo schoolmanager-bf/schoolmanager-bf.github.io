@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yiriba SaaS — Gestion scolaire en ligne au Burkina Faso</title>
+    <meta name="description" content="Yiriba SaaS : la plateforme web de gestion scolaire pour les écoles du Burkina Faso. Notes, bulletins, paiements, tout en ligne.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --green:#1F3B2C; --green-light:#3E7C59; --gold:#C98A2C; --gold-light:#E8B94A; --dark:#0F172A; --darker:#020617; --card:#1E293B; --text:#F1F5F9; --muted:#94A3B8; --red:#CE1126; --radius:16px; }
+        * { margin:0; padding:0; box-sizing:border-box; } html { scroll-behavior:smooth; }
+        body { font-family:'Inter',sans-serif; background:var(--darker); color:var(--text); line-height:1.6; overflow-x:hidden; }
+        .nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(2,6,23,.92); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,.05); padding:0 40px; display:flex; align-items:center; justify-content:space-between; height:72px; }
+        .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; font-size:18px; font-weight:800; color:var(--text); }
+        .nav-logo .icon { font-size:28px; }
+        .nav-logo .saas-badge { background:var(--gold); color:#000; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700; }
+        .nav-links { display:flex; gap:24px; list-style:none; }
+        .nav-links a { color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; transition:.2s; }
+        .nav-links a:hover { color:var(--gold); }
+        .nav-cta { background:var(--gold); color:#000; padding:10px 24px; border-radius:10px; text-decoration:none; font-weight:700; font-size:14px; transition:.3s; }
+        .nav-cta:hover { background:var(--gold-light); transform:translateY(-1px); }
+        .hamburger { display:none; background:none; border:none; color:var(--text); font-size:24px; cursor:pointer; }
+        .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:120px 40px 80px; position:relative; overflow:hidden; }
+        .hero::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle at 30% 40%, rgba(201,138,44,.1) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(31,59,44,.08) 0%, transparent 50%); }
+        .hero-content { position:relative; z-index:1; max-width:900px; }
+        .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(201,138,44,.15); border:1px solid rgba(201,138,44,.3); padding:8px 20px; border-radius:50px; font-size:13px; font-weight:600; color:var(--gold); margin-bottom:30px; animation:fadeIn .8s ease; }
+        .hero h1 { font-size:clamp(36px,5.5vw,68px); font-weight:900; line-height:1.1; margin-bottom:24px; animation:fadeIn .8s ease .2s both; }
+        .hero h1 .gold { color:var(--gold); }
+        .hero p { font-size:clamp(16px,2vw,20px); color:var(--muted); max-width:650px; margin:0 auto 40px; animation:fadeIn .8s ease .4s both; }
+        .hero-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; animation:fadeIn .8s ease .6s both; }
+        .btn-primary { background:var(--gold); color:#000; padding:14px 36px; border-radius:12px; text-decoration:none; font-weight:700; font-size:16px; transition:.3s; border:none; cursor:pointer; }
+        .btn-primary:hover { background:var(--gold-light); transform:translateY(-2px); box-shadow:0 12px 30px rgba(201,138,44,.35); }
+        .btn-secondary { background:rgba(255,255,255,.08); color:var(--text); padding:14px 36px; border-radius:12px; text-decoration:none; font-weight:600; font-size:16px; border:1px solid rgba(255,255,255,.15); transition:.3s; }
+        .btn-secondary:hover { background:rgba(255,255,255,.12); }
+        .hero-stats { display:flex; gap:48px; justify-content:center; margin-top:60px; animation:fadeIn .8s ease .8s both; }
+        .hero-stats .stat { text-align:center; }
+        .hero-stats .num { font-size:32px; font-weight:800; color:var(--gold); }
+        .hero-stats .label { font-size:13px; color:var(--muted); margin-top:4px; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        section { padding:100px 40px; max-width:1200px; margin:0 auto; }
+        .section-title { text-align:center; margin-bottom:60px; }
+        .section-title .tag { display:inline-block; background:rgba(201,138,44,.15); color:var(--gold); padding:6px 16px; border-radius:50px; font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; margin-bottom:16px; }
+        .section-title h2 { font-size:clamp(28px,4vw,44px); font-weight:800; margin-bottom:16px; }
+        .section-title p { color:var(--muted); font-size:17px; max-width:600px; margin:0 auto; }
+        .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
+        .feature-card { background:var(--card); border-radius:var(--radius); padding:32px; border:1px solid rgba(255,255,255,.06); transition:.3s; }
+        .feature-card:hover { transform:translateY(-4px); border-color:rgba(201,138,44,.2); box-shadow:0 20px 40px rgba(0,0,0,.3); }
+        .feature-card .icon { font-size:40px; margin-bottom:16px; }
+        .feature-card h3 { font-size:18px; font-weight:700; margin-bottom:8px; }
+        .feature-card p { color:var(--muted); font-size:14px; line-height:1.7; }
+        .compare-table { width:100%; border-collapse:collapse; margin-top:40px; }
+        .compare-table th, .compare-table td { padding:14px 20px; text-align:left; border-bottom:1px solid rgba(255,255,255,.06); font-size:14px; }
+        .compare-table th { color:var(--gold); font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.05em; }
+        .compare-table tr:hover { background:rgba(255,255,255,.03); }
+        .check { color:var(--green-light); font-weight:700; }
+        .cross { color:var(--red); }
+        .pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
+        .price-card { background:var(--card); border-radius:var(--radius); padding:40px 32px; border:1px solid rgba(255,255,255,.06); transition:.3s; position:relative; }
+        .price-card.popular { border-color:var(--gold); }
+        .price-card.popular::before { content:'⭐ Populaire'; position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--gold); color:#000; padding:4px 16px; border-radius:50px; font-size:12px; font-weight:700; }
+        .price-card:hover { transform:translateY(-4px); box-shadow:0 20px 40px rgba(0,0,0,.3); }
+        .price-card h3 { font-size:20px; font-weight:700; margin-bottom:8px; }
+        .price-card .price { font-size:36px; font-weight:900; color:var(--gold); margin:16px 0; }
+        .price-card .price span { font-size:14px; color:var(--muted); font-weight:400; }
+        .price-card .desc { color:var(--muted); font-size:14px; margin-bottom:24px; }
+        .price-card ul { list-style:none; margin-bottom:28px; }
+        .price-card li { padding:8px 0; font-size:14px; display:flex; align-items:center; gap:8px; }
+        .price-card li::before { content:'✓'; color:var(--green-light); font-weight:700; }
+        .price-card .cta { display:block; text-align:center; padding:14px; border-radius:10px; text-decoration:none; font-weight:700; font-size:15px; transition:.3s; }
+        .price-card .cta-gold { background:var(--gold); color:#000; }
+        .price-card .cta-gold:hover { background:var(--gold-light); }
+        .price-card .cta-outline { border:1px solid rgba(255,255,255,.2); color:var(--text); }
+        .price-card .cta-outline:hover { background:rgba(255,255,255,.08); }
+        .testimonials-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
+        .testimonial { background:var(--card); border-radius:var(--radius); padding:32px; border:1px solid rgba(255,255,255,.06); }
+        .testimonial .stars { color:var(--gold); font-size:18px; margin-bottom:12px; }
+        .testimonial p { color:var(--muted); font-size:14px; font-style:italic; margin-bottom:16px; line-height:1.7; }
+        .testimonial .author { display:flex; align-items:center; gap:12px; }
+        .testimonial .avatar { width:42px; height:42px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:18px; }
+        .testimonial .name { font-weight:600; font-size:14px; }
+        .testimonial .role { font-size:12px; color:var(--muted); }
+        .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:32px; margin-top:40px; }
+        .step { text-align:center; }
+        .step .num { width:56px; height:56px; border-radius:50%; background:rgba(201,138,44,.15); border:2px solid var(--gold); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; color:var(--gold); margin:0 auto 16px; }
+        .step h3 { font-size:16px; font-weight:700; margin-bottom:8px; }
+        .step p { color:var(--muted); font-size:13px; }
+        .cta-banner { background:linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%); border-radius:24px; padding:60px; text-align:center; margin:80px auto; max-width:1100px; }
+        .cta-banner h2 { font-size:clamp(24px,3.5vw,40px); font-weight:800; margin-bottom:16px; color:#fff; }
+        .cta-banner p { color:rgba(255,255,255,.8); font-size:17px; margin-bottom:32px; }
+        .faq-item { background:var(--card); border-radius:12px; margin-bottom:12px; border:1px solid rgba(255,255,255,.06); overflow:hidden; }
+        .faq-q { padding:20px 24px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:600; font-size:15px; }
+        .faq-q:hover { color:var(--gold); }
+        .faq-q .arrow { transition:.3s; font-size:20px; }
+        .faq-q.active .arrow { transform:rotate(45deg); }
+        .faq-a { padding:0 24px; max-height:0; overflow:hidden; transition:.3s; color:var(--muted); font-size:14px; line-height:1.7; }
+        .faq-a.open { padding:0 24px 20px; max-height:200px; }
+        .footer { border-top:1px solid rgba(255,255,255,.06); padding:40px; text-align:center; color:var(--muted); font-size:13px; }
+        .footer a { color:var(--gold); text-decoration:none; }
+        .footer-links { display:flex; gap:20px; justify-content:center; margin-bottom:16px; flex-wrap:wrap; }
+        @media(max-width:768px) { .nav-links { display:none; } .hamburger { display:block; } section { padding:60px 20px; } .hero { padding:100px 20px 60px; } .hero-stats { gap:24px; } .cta-banner { margin:40px 20px; padding:40px 24px; } }
+    </style>
+</head>
+<body>
+<nav class="nav">
+    <a href="index.html" class="nav-logo"><span class="icon">🌳</span> Yiriba <span class="saas-badge">SaaS</span></a>
+    <ul class="nav-links">
+        <li><a href="#features">Fonctionnalités</a></li>
+        <li><a href="#pricing">Tarifs</a></li>
+        <li><a href="#how">Comment ça marche</a></li>
+        <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="https://saas.yiriba.app" class="nav-cta">Essayer gratuitement →</a>
+    <button class="hamburger" onclick="document.querySelector('.nav-links').style.display=document.querySelector('.nav-links').style.display==='flex'?'none':'flex'">☰</button>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">🚀 Version SaaS — Aucune installation requise</div>
+        <h1>Gérez votre école<br><span class="gold">entièrement en ligne</span></h1>
+        <p>Notes, bulletins, paiements, emploi du temps, absences… Tout ce qu'il faut pour gérer votre école, accessible depuis n'importe quel appareil, n'importe où.</p>
+        <div class="hero-btns">
+            <a href="https://saas.yiriba.app" class="btn-primary">Commencer gratuitement →</a>
+            <a href="#features" class="btn-secondary">Découvrir les fonctionnalités</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat"><div class="num">19</div><div class="label">Pages complètes</div></div>
+            <div class="stat"><div class="num">35+</div><div class="label">Endpoints API</div></div>
+            <div class="stat"><div class="num">0 FCFA</div><div class="label">Plan Démo gratuit</div></div>
+        </div>
+    </div>
+</section>
+
+<section id="features">
+    <div class="section-title">
+        <div class="tag">Fonctionnalités</div>
+        <h2>Tout ce dont votre école a besoin</h2>
+        <p>De l'inscription des élèves à la génération des bulletins, Yiriba SaaS couvre chaque aspect de la gestion scolaire.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card"><div class="icon">🎓</div><h3>Gestion des élèves</h3><p>Inscriptions, affectations de classes, passage automatique d'année en année.</p></div>
+        <div class="feature-card"><div class="icon">📊</div><h3>Notes & Bulletins</h3><p>Saisie des notes, calcul automatique des moyennes, bulletins PDF avec QR code.</p></div>
+        <div class="feature-card"><div class="icon">💰</div><h3>Paiements & Finances</h3><p>Suivi des frais scolaires, reçus uniques, historique par élève.</p></div>
+        <div class="feature-card"><div class="icon">📅</div><h3>Emploi du temps</h3><p>Planning hebdomadaire avec matières, enseignants et salles.</p></div>
+        <div class="feature-card"><div class="icon">👨‍🏫</div><h3>Enseignants</h3><p>Gestion du corps enseignant avec matières affectées et coordonnées.</p></div>
+        <div class="feature-card"><div class="icon">📋</div><h3>Absences</h3><p>Enregistrement des absences avec justification. Suivi par élève.</p></div>
+        <div class="feature-card"><div class="icon">📈</div><h3>Rapports avancés</h3><p>Statistiques de réussite, moyennes par classe, export CSV.</p></div>
+        <div class="feature-card"><div class="icon">🔄</div><h3>Passage de classe</h3><p>Promotion automatique avec contrôle des moyennes minimales.</p></div>
+        <div class="feature-card"><div class="icon">📥</div><h3>Import Excel</h3><p>Importez vos données existantes depuis Excel/CSV en un clic.</p></div>
+        <div class="feature-card"><div class="icon">💾</div><h3>Sauvegarde & Restore</h3><p>Exportez et importez l'intégralité de vos données.</p></div>
+        <div class="feature-card"><div class="icon">🔐</div><h3>Rôles & Permissions</h3><p>Directeur, Comptable, Secrétaire, Enseignant — chaque rôle a ses accès.</p></div>
+        <div class="feature-card"><div class="icon">📱</div><h3>Responsive</h3><p>Accessible sur ordinateur, tablette et téléphone.</p></div>
+    </div>
+</section>
+
+<section id="compare">
+    <div class="section-title">
+        <div class="tag">Comparaison</div>
+        <h2>Pourquoi passer au SaaS ?</h2>
+    </div>
+    <table class="compare-table">
+        <thead><tr><th>Fonctionnalité</th><th>Yiriba Desktop</th><th>Yiriba SaaS</th><th>Autres logiciels</th></tr></thead>
+        <tbody>
+            <tr><td>Installation requise</td><td>✅ Oui</td><td class="check">❌ Non</td><td>✅ Oui</td></tr>
+            <tr><td>Accessible sur téléphone</td><td class="cross">❌ Non</td><td class="check">✅ Oui</td><td class="cross">❌ Rarement</td></tr>
+            <tr><td>Multi-utilisateurs</td><td>⚠️ Réseau</td><td class="check">✅ Natif</td><td class="cross">❌ Payant</td></tr>
+            <tr><td>Sauvegarde cloud</td><td class="cross">❌ Non</td><td class="check">✅ Auto</td><td>⚠️ Payant</td></tr>
+            <tr><td>Mise à jour auto</td><td class="cross">❌ Non</td><td class="check">✅ Auto</td><td>✅ Auto</td></tr>
+            <tr><td>Bulletins PDF + QR</td><td>✅ Oui</td><td class="check">✅ Oui</td><td class="cross">❌ Limité</td></tr>
+            <tr><td>Plan gratuit</td><td>✅ Démo</td><td class="check">✅ Démo</td><td class="cross">❌ Non</td></tr>
+            <tr><td>Prix</td><td>250 000 FCFA</td><td class="check">50 000 FCFA/an</td><td>500 000+ FCFA/an</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section id="how">
+    <div class="section-title">
+        <div class="tag">Comment ça marche</div>
+        <h2>En ligne en 3 étapes</h2>
+        <p>Aucune installation, aucun serveur à configurer.</p>
+    </div>
+    <div class="steps">
+        <div class="step"><div class="num">1</div><h3>Créez votre compte</h3><p>Entrez le nom de votre école, un email et un mot de passe. Gratuit.</p></div>
+        <div class="step"><div class="num">2</div><h3>Configurez votre école</h3><p>Ajoutez classes, matières, enseignants et élèves. Importez depuis Excel.</p></div>
+        <div class="step"><div class="num">3</div><h3>Gérez au quotidien</h3><p>Notes, paiements, bulletins — tout est accessible en ligne.</p></div>
+        <div class="step"><div class="num">4</div><h3>Partagez avec vos équipes</h3><p>Créez des comptes pour enseignants et comptables.</p></div>
+    </div>
+</section>
+
+<section id="pricing">
+    <div class="section-title">
+        <div class="tag">Tarifs</div>
+        <h2>Un plan pour chaque école</h2>
+        <p>Commencez gratuitement, évoluez quand vous êtes prêt.</p>
+    </div>
+    <div class="pricing-grid">
+        <div class="price-card">
+            <h3>🌱 Démo</h3><div class="price">Gratuit</div><div class="desc">Tester sans engagement</div>
+            <ul><li>Jusqu'à 50 élèves</li><li>Notes & Bulletins</li><li>Paiements basiques</li><li>Emploi du temps</li><li>1 seul utilisateur</li></ul>
+            <a href="https://saas.yiriba.app" class="cta cta-outline">Commencer gratuitement</a>
+        </div>
+        <div class="price-card popular">
+            <h3>🏫 Standard</h3><div class="price">50 000 <span>FCFA/an</span></div><div class="desc">Pour les écoles en ligne</div>
+            <ul><li>Jusqu'à 200 élèves</li><li>Toutes les fonctionnalités</li><li>Multi-utilisateurs (5)</li><li>Bulletins PDF signés</li><li>Import Excel</li><li>Support par téléphone</li></ul>
+            <a href="https://saas.yiriba.app" class="cta cta-gold">Choisir Standard</a>
+        </div>
+        <div class="price-card">
+            <h3>🎓 Premium</h3><div class="price">150 000 <span>FCFA/an</span></div><div class="desc">Pour les grands établissements</div>
+            <ul><li>Élèves illimités</li><li>Utilisateurs illimités</li><li>Bulletins de classe PDF</li><li>Rapports avancés</li><li>Sauvegarde automatique</li><li>Support prioritaire 24/7</li><li>Personnalisation logo</li></ul>
+            <a href="https://saas.yiriba.app" class="cta cta-outline">Choisir Premium</a>
+        </div>
+    </div>
+</section>
+
+<section id="testimonials">
+    <div class="section-title"><div class="tag">Témoignages</div><h2>Ce que disent nos écoles</h2></div>
+    <div class="testimonials-grid">
+        <div class="testimonial"><div class="stars">★★★★★</div><p>"Depuis qu'on utilise Yiriba, on a fini de chercher les fiches dans les tiroirs. Tout est là. Les parents sont contents de recevoir des bulletins propres."</p><div class="author"><div class="avatar">👩‍🏫</div><div><div class="name">Mme Ouédraogo</div><div class="role">Directrice, École La Grace</div></div></div></div>
+        <div class="testimonial"><div class="stars">★★★★★</div><p>"Le mode réseau nous a permis d'avoir 3 ordinateurs connectés. Le comptable gère les paiements pendant que je gère les notes. Parfait !"</p><div class="author"><div class="avatar">👨‍💼</div><div><div class="name">M. Compaoré</div><div class="role">Directeur, CEG Koudougou</div></div></div></div>
+        <div class="testimonial"><div class="stars">★★★★★</div><p>"Le QR code sur les bulletins, c'est génial. Les parents vérifient l'authenticité. Plus de faux bulletins dans notre école."</p><div class="author"><div class="avatar">👩‍💻</div><div><div class="name">Mme Zongo</div><div class="role">Comptable, École Les Palmiers</div></div></div></div>
+    </div>
+</section>
+
+<div class="cta-banner">
+    <h2>Prêt à moderniser votre école ?</h2>
+    <p>Créez votre compte en 2 minutes. Aucune carte bancaire requise. Plan Démo gratuit, sans limite de temps.</p>
+    <a href="https://saas.yiriba.app" class="btn-primary" style="display:inline-block;">Commencer maintenant — C'est gratuit →</a>
+</div>
+
+<section id="faq">
+    <div class="section-title"><div class="tag">FAQ</div><h2>Questions fréquentes</h2></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">C'est vraiment gratuit ?<span class="arrow">+</span></div><div class="faq-a">Oui, le plan Démo est 100% gratuit et sans limite de temps. Il permet de gérer jusqu'à 50 élèves. Vous n'avez besoin de payer que si vous voulez passer à 200+ élèves.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Mes données sont-elles sécurisées ?<span class="arrow">+</span></div><div class="faq-a">Absolument. Toutes les données sont chiffrées et hébergées sur des serveurs sécurisés. Le plan Premium inclut des sauvegardes automatiques quotidiennes.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Puis-je importer mes données depuis Excel ?<span class="arrow">+</span></div><div class="faq-a">Oui ! L'import CSV/Excel est supporté pour les élèves, notes et paiements. Migrez depuis votre ancien système en quelques clics.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Faut-il une connexion internet permanente ?<span class="arrow">+</span></div><div class="faq-a">Oui, c'est une application web. Mais l'interface fonctionne même avec une connexion lente (2G/3G).</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Les bulletins PDF sont-ils officiels ?<span class="arrow">+</span></div><div class="faq-a">Oui. Les bulletins incluent le logo, le nom du directeur, les signatures et un QR code unique pour vérification en ligne.</div></div>
+</section>
+
+<footer class="footer">
+    <div class="footer-links">
+        <a href="index.html">Yiriba Desktop</a>
+        <a href="saas.html">Yiriba SaaS</a>
+        <a href="faq.html">FAQ</a>
+        <a href="contact.html">Contact</a>
+        <a href="conditions.html">Conditions</a>
+    </div>
+    <p>© 2026 Yiriba — Fait avec ❤️ au Burkina Faso 🇧🇫</p>
+</footer>
+
+<script>
+function toggleFaq(el){const a=el.nextElementSibling;document.querySelectorAll('.faq-a').forEach(x=>{if(x!==a)x.classList.remove('open')});document.querySelectorAll('.faq-q').forEach(x=>{if(x!==el)x.classList.remove('active')});a.classList.toggle('open');el.classList.toggle('active')}
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+</script>
+</body>
+</html>
