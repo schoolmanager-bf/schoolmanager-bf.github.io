@@ -39,6 +39,64 @@
         .hero-stats .num { font-size:32px; font-weight:800; color:var(--gold); }
         .hero-stats .label { font-size:13px; color:var(--muted); margin-top:4px; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+        /* DEMO SECTION */
+        .demo-section { padding:80px 20px; max-width:1400px; margin:0 auto; }
+        .demo-wrapper { position:relative; border-radius:20px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.08); background:#0d1117; }
+        .demo-topbar { display:flex; align-items:center; justify-content:space-between; padding:10px 16px; background:#161b22; border-bottom:1px solid rgba(255,255,255,.06); }
+        .demo-dots { display:flex; gap:6px; }
+        .demo-dots span { width:12px; height:12px; border-radius:50%; }
+        .demo-dots span:nth-child(1) { background:#ff5f57; }
+        .demo-dots span:nth-child(2) { background:#febc2e; }
+        .demo-dots span:nth-child(3) { background:#28c840; }
+        .demo-url { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:8px; padding:6px 16px; font-size:13px; color:var(--muted); flex:1; margin:0 16px; }
+        .demo-body { display:flex; height:600px; }
+        .demo-sidebar { width:220px; background:#0d1117; border-right:1px solid rgba(255,255,255,.06); display:flex; flex-direction:column; flex-shrink:0; }
+        .demo-sidebar-header { padding:16px; border-bottom:1px solid rgba(255,255,255,.06); display:flex; align-items:center; gap:10px; }
+        .demo-sidebar-header .tree { font-size:24px; }
+        .demo-sidebar-header .name { font-size:14px; font-weight:700; color:var(--text); }
+        .demo-sidebar-header .school { font-size:11px; color:var(--muted); }
+        .demo-nav { flex:1; padding:8px; overflow-y:auto; }
+        .demo-nav-item { display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:8px; font-size:13px; color:var(--muted); cursor:pointer; transition:.15s; margin-bottom:2px; }
+        .demo-nav-item:hover { background:rgba(255,255,255,.05); color:var(--text); }
+        .demo-nav-item.active { background:rgba(201,138,44,.15); color:var(--gold); font-weight:600; }
+        .demo-nav-item .icon { font-size:16px; width:22px; text-align:center; }
+        .demo-nav-section { font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.25); padding:12px 14px 4px; font-weight:700; }
+        .demo-main { flex:1; overflow-y:auto; background:#0f1318; }
+        .demo-page { display:none; padding:24px; }
+        .demo-page.active { display:block; }
+        .demo-page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+        .demo-page-header h2 { font-size:22px; font-weight:700; }
+        .demo-page-header .btn { background:var(--gold); color:#000; border:none; padding:8px 18px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
+        .demo-stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+        .demo-stat-card { background:rgba(255,255,255,.04); border-radius:12px; padding:16px; border:1px solid rgba(255,255,255,.06); }
+        .demo-stat-card .label { font-size:11px; color:var(--muted); margin-bottom:4px; }
+        .demo-stat-card .value { font-size:24px; font-weight:800; }
+        .demo-stat-card .value.green { color:var(--green-light); }
+        .demo-stat-card .value.gold { color:var(--gold); }
+        .demo-stat-card .value.red { color:var(--red); }
+        .demo-table { width:100%; border-collapse:collapse; }
+        .demo-table th { text-align:left; padding:10px 12px; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); border-bottom:1px solid rgba(255,255,255,.08); font-weight:600; }
+        .demo-table td { padding:10px 12px; font-size:13px; border-bottom:1px solid rgba(255,255,255,.04); }
+        .demo-table tr:hover td { background:rgba(255,255,255,.03); }
+        .badge { display:inline-block; padding:3px 10px; border-radius:50px; font-size:11px; font-weight:600; }
+        .badge.green { background:rgba(62,124,89,.2); color:#3E7C59; }
+        .badge.gold { background:rgba(201,138,44,.2); color:#E8B94A; }
+        .badge.red { background:rgba(206,17,38,.2); color:#CE1126; }
+        .badge.blue { background:rgba(59,130,246,.2); color:#3B82F6; }
+        .demo-grid-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+        .demo-class-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:16px; text-align:center; transition:.2s; cursor:pointer; }
+        .demo-class-card:hover { border-color:var(--gold); transform:translateY(-2px); }
+        .demo-class-card .emoji { font-size:28px; margin-bottom:8px; }
+        .demo-class-card .cls-name { font-weight:700; font-size:14px; }
+        .demo-class-card .cls-count { color:var(--muted); font-size:12px; margin-top:4px; }
+        .demo-timetable { display:grid; grid-template-columns:80px repeat(6,1fr); gap:1px; background:rgba(255,255,255,.06); border-radius:8px; overflow:hidden; }
+        .demo-tt-header { background:var(--green); color:#fff; padding:8px; font-size:11px; font-weight:700; text-align:center; }
+        .demo-tt-time { background:rgba(255,255,255,.03); padding:8px; font-size:11px; color:var(--muted); display:flex; align-items:center; justify-content:center; }
+        .demo-tt-cell { background:#0d1117; padding:6px; font-size:10px; text-align:center; display:flex; align-items:center; justify-content:center; }
+        .demo-tt-cell .mat { font-weight:600; color:var(--text); }
+        .demo-tt-cell .prof { color:var(--muted); font-size:9px; }
+
         section { padding:100px 40px; max-width:1200px; margin:0 auto; }
         .section-title { text-align:center; margin-bottom:60px; }
         .section-title .tag { display:inline-block; background:rgba(201,138,44,.15); color:var(--gold); padding:6px 16px; border-radius:50px; font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; margin-bottom:16px; }
@@ -99,30 +157,37 @@
         .footer { border-top:1px solid rgba(255,255,255,.06); padding:40px; text-align:center; color:var(--muted); font-size:13px; }
         .footer a { color:var(--gold); text-decoration:none; }
         .footer-links { display:flex; gap:20px; justify-content:center; margin-bottom:16px; flex-wrap:wrap; }
-        @media(max-width:768px) { .nav-links { display:none; } .hamburger { display:block; } section { padding:60px 20px; } .hero { padding:100px 20px 60px; } .hero-stats { gap:24px; } .cta-banner { margin:40px 20px; padding:40px 24px; } }
+        @media(max-width:768px) {
+            .nav-links { display:none; } .hamburger { display:block; }
+            section { padding:60px 20px; } .hero { padding:100px 20px 60px; }
+            .hero-stats { gap:24px; } .cta-banner { margin:40px 20px; padding:40px 24px; }
+            .demo-sidebar { display:none; } .demo-stats-row { grid-template-columns:repeat(2,1fr); }
+            .demo-timetable { font-size:9px; } .demo-tt-cell .prof { display:none; }
+        }
     </style>
 </head>
 <body>
 <nav class="nav">
     <a href="index.html" class="nav-logo"><span class="icon">🌳</span> Yiriba <span class="saas-badge">SaaS</span></a>
     <ul class="nav-links">
+        <li><a href="#demo">Démo</a></li>
         <li><a href="#features">Fonctionnalités</a></li>
         <li><a href="#pricing">Tarifs</a></li>
-        <li><a href="#how">Comment ça marche</a></li>
         <li><a href="#faq">FAQ</a></li>
     </ul>
     <a href="https://saas.yiriba.app" class="nav-cta">Essayer gratuitement →</a>
     <button class="hamburger" onclick="document.querySelector('.nav-links').style.display=document.querySelector('.nav-links').style.display==='flex'?'none':'flex'">☰</button>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">🚀 Version SaaS — Aucune installation requise</div>
         <h1>Gérez votre école<br><span class="gold">entièrement en ligne</span></h1>
-        <p>Notes, bulletins, paiements, emploi du temps, absences… Tout ce qu'il faut pour gérer votre école, accessible depuis n'importe quel appareil, n'importe où.</p>
+        <p>Notes, bulletins, paiements, emploi du temps, absences… Tout ce qu'il faut pour gérer votre école, accessible depuis n'importe quel appareil.</p>
         <div class="hero-btns">
-            <a href="https://saas.yiriba.app" class="btn-primary">Commencer gratuitement →</a>
-            <a href="#features" class="btn-secondary">Découvrir les fonctionnalités</a>
+            <a href="#demo" class="btn-primary">🎮 Voir la démo interactive</a>
+            <a href="https://saas.yiriba.app" class="btn-secondary">Commencer gratuitement →</a>
         </div>
         <div class="hero-stats">
             <div class="stat"><div class="num">19</div><div class="label">Pages complètes</div></div>
@@ -132,12 +197,264 @@
     </div>
 </section>
 
-<section id="features">
+<!-- INTERACTIVE DEMO -->
+<section class="demo-section" id="demo">
     <div class="section-title">
-        <div class="tag">Fonctionnalités</div>
-        <h2>Tout ce dont votre école a besoin</h2>
-        <p>De l'inscription des élèves à la génération des bulletins, Yiriba SaaS couvre chaque aspect de la gestion scolaire.</p>
+        <div class="tag">🎮 Démo interactive</div>
+        <h2>Testez avant de vous inscrire</h2>
+        <p>Naviguez dans l'application comme si vous étiez connecté. Cliquez sur chaque page de la sidebar.</p>
     </div>
+    <div class="demo-wrapper">
+        <div class="demo-topbar">
+            <div class="demo-dots"><span></span><span></span><span></span></div>
+            <div class="demo-url">🔒 https://app.yiriba.app/dashboard</div>
+            <div style="font-size:11px;color:var(--muted);">Démo — Données simulées</div>
+        </div>
+        <div class="demo-body">
+            <!-- SIDEBAR -->
+            <div class="demo-sidebar">
+                <div class="demo-sidebar-header">
+                    <span class="tree">🌳</span>
+                    <div><div class="name">Yiriba</div><div class="school">École La Grace</div></div>
+                </div>
+                <div class="demo-nav">
+                    <div class="demo-nav-section">Principal</div>
+                    <div class="demo-nav-item active" onclick="demoNav(this,'dashboard')"><span class="icon">📊</span> Dashboard</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'students')"><span class="icon">🎓</span> Élèves</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'classes')"><span class="icon">🏫</span> Classes</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'teachers')"><span class="icon">👨‍🏫</span> Enseignants</div>
+                    <div class="demo-nav-section">Scolarité</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'grades')"><span class="icon">📝</span> Notes</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'bulletins')"><span class="icon">📄</span> Bulletins</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'absences')"><span class="icon">📋</span> Absences</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'timetable')"><span class="icon">📅</span> Emploi du temps</div>
+                    <div class="demo-nav-section">Finance</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'payments')"><span class="icon">💰</span> Paiements</div>
+                    <div class="demo-nav-section">Outils</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'reports')"><span class="icon">📈</span> Rapports</div>
+                    <div class="demo-nav-item" onclick="demoNav(this,'settings')"><span class="icon">⚙️</span> Paramètres</div>
+                </div>
+            </div>
+            <!-- MAIN CONTENT -->
+            <div class="demo-main">
+                <!-- DASHBOARD -->
+                <div class="demo-page active" id="demo-dashboard">
+                    <div class="demo-page-header"><h2>📊 Tableau de bord</h2><span style="color:var(--muted);font-size:13px;">Année 2025-2026</span></div>
+                    <div class="demo-stats-row">
+                        <div class="demo-stat-card"><div class="label">Élèves</div><div class="value gold">247</div></div>
+                        <div class="demo-stat-card"><div class="label">Classes</div><div class="value" style="color:#3B82F6;">8</div></div>
+                        <div class="demo-stat-card"><div class="label">Encaissé</div><div class="value green">4.2M</div></div>
+                        <div class="demo-stat-card"><div class="label">Taux réussite</div><div class="value green">87%</div></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.06);">
+                            <div style="font-size:13px;font-weight:600;margin-bottom:12px;">📈 Dernières inscriptions</div>
+                            <div style="font-size:12px;color:var(--muted);">• Compaoré Aminata — 6ème A</div>
+                            <div style="font-size:12px;color:var(--muted);">• Ouédraogo Ibrahim — 5ème B</div>
+                            <div style="font-size:12px;color:var(--muted);">• Zongo Fatimata — 4ème A</div>
+                            <div style="font-size:12px;color:var(--muted);">• Traoré Adama — 3ème C</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.06);">
+                            <div style="font-size:13px;font-weight:600;margin-bottom:12px;">💰 Paiements récents</div>
+                            <div style="font-size:12px;color:var(--muted);">• Sawadogo Moussa — 25 000 FCFA</div>
+                            <div style="font-size:12px;color:var(--muted);">• Nana Aristide — 50 000 FCFA</div>
+                            <div style="font-size:12px;color:var(--muted);">• Diallo Mariam — 15 000 FCFA</div>
+                            <div style="font-size:12px;color:var(--muted);">• Kabore Philippe — 30 000 FCFA</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- STUDENTS -->
+                <div class="demo-page" id="demo-students">
+                    <div class="demo-page-header"><h2>🎓 Gestion des élèves</h2><button class="btn">+ Nouvel élève</button></div>
+                    <div style="margin-bottom:16px;"><input type="text" placeholder="🔍 Rechercher un élève..." style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 16px;color:var(--text);width:100%;max-width:350px;font-size:13px;"></div>
+                    <table class="demo-table">
+                        <thead><tr><th>Matricule</th><th>Nom & Prénom</th><th>Classe</th><th>Sexe</th><th>État</th></tr></thead>
+                        <tbody>
+                            <tr><td style="color:var(--muted)">ELV-001</td><td><strong>Compaoré Aminata</strong></td><td><span class="badge blue">6ème A</span></td><td>Féminin</td><td><span class="badge green">Affecté</span></td></tr>
+                            <tr><td style="color:var(--muted)">ELV-002</td><td><strong>Ouédraogo Ibrahim</strong></td><td><span class="badge blue">5ème B</span></td><td>Masculin</td><td><span class="badge green">Affecté</span></td></tr>
+                            <tr><td style="color:var(--muted)">ELV-003</td><td><strong>Zongo Fatimata</strong></td><td><span class="badge blue">4ème A</span></td><td>Féminin</td><td><span class="badge green">Affecté</span></td></tr>
+                            <tr><td style="color:var(--muted)">ELV-004</td><td><strong>Traoré Adama</strong></td><td><span class="badge blue">3ème C</span></td><td>Masculin</td><td><span class="badge gold">En attente</span></td></tr>
+                            <tr><td style="color:var(--muted)">ELV-005</td><td><strong>Sawadogo Moussa</strong></td><td><span class="badge blue">6ème A</span></td><td>Masculin</td><td><span class="badge green">Affecté</span></td></tr>
+                            <tr><td style="color:var(--muted)">ELV-006</td><td><strong>Nana Aristide</strong></td><td><span class="badge blue">1ère A</span></td><td>Masculin</td><td><span class="badge green">Affecté</span></td></tr>
+                            <tr><td style="color:var(--muted)">ELV-007</td><td><strong>Diallo Mariam</strong></td><td><span class="badge blue">Terminale</span></td><td>Féminin</td><td><span class="badge green">Affecté</span></td></tr>
+                            <tr><td style="color:var(--muted)">ELV-008</td><td><strong>Kabore Philippe</strong></td><td><span class="badge blue">5ème A</span></td><td>Masculin</td><td><span class="badge red">Radié</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- CLASSES -->
+                <div class="demo-page" id="demo-classes">
+                    <div class="demo-page-header"><h2>🏫 Classes</h2><button class="btn">+ Nouvelle classe</button></div>
+                    <div class="demo-grid-cards">
+                        <div class="demo-class-card"><div class="emoji">📗</div><div class="cls-name">6ème A</div><div class="cls-count">32 élèves</div></div>
+                        <div class="demo-class-card"><div class="emoji">📘</div><div class="cls-name">6ème B</div><div class="cls-count">28 élèves</div></div>
+                        <div class="demo-class-card"><div class="emoji">📗</div><div class="cls-name">5ème A</div><div class="cls-count">30 élèves</div></div>
+                        <div class="demo-class-card"><div class="emoji">📘</div><div class="cls-name">5ème B</div><div class="cls-count">25 élèves</div></div>
+                        <div class="demo-class-card"><div class="emoji">📙</div><div class="cls-name">4ème A</div><div class="cls-count">28 élèves</div></div>
+                        <div class="demo-class-card"><div class="emoji">📙</div><div class="cls-name">3ème C</div><div class="cls-count">22 élèves</div></div>
+                        <div class="demo-class-card"><div class="emoji">📕</div><div class="cls-name">1ère A</div><div class="cls-count">42 élèves</div></div>
+                        <div class="demo-class-card"><div class="emoji">📕</div><div class="cls-name">Terminale</div><div class="cls-count">40 élèves</div></div>
+                    </div>
+                </div>
+                <!-- TEACHERS -->
+                <div class="demo-page" id="demo-teachers">
+                    <div class="demo-page-header"><h2>👨‍🏫 Enseignants</h2><button class="btn">+ Ajouter</button></div>
+                    <table class="demo-table">
+                        <thead><tr><th>Nom</th><th>Matière</th><th>Téléphone</th><th>Classes</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Dr. Ouédraogo</strong></td><td>Mathématiques</td><td>77 67 69 31</td><td><span class="badge blue">6ème A, 5ème A</span></td></tr>
+                            <tr><td><strong>Mme Zongo</strong></td><td>Français</td><td>70 12 34 56</td><td><span class="badge blue">4ème A, 3ème C</span></td></tr>
+                            <tr><td><strong>M. Compaoré</strong></td><td>Physique-Chimie</td><td>76 98 76 54</td><td><span class="badge blue">1ère A, Terminale</span></td></tr>
+                            <tr><td><strong>Mme Traoré</strong></td><td>Histoire-Géo</td><td>78 11 22 33</td><td><span class="badge blue">6ème B, 5ème B</span></td></tr>
+                            <tr><td><strong>M. Sawadogo</strong></td><td>Anglais</td><td>75 44 55 66</td><td><span class="badge blue">1ère A</span></td></tr>
+                            <tr><td><strong>Mme Diallo</strong></td><td>SVT</td><td>73 77 88 99</td><td><span class="badge blue">Terminale, 4ème A</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- GRADES -->
+                <div class="demo-page" id="demo-grades">
+                    <div class="demo-page-header"><h2>📝 Notes</h2><button class="btn">+ Saisir des notes</button></div>
+                    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+                        <select style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;color:var(--text);font-size:13px;"><option>1ère A</option><option>6ème A</option><option>Terminale</option></select>
+                        <select style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;color:var(--text);font-size:13px;"><option>T1 — Trimestre 1</option><option>T2 — Trimestre 2</option><option>T3 — Trimestre 3</option></select>
+                        <select style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;color:var(--text);font-size:13px;"><option>Mathématiques</option><option>Français</option><option>Physique</option></select>
+                    </div>
+                    <table class="demo-table">
+                        <thead><tr><th>Élève</th><th>Note / 20</th><th>Coeff</th><th>Pondéré</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Nana Aristide</strong></td><td style="color:var(--green-light)">15.5</td><td>3</td><td>46.5</td></tr>
+                            <tr><td><strong>Diallo Mariam</strong></td><td style="color:var(--green-light)">13.0</td><td>3</td><td>39.0</td></tr>
+                            <tr><td><strong>Compaoré Aminata</strong></td><td style="color:var(--red)">7.5</td><td>3</td><td>22.5</td></tr>
+                            <tr><td><strong>Ouédraogo Ibrahim</strong></td><td style="color:var(--green-light)">11.0</td><td>3</td><td>33.0</td></tr>
+                            <tr><td><strong>Zongo Fatimata</strong></td><td style="color:var(--green-light)">14.5</td><td>3</td><td>43.5</td></tr>
+                            <tr><td><strong>Sawadogo Moussa</strong></td><td style="color:var(--red)">6.0</td><td>3</td><td>18.0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- BULLETINS -->
+                <div class="demo-page" id="demo-bulletins">
+                    <div class="demo-page-header"><h2>📄 Bulletins</h2><button class="btn">📄 Générer bulletin PDF</button></div>
+                    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+                        <select style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;color:var(--text);font-size:13px;"><option>1ère A</option><option>6ème A</option><option>Terminale</option></select>
+                        <select style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;color:var(--text);font-size:13px;"><option>T1 — Trimestre 1</option><option>T2 — Trimestre 2</option><option>T3 — Trimestre 3</option></select>
+                    </div>
+                    <table class="demo-table">
+                        <thead><tr><th>Élève</th><th>Moyenne</th><th>Rang</th><th>Décision</th><th>Action</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Nana Aristide</strong></td><td><span class="badge green">15.2/20</span></td><td>3/42</td><td><span class="badge green">Admis</span></td><td><span style="color:var(--gold);cursor:pointer;">📄 Voir</span></td></tr>
+                            <tr><td><strong>Diallo Mariam</strong></td><td><span class="badge green">13.8/20</span></td><td>8/42</td><td><span class="badge green">Admis</span></td><td><span style="color:var(--gold);cursor:pointer;">📄 Voir</span></td></tr>
+                            <tr><td><strong>Compaoré Aminata</strong></td><td><span class="badge red">8.2/20</span></td><td>38/42</td><td><span class="badge red">Échec</span></td><td><span style="color:var(--gold);cursor:pointer;">📄 Voir</span></td></tr>
+                            <tr><td><strong>Ouédraogo Ibrahim</strong></td><td><span class="badge gold">10.5/20</span></td><td>22/42</td><td><span class="badge green">Admis</span></td><td><span style="color:var(--gold);cursor:pointer;">📄 Voir</span></td></tr>
+                            <tr><td><strong>Zongo Fatimata</strong></td><td><span class="badge green">16.1/20</span></td><td>1/42</td><td><span class="badge green">Admis</span></td><td><span style="color:var(--gold);cursor:pointer;">📄 Voir</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- ABSENCES -->
+                <div class="demo-page" id="demo-absences">
+                    <div class="demo-page-header"><h2>📋 Absences</h2><button class="btn">+ Signaler absence</button></div>
+                    <div class="demo-stats-row" style="grid-template-columns:repeat(3,1fr);">
+                        <div class="demo-stat-card"><div class="label">Total absences</div><div class="value red">23</div></div>
+                        <div class="demo-stat-card"><div class="label">Justifiées</div><div class="value green">15</div></div>
+                        <div class="demo-stat-card"><div class="label">Non justifiées</div><div class="value red">8</div></div>
+                    </div>
+                    <table class="demo-table">
+                        <thead><tr><th>Date</th><th>Élève</th><th>Classe</th><th>Matière</th><th>Justifiée</th></tr></thead>
+                        <tbody>
+                            <tr><td>28/08/2026</td><td><strong>Compaoré Aminata</strong></td><td>6ème A</td><td>Mathématiques</td><td><span class="badge green">Oui</span></td></tr>
+                            <tr><td>27/08/2026</td><td><strong>Sawadogo Moussa</strong></td><td>6ème A</td><td>Français</td><td><span class="badge red">Non</span></td></tr>
+                            <tr><td>26/08/2026</td><td><strong>Traoré Adama</strong></td><td>3ème C</td><td>Anglais</td><td><span class="badge green">Oui</span></td></tr>
+                            <tr><td>25/08/2026</td><td><strong>Kabore Philippe</strong></td><td>5ème A</td><td>Physique</td><td><span class="badge red">Non</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- TIMETABLE -->
+                <div class="demo-page" id="demo-timetable">
+                    <div class="demo-page-header"><h2>📅 Emploi du temps</h2><button class="btn">✏️ Modifier</button></div>
+                    <div style="margin-bottom:12px;"><select style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;color:var(--text);font-size:13px;"><option>1ère A</option><option>6ème A</option><option>Terminale</option></select></div>
+                    <div class="demo-timetable">
+                        <div class="demo-tt-header">Heure</div><div class="demo-tt-header">Lundi</div><div class="demo-tt-header">Mardi</div><div class="demo-tt-header">Mercredi</div><div class="demo-tt-header">Jeudi</div><div class="demo-tt-header">Vendredi</div><div class="demo-tt-header">Samedi</div>
+                        <div class="demo-tt-time">7h30</div><div class="demo-tt-cell"><div><div class="mat">Maths</div><div class="prof">Dr. Ouédraogo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Français</div><div class="prof">Mme Zongo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Physique</div><div class="prof">M. Compaoré</div></div></div><div class="demo-tt-cell"><div><div class="mat">Anglais</div><div class="prof">M. Sawadogo</div></div></div><div class="demo-tt-cell"><div><div class="mat">SVT</div><div class="prof">Mme Diallo</div></div></div><div class="demo-tt-cell" style="color:var(--muted);">—</div>
+                        <div class="demo-tt-time">8h30</div><div class="demo-tt-cell"><div><div class="mat">Français</div><div class="prof">Mme Zongo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Maths</div><div class="prof">Dr. Ouédraogo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Histoire</div><div class="prof">Mme Traoré</div></div></div><div class="demo-tt-cell"><div><div class="mat">Maths</div><div class="prof">Dr. Ouédraogo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Physique</div><div class="prof">M. Compaoré</div></div></div><div class="demo-tt-cell"><div><div class="mat">Français</div><div class="prof">Mme Zongo</div></div></div>
+                        <div class="demo-tt-time">9h30</div><div class="demo-tt-cell"><div><div class="mat">Anglais</div><div class="prof">M. Sawadogo</div></div></div><div class="demo-tt-cell"><div><div class="mat">SVT</div><div class="prof">Mme Diallo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Maths</div><div class="prof">Dr. Ouédraogo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Physique</div><div class="prof">M. Compaoré</div></div></div><div class="demo-tt-cell"><div><div class="mat">Histoire</div><div class="prof">Mme Traoré</div></div></div><div class="demo-tt-cell"><div><div class="mat">Anglais</div><div class="prof">M. Sawadogo</div></div></div>
+                        <div class="demo-tt-time">10h30</div><div class="demo-tt-cell"><div><div class="mat">SVT</div><div class="prof">Mme Diallo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Histoire</div><div class="prof">Mme Traoré</div></div></div><div class="demo-tt-cell"><div><div class="mat">Anglais</div><div class="prof">M. Sawadogo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Français</div><div class="prof">Mme Zongo</div></div></div><div class="demo-tt-cell"><div><div class="mat">Maths</div><div class="prof">Dr. Ouédraogo</div></div></div><div class="demo-tt-cell"><div><div class="mat">SVT</div><div class="prof">Mme Diallo</div></div></div>
+                        <div class="demo-tt-time">11h30</div><div class="demo-tt-cell" style="color:var(--muted);">—</div><div class="demo-tt-cell" style="color:var(--muted);">—</div><div class="demo-tt-cell"><div><div class="mat">Ed. civique</div><div class="prof">Mme Traoré</div></div></div><div class="demo-tt-cell" style="color:var(--muted);">—</div><div class="demo-tt-cell"><div><div class="mat">Ed. physique</div><div class="prof">M. Compaoré</div></div></div><div class="demo-tt-cell" style="color:var(--muted);">—</div>
+                    </div>
+                </div>
+                <!-- PAYMENTS -->
+                <div class="demo-page" id="demo-payments">
+                    <div class="demo-page-header"><h2>💰 Paiements</h2><button class="btn">+ Nouveau paiement</button></div>
+                    <div class="demo-stats-row">
+                        <div class="demo-stat-card"><div class="label">Total encaissé</div><div class="value green">4.2M</div></div>
+                        <div class="demo-stat-card"><div class="label">Ce mois</div><div class="value gold">850K</div></div>
+                        <div class="demo-stat-card"><div class="label">En attente</div><div class="value red">1.1M</div></div>
+                        <div class="demo-stat-card"><div class="label">Transactions</div><div class="value" style="color:#3B82F6;">156</div></div>
+                    </div>
+                    <table class="demo-table">
+                        <thead><tr><th>Date</th><th>Élève</th><th>Classe</th><th>Montant</th><th>Motif</th><th>Reçu</th></tr></thead>
+                        <tbody>
+                            <tr><td>28/08/2026</td><td><strong>Nana Aristide</strong></td><td>1ère A</td><td style="color:var(--green-light);font-weight:700;">50 000 FCFA</td><td>Frais scolaires T1</td><td><span style="color:var(--gold);">RCP-2026-0156</span></td></tr>
+                            <tr><td>27/08/2026</td><td><strong>Diallo Mariam</strong></td><td>Terminale</td><td style="color:var(--green-light);font-weight:700;">75 000 FCFA</td><td>Frais d'inscription</td><td><span style="color:var(--gold);">RCP-2026-0155</span></td></tr>
+                            <tr><td>26/08/2026</td><td><strong>Compaoré Aminata</strong></td><td>6ème A</td><td style="color:var(--green-light);font-weight:700;">25 000 FCFA</td><td>Frais scolaires T1</td><td><span style="color:var(--gold);">RCP-2026-0154</span></td></tr>
+                            <tr><td>25/08/2026</td><td><strong>Sawadogo Moussa</strong></td><td>6ème A</td><td style="color:var(--green-light);font-weight:700;">30 000 FCFA</td><td>Frais scolaires T1</td><td><span style="color:var(--gold);">RCP-2026-0153</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- REPORTS -->
+                <div class="demo-page" id="demo-reports">
+                    <div class="demo-page-header"><h2>📈 Rapports</h2><button class="btn">📥 Export CSV</button></div>
+                    <div class="demo-stats-row">
+                        <div class="demo-stat-card"><div class="label">Moyenne générale</div><div class="value gold">11.8/20</div></div>
+                        <div class="demo-stat-card"><div class="label">Taux réussite</div><div class="value green">87%</div></div>
+                        <div class="demo-stat-card"><div class="label">Élèves en difficulté</div><div class="value red">32</div></div>
+                        <div class="demo-stat-card"><div class="label">Mention Bien+</div><div class="value gold">18</div></div>
+                    </div>
+                    <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,.06);margin-bottom:16px;">
+                        <div style="font-size:14px;font-weight:600;margin-bottom:12px;">📊 Moyennes par classe</div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="font-size:12px;width:80px;">6ème A</span><div style="flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;"><div style="width:65%;height:100%;background:var(--green-light);border-radius:4px;"></div></div><span style="font-size:12px;width:40px;text-align:right;">13.0</span></div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="font-size:12px;width:80px;">5ème A</span><div style="flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;"><div style="width:55%;height:100%;background:var(--gold);border-radius:4px;"></div></div><span style="font-size:12px;width:40px;text-align:right;">11.2</span></div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="font-size:12px;width:80px;">4ème A</span><div style="flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;"><div style="width:60%;height:100%;background:var(--green-light);border-radius:4px;"></div></div><span style="font-size:12px;width:40px;text-align:right;">12.1</span></div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="font-size:12px;width:80px;">1ère A</span><div style="flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;"><div style="width:72%;height:100%;background:var(--green-light);border-radius:4px;"></div></div><span style="font-size:12px;width:40px;text-align:right;">14.5</span></div>
+                        <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;width:80px;">Terminale</span><div style="flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;"><div style="width:68%;height:100%;background:var(--green-light);border-radius:4px;"></div></div><span style="font-size:12px;width:40px;text-align:right;">13.6</span></div>
+                    </div>
+                </div>
+                <!-- SETTINGS -->
+                <div class="demo-page" id="demo-settings">
+                    <div class="demo-page-header"><h2>⚙️ Paramètres</h2></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,.06);">
+                            <div style="font-size:14px;font-weight:600;margin-bottom:12px;">🏫 Informations école</div>
+                            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;"><strong>Nom :</strong> École La Grace</div>
+                            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;"><strong>Directeur :</strong> M. Tassembédo</div>
+                            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;"><strong>Adresse :</strong> Ouagadougou, Burkina Faso</div>
+                            <div style="font-size:12px;color:var(--muted);"><strong>Téléphone :</strong> +226 77 67 69 31</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,.06);">
+                            <div style="font-size:14px;font-weight:600;margin-bottom:12px;">👥 Utilisateurs</div>
+                            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;"><strong>Admin :</strong> admin@lagrace.com <span class="badge green">Actif</span></div>
+                            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;"><strong>Comptable :</strong> comptable@lagrace.com <span class="badge green">Actif</span></div>
+                            <div style="font-size:12px;color:var(--muted);"><strong>Secrétaire :</strong> secretariat@lagrace.com <span class="badge green">Actif</span></div>
+                        </div>
+                        <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,.06);">
+                            <div style="font-size:14px;font-weight:600;margin-bottom:12px;">💰 Abonnement</div>
+                            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;"><strong>Plan :</strong> <span class="badge gold">Standard</span></div>
+                            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;"><strong>Expire le :</strong> 28/08/2027</div>
+                            <div style="font-size:12px;color:var(--muted);"><strong>Élèves :</strong> 247 / 200</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,.06);">
+                            <div style="font-size:14px;font-weight:600;margin-bottom:12px;">💾 Sauvegarde</div>
+                            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;"><strong>Dernière :</strong> 28/08/2026 14:30</div>
+                            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;"><strong>Taille :</strong> 12.4 MB</div>
+                            <div style="font-size:12px;color:var(--green-light);cursor:pointer;">📥 Exporter maintenant</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+    <div class="section-title"><div class="tag">Fonctionnalités</div><h2>Tout ce dont votre école a besoin</h2><p>De l'inscription à la génération des bulletins, Yiriba SaaS couvre chaque aspect de la gestion scolaire.</p></div>
     <div class="features-grid">
         <div class="feature-card"><div class="icon">🎓</div><h3>Gestion des élèves</h3><p>Inscriptions, affectations de classes, passage automatique d'année en année.</p></div>
         <div class="feature-card"><div class="icon">📊</div><h3>Notes & Bulletins</h3><p>Saisie des notes, calcul automatique des moyennes, bulletins PDF avec QR code.</p></div>
@@ -154,32 +471,25 @@
     </div>
 </section>
 
+<!-- COMPARISON -->
 <section id="compare">
-    <div class="section-title">
-        <div class="tag">Comparaison</div>
-        <h2>Pourquoi passer au SaaS ?</h2>
-    </div>
+    <div class="section-title"><div class="tag">Comparaison</div><h2>Pourquoi passer au SaaS ?</h2></div>
     <table class="compare-table">
-        <thead><tr><th>Fonctionnalité</th><th>Yiriba Desktop</th><th>Yiriba SaaS</th><th>Autres logiciels</th></tr></thead>
+        <thead><tr><th>Fonctionnalité</th><th>Desktop</th><th>SaaS</th><th>Autres</th></tr></thead>
         <tbody>
-            <tr><td>Installation requise</td><td>✅ Oui</td><td class="check">❌ Non</td><td>✅ Oui</td></tr>
-            <tr><td>Accessible sur téléphone</td><td class="cross">❌ Non</td><td class="check">✅ Oui</td><td class="cross">❌ Rarement</td></tr>
+            <tr><td>Installation</td><td>✅ Oui</td><td class="check">❌ Non</td><td>✅ Oui</td></tr>
+            <tr><td>Téléphone</td><td class="cross">❌</td><td class="check">✅</td><td class="cross">❌</td></tr>
             <tr><td>Multi-utilisateurs</td><td>⚠️ Réseau</td><td class="check">✅ Natif</td><td class="cross">❌ Payant</td></tr>
-            <tr><td>Sauvegarde cloud</td><td class="cross">❌ Non</td><td class="check">✅ Auto</td><td>⚠️ Payant</td></tr>
-            <tr><td>Mise à jour auto</td><td class="cross">❌ Non</td><td class="check">✅ Auto</td><td>✅ Auto</td></tr>
-            <tr><td>Bulletins PDF + QR</td><td>✅ Oui</td><td class="check">✅ Oui</td><td class="cross">❌ Limité</td></tr>
-            <tr><td>Plan gratuit</td><td>✅ Démo</td><td class="check">✅ Démo</td><td class="cross">❌ Non</td></tr>
-            <tr><td>Prix</td><td>250 000 FCFA</td><td class="check">50 000 FCFA/an</td><td>500 000+ FCFA/an</td></tr>
+            <tr><td>Sauvegarde cloud</td><td class="cross">❌</td><td class="check">✅</td><td>⚠️ Payant</td></tr>
+            <tr><td>Plan gratuit</td><td>✅ Démo</td><td class="check">✅ Démo</td><td class="cross">❌</td></tr>
+            <tr><td>Prix</td><td>250K FCFA</td><td class="check">50K/an</td><td>500K+/an</td></tr>
         </tbody>
     </table>
 </section>
 
+<!-- HOW IT WORKS -->
 <section id="how">
-    <div class="section-title">
-        <div class="tag">Comment ça marche</div>
-        <h2>En ligne en 3 étapes</h2>
-        <p>Aucune installation, aucun serveur à configurer.</p>
-    </div>
+    <div class="section-title"><div class="tag">Comment ça marche</div><h2>En ligne en 3 étapes</h2><p>Aucune installation, aucun serveur à configurer.</p></div>
     <div class="steps">
         <div class="step"><div class="num">1</div><h3>Créez votre compte</h3><p>Entrez le nom de votre école, un email et un mot de passe. Gratuit.</p></div>
         <div class="step"><div class="num">2</div><h3>Configurez votre école</h3><p>Ajoutez classes, matières, enseignants et élèves. Importez depuis Excel.</p></div>
@@ -188,55 +498,44 @@
     </div>
 </section>
 
+<!-- PRICING -->
 <section id="pricing">
-    <div class="section-title">
-        <div class="tag">Tarifs</div>
-        <h2>Un plan pour chaque école</h2>
-        <p>Commencez gratuitement, évoluez quand vous êtes prêt.</p>
-    </div>
+    <div class="section-title"><div class="tag">Tarifs</div><h2>Un plan pour chaque école</h2><p>Commencez gratuitement, évoluez quand vous êtes prêt.</p></div>
     <div class="pricing-grid">
-        <div class="price-card">
-            <h3>🌱 Démo</h3><div class="price">Gratuit</div><div class="desc">Tester sans engagement</div>
-            <ul><li>Jusqu'à 50 élèves</li><li>Notes & Bulletins</li><li>Paiements basiques</li><li>Emploi du temps</li><li>1 seul utilisateur</li></ul>
-            <a href="https://saas.yiriba.app" class="cta cta-outline">Commencer gratuitement</a>
-        </div>
-        <div class="price-card popular">
-            <h3>🏫 Standard</h3><div class="price">50 000 <span>FCFA/an</span></div><div class="desc">Pour les écoles en ligne</div>
-            <ul><li>Jusqu'à 200 élèves</li><li>Toutes les fonctionnalités</li><li>Multi-utilisateurs (5)</li><li>Bulletins PDF signés</li><li>Import Excel</li><li>Support par téléphone</li></ul>
-            <a href="https://saas.yiriba.app" class="cta cta-gold">Choisir Standard</a>
-        </div>
-        <div class="price-card">
-            <h3>🎓 Premium</h3><div class="price">150 000 <span>FCFA/an</span></div><div class="desc">Pour les grands établissements</div>
-            <ul><li>Élèves illimités</li><li>Utilisateurs illimités</li><li>Bulletins de classe PDF</li><li>Rapports avancés</li><li>Sauvegarde automatique</li><li>Support prioritaire 24/7</li><li>Personnalisation logo</li></ul>
-            <a href="https://saas.yiriba.app" class="cta cta-outline">Choisir Premium</a>
-        </div>
+        <div class="price-card"><h3>🌱 Démo</h3><div class="price">Gratuit</div><div class="desc">Tester sans engagement</div><ul><li>Jusqu'à 50 élèves</li><li>Notes & Bulletins</li><li>Paiements basiques</li><li>Emploi du temps</li><li>1 seul utilisateur</li></ul><a href="https://saas.yiriba.app" class="cta cta-outline">Commencer gratuitement</a></div>
+        <div class="price-card popular"><h3>🏫 Standard</h3><div class="price">50 000 <span>FCFA/an</span></div><div class="desc">Pour les écoles en ligne</div><ul><li>Jusqu'à 200 élèves</li><li>Toutes les fonctionnalités</li><li>Multi-utilisateurs (5)</li><li>Bulletins PDF signés</li><li>Import Excel</li><li>Support par téléphone</li></ul><a href="https://saas.yiriba.app" class="cta cta-gold">Choisir Standard</a></div>
+        <div class="price-card"><h3>🎓 Premium</h3><div class="price">150 000 <span>FCFA/an</span></div><div class="desc">Pour les grands établissements</div><ul><li>Élèves illimités</li><li>Utilisateurs illimités</li><li>Bulletins de classe PDF</li><li>Rapports avancés</li><li>Sauvegarde auto</li><li>Support prioritaire 24/7</li><li>Personnalisation logo</li></ul><a href="https://saas.yiriba.app" class="cta cta-outline">Choisir Premium</a></div>
     </div>
 </section>
 
+<!-- TESTIMONIALS -->
 <section id="testimonials">
     <div class="section-title"><div class="tag">Témoignages</div><h2>Ce que disent nos écoles</h2></div>
     <div class="testimonials-grid">
-        <div class="testimonial"><div class="stars">★★★★★</div><p>"Depuis qu'on utilise Yiriba, on a fini de chercher les fiches dans les tiroirs. Tout est là. Les parents sont contents de recevoir des bulletins propres."</p><div class="author"><div class="avatar">👩‍🏫</div><div><div class="name">Mme Ouédraogo</div><div class="role">Directrice, École La Grace</div></div></div></div>
-        <div class="testimonial"><div class="stars">★★★★★</div><p>"Le mode réseau nous a permis d'avoir 3 ordinateurs connectés. Le comptable gère les paiements pendant que je gère les notes. Parfait !"</p><div class="author"><div class="avatar">👨‍💼</div><div><div class="name">M. Compaoré</div><div class="role">Directeur, CEG Koudougou</div></div></div></div>
-        <div class="testimonial"><div class="stars">★★★★★</div><p>"Le QR code sur les bulletins, c'est génial. Les parents vérifient l'authenticité. Plus de faux bulletins dans notre école."</p><div class="author"><div class="avatar">👩‍💻</div><div><div class="name">Mme Zongo</div><div class="role">Comptable, École Les Palmiers</div></div></div></div>
+        <div class="testimonial"><div class="stars">★★★★★</div><p>"On a fini de chercher les fiches dans les tiroirs. Tout est là. Les parents sont contents de recevoir des bulletins propres."</p><div class="author"><div class="avatar">👩‍🏫</div><div><div class="name">Mme Ouédraogo</div><div class="role">Directrice, École La Grace</div></div></div></div>
+        <div class="testimonial"><div class="stars">★★★★★</div><p>"Le mode réseau nous a permis d'avoir 3 ordinateurs connectés. Le comptable gère les paiements pendant que je gère les notes."</p><div class="author"><div class="avatar">👨‍💼</div><div><div class="name">M. Compaoré</div><div class="role">Directeur, CEG Koudougou</div></div></div></div>
+        <div class="testimonial"><div class="stars">★★★★★</div><p>"Le QR code sur les bulletins, c'est génial. Les parents vérifient l'authenticité. Plus de faux bulletins."</p><div class="author"><div class="avatar">👩‍💻</div><div><div class="name">Mme Zongo</div><div class="role">Comptable, École Les Palmiers</div></div></div></div>
     </div>
 </section>
 
+<!-- CTA -->
 <div class="cta-banner">
     <h2>Prêt à moderniser votre école ?</h2>
     <p>Créez votre compte en 2 minutes. Aucune carte bancaire requise. Plan Démo gratuit, sans limite de temps.</p>
     <a href="https://saas.yiriba.app" class="btn-primary" style="display:inline-block;">Commencer maintenant — C'est gratuit →</a>
 </div>
 
+<!-- FAQ -->
 <section id="faq">
     <div class="section-title"><div class="tag">FAQ</div><h2>Questions fréquentes</h2></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">C'est vraiment gratuit ?<span class="arrow">+</span></div><div class="faq-a">Oui, le plan Démo est 100% gratuit et sans limite de temps. Il permet de gérer jusqu'à 50 élèves. Vous n'avez besoin de payer que si vous voulez passer à 200+ élèves.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Mes données sont-elles sécurisées ?<span class="arrow">+</span></div><div class="faq-a">Absolument. Toutes les données sont chiffrées et hébergées sur des serveurs sécurisés. Le plan Premium inclut des sauvegardes automatiques quotidiennes.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Puis-je importer mes données depuis Excel ?<span class="arrow">+</span></div><div class="faq-a">Oui ! L'import CSV/Excel est supporté pour les élèves, notes et paiements. Migrez depuis votre ancien système en quelques clics.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Faut-il une connexion internet permanente ?<span class="arrow">+</span></div><div class="faq-a">Oui, c'est une application web. Mais l'interface fonctionne même avec une connexion lente (2G/3G).</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Les bulletins PDF sont-ils officiels ?<span class="arrow">+</span></div><div class="faq-a">Oui. Les bulletins incluent le logo, le nom du directeur, les signatures et un QR code unique pour vérification en ligne.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">C'est vraiment gratuit ?<span class="arrow">+</span></div><div class="faq-a">Oui, le plan Démo est 100% gratuit et sans limite de temps. Il permet de gérer jusqu'à 50 élèves.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Mes données sont-elles sécurisées ?<span class="arrow">+</span></div><div class="faq-a">Toutes les données sont chiffrées et hébergées sur des serveurs sécurisés.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Puis-je importer depuis Excel ?<span class="arrow">+</span></div><div class="faq-a">Oui ! L'import CSV/Excel est supporté pour les élèves, notes et paiements.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Faut-il une connexion internet ?<span class="arrow">+</span></div><div class="faq-a">Oui, c'est une application web. Mais l'interface fonctionne même avec une connexion lente (2G/3G).</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Les bulletins PDF sont-ils officiels ?<span class="arrow">+</span></div><div class="faq-a">Oui. Les bulletins incluent le logo, le directeur, les signatures et un QR code de vérification.</div></div>
 </section>
 
+<!-- FOOTER -->
 <footer class="footer">
     <div class="footer-links">
         <a href="index.html">Yiriba Desktop</a>
@@ -251,6 +550,15 @@
 <script>
 function toggleFaq(el){const a=el.nextElementSibling;document.querySelectorAll('.faq-a').forEach(x=>{if(x!==a)x.classList.remove('open')});document.querySelectorAll('.faq-q').forEach(x=>{if(x!==el)x.classList.remove('active')});a.classList.toggle('open');el.classList.toggle('active')}
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+function demoNav(el,page){
+    document.querySelectorAll('.demo-nav-item').forEach(i=>i.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.demo-page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('demo-'+page).classList.add('active');
+    const url=document.querySelector('.demo-url');
+    const names={dashboard:'dashboard',students:'eleves',classes:'classes',teachers:'enseignants',grades:'notes',bulletins:'bulletins',absences:'absences',timetable:'emploi-du-temps',payments:'paiements',reports:'rapports',settings:'parametres'};
+    url.textContent='🔒 https://app.yiriba.app/'+names[page];
+}
 </script>
 </body>
 </html>
